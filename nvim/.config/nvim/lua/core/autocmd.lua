@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 -- Close with q
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("close-with-q", { clear = true }),
-  pattern = { "help", "man", "qf", "oil", "nvim-pack", "fugitive", "git", "gitcommit" },
+  pattern = { "help", "man", "qf", "oil", "nvim-pack", "fugitive", "git" },
   callback = function(ev)
     -- buffer-local mapping so it doesn't steal "q" globally
     vim.keymap.set("n", "q", function()
