@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "amp": {
-      "rev": "48af7fd795f8ff763b45a63472d3a390a990c011",
+      "rev": "3b9ad5ef0328de1b35cc9bfa723a37db5daf9434",
       "src": "https://github.com/sourcegraph/amp.nvim"
     },
     "bamboo.nvim": {
@@ -13,16 +13,15 @@
       "src": "https://github.com/ribru17/bamboo.nvim"
     },
     "blink.cmp": {
-      "rev": "b19413d214068f316c78978b08264ed1c41830ec",
-      "src": "https://github.com/Saghen/blink.cmp",
-      "version": "'v1.8.0'"
+      "rev": "d4ba3e7c39543e588d1569532cbdd03d73d20c39",
+      "src": "https://github.com/Saghen/blink.cmp"
     },
     "bodybuilder-nvim": {
-      "rev": "801aec7b9b135bf69fd90659934998ed504ab46b",
+      "rev": "d036ee9ffdd117817992696e07b755d1c3e24c03",
       "src": "https://github.com/whleucka/bodybuilder-nvim"
     },
     "bodybuilder.nvim": {
-      "rev": "801aec7b9b135bf69fd90659934998ed504ab46b",
+      "rev": "d036ee9ffdd117817992696e07b755d1c3e24c03",
       "src": "https://github.com/whleucka/bodybuilder.nvim"
     },
     "bufferline.nvim": {
@@ -30,7 +29,7 @@
       "src": "https://github.com/akinsho/bufferline.nvim"
     },
     "catppuccin": {
-      "rev": "193e123cdbc4dd3e86db883d55349e9587f0ded6",
+      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
       "src": "https://github.com/catppuccin/nvim"
     },
     "dashboard-nvim": {
@@ -45,10 +44,6 @@
       "rev": "557bce922401e247a596583679bc181d4d688554",
       "src": "https://github.com/neanias/everforest-nvim"
     },
-    "fff.nvim": {
-      "rev": "53acaf90abb7d187ac9ac32b9536592e6d5ee10f",
-      "src": "https://github.com/dmtrKovalenko/fff.nvim"
-    },
     "flash.nvim": {
       "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
       "src": "https://github.com/folke/flash.nvim"
@@ -62,7 +57,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "bd69cbae60eeb4589fbd285cb112265530fe1a5e",
+      "rev": "e9c8828f216e419d3b7fa1292d18378b14368492",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -114,7 +109,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim": {
-      "rev": "193e123cdbc4dd3e86db883d55349e9587f0ded6",
+      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
       "src": "https://github.com/catppuccin/nvim"
     },
     "nvim-dap": {
@@ -154,7 +149,7 @@
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "sshfs": {
-      "rev": "205f3dca5949b6874463a6731d6983134d9296e4",
+      "rev": "52561101c0b8f8f9672d0cf675b230cf9bbe568f",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
     "tokyonight.nvim": {
