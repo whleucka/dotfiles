@@ -45,11 +45,8 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 })
 
 -- Close with q
--- one group, created once
-local close_grp = vim.api.nvim_create_augroup("close-with-q", { clear = true })
-
 vim.api.nvim_create_autocmd("FileType", {
-  group = close_grp,
+  group = vim.api.nvim_create_augroup("close-with-q", { clear = true }),
   pattern = { "help", "man", "qf", "oil", "nvim-pack", "fugitive", "git", "gitcommit" },
   callback = function(ev)
     -- buffer-local mapping so it doesn't steal "q" globally
