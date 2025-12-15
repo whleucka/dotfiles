@@ -119,27 +119,28 @@ alias icat="kitty +kitten icat"
 # git
 alias g="git"
 alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
-alias gcm='git checkout master'
+alias gp='git pull'
+alias gpu='git push'
 alias gco='git checkout'
 alias gcb="git checkout -b"
 alias gs='git status'
 alias ga='git add'
 alias gc='git commit'
-alias gc!="gc -v"
+alias gc!="git commit -v"
+alias gcm="git commit -m"
+alias gcm!="git commit -mv"
 alias gca='git commit -a'
-alias gca!='gca -v'
-alias gcam='git commit -a -m'
-alias gcaa='git commit --amend'
+alias gca!='git commit -av'
+alias gcam='git commit -am'
+alias gcam!='git commit -amv'
+alias gcA='git commit --amend'
 alias gb='git branch'
 alias gbd='git branch -d'
-alias gbD='git branch -D'
+alias gbd!='git branch -D'
 alias gf='git fetch'
 alias gm='git merge'
-alias gp='git pull'
-alias gpl='git pull origin'
-alias gps='git push'
-alias gpu='git push'
-alias gpsu='git push -u origin'
+alias grb='git rebase'
+alias gcp='git cherry-pick'
 alias gstore="git config credential.helper store"
 
 # yay
