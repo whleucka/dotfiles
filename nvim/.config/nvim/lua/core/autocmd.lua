@@ -50,7 +50,7 @@ local close_grp = vim.api.nvim_create_augroup("close-with-q", { clear = true })
 
 vim.api.nvim_create_autocmd("FileType", {
   group = close_grp,
-  pattern = { "help", "man", "qf", "oil", "nvim-pack", "fugitive" },
+  pattern = { "help", "man", "qf", "oil", "nvim-pack", "fugitive", "gitcommit" },
   callback = function(ev)
     -- buffer-local mapping so it doesn't steal "q" globally
     vim.keymap.set("n", "q", function()
