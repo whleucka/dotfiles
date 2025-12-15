@@ -9,8 +9,6 @@
 	rebase = true
 [fetch]
     prune = true
-[gc]
-    auto = true
 [push]
     autoSetupRemote = true
 [init]
