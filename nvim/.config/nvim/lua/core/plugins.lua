@@ -1,6 +1,7 @@
 -- Plugins
-require("plugins.omarchy")
 require("plugins.which-key-nvim")
+require('plugins.vim-fugitive')
+require("plugins.omarchy")
 require("plugins.oil-nvim")
 require('plugins.fzf-lua')
 require("plugins.lualine-nvim")
@@ -15,7 +16,6 @@ vim.api.nvim_create_autocmd("BufRead", {
     if not loaded_lazy_plugins and vim.bo[ev.buf].buftype == "" then
       loaded_lazy_plugins = true
       require('plugins.vim-repeat')
-      require('plugins.vim-fugitive')
       require("plugins.nvim-treesitter")
       require('plugins.flash-nvim')
       require("plugins.blink-cmp")

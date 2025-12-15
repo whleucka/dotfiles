@@ -35,6 +35,12 @@ return {
         key = 'n',
       },
       {
+        desc = 'Git',
+        group = 'Label',
+        action = ':Git',
+        key = 'g',
+      },
+      {
         desc = 'Oil',
         group = 'Label',
         action = ':Oil',
