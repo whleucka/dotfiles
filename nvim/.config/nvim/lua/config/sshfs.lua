@@ -25,13 +25,17 @@ return {
     auto_change_dir_on_mount = true,
   },
   host_paths = {
-    ['cl-alpha'] = '/var/www/alpha.chainlogic.net/web/will/cms/',
+    ['cl-alpha'] = '/var/www/alpha.chainlogic.net/web/will/cms',
     ['ic-atm'] = {
-      '/var/www/dev.instacoinatm.com/',
-      '/var/www/beta.instacoinatm.com/',
-      '/var/www/instacoinatm.com/',
+      '/var/www/dev.instacoinatm.com',
+      '/var/www/beta.instacoinatm.com',
+      '/var/www/instacoinatm.com',
     },
     ['chainlogic'] = '/mnt/enc/chainlogic-dev',
-    ['elitedesk'] = '/home/whleucka/Projects/',
+    ['elitedesk'] = {
+      '/home/whleucka/Projects',
+      '/home/whleucka/Projects/music',
+      '/home/whleucka/projects/echo',
+    },
   },
 }

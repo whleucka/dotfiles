@@ -23,6 +23,12 @@ return {
     packages = { enable = false },
     shortcut = {
       {
+        desc = 'Mount',
+        group = 'Label',
+        action = ':SSHConnect',
+        key = 'm',
+      },
+      {
         desc = 'New',
         group = 'Label',
         action = ':enew',
