@@ -16,6 +16,7 @@ vim.api.nvim_create_autocmd("BufRead", {
     if not loaded_lazy_plugins and vim.bo[ev.buf].buftype == "" then
       loaded_lazy_plugins = true
       require('plugins.vim-repeat')
+      require('plugins.vim-surround')
       require("plugins.nvim-treesitter")
       require('plugins.flash-nvim')
       require("plugins.blink-cmp")

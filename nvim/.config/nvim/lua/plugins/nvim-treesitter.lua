@@ -1,12 +1,11 @@
 vim.pack.add({
   {
     src = "https://github.com/nvim-treesitter/nvim-treesitter",
-    version = "v0.10.0",
   },
 })
 
 local config = require("config.treesitter")
-require("nvim-treesitter.configs").setup(config)
+require("nvim-treesitter").setup(config)
 
 local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
 parser_configs.cfml = {
