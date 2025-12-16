@@ -5,7 +5,7 @@
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
     "amp": {
-      "rev": "48af7fd795f8ff763b45a63472d3a390a990c011",
+      "rev": "3b9ad5ef0328de1b35cc9bfa723a37db5daf9434",
       "src": "https://github.com/sourcegraph/amp.nvim"
     },
     "bamboo.nvim": {
@@ -18,7 +18,7 @@
       "version": "'v1.8.0'"
     },
     "bodybuilder-nvim": {
-      "rev": "801aec7b9b135bf69fd90659934998ed504ab46b",
+      "rev": "d036ee9ffdd117817992696e07b755d1c3e24c03",
       "src": "https://github.com/whleucka/bodybuilder-nvim"
     },
     "bodybuilder.nvim": {
@@ -30,7 +30,7 @@
       "src": "https://github.com/akinsho/bufferline.nvim"
     },
     "catppuccin": {
-      "rev": "193e123cdbc4dd3e86db883d55349e9587f0ded6",
+      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
       "src": "https://github.com/catppuccin/nvim"
     },
     "dashboard-nvim": {
@@ -50,7 +50,7 @@
       "src": "https://github.com/neanias/everforest-nvim"
     },
     "fff.nvim": {
-      "rev": "53acaf90abb7d187ac9ac32b9536592e6d5ee10f",
+      "rev": "a4f87bd4f2ba37e9bc141d1bfba563dabd3dbc91",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "flash.nvim": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "e9c8828f216e419d3b7fa1292d18378b14368492",
+      "rev": "3b53b0eb26972686c5825d7c0e63b3cffd0c4f2b",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -122,7 +122,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim": {
-      "rev": "193e123cdbc4dd3e86db883d55349e9587f0ded6",
+      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
       "src": "https://github.com/catppuccin/nvim"
     },
     "nvim-dap": {
@@ -162,7 +162,7 @@
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "sshfs": {
-      "rev": "52561101c0b8f8f9672d0cf675b230cf9bbe568f",
+      "rev": "c9d41c51d9bfaf33d6f3679a0d47a8bac6b77de8",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
     "tokyonight.nvim": {

@@ -21,8 +21,8 @@ return {
   },
   mounts = {
     base_dir = vim.fn.expand("$HOME") .. "/.mount",
-    unmount_on_exit = true,
-    auto_change_dir_on_mount = true,
+    auto_unmount = true,
+    auto_change_to_dir = true,
   },
   host_paths = {
     ['cl-alpha'] = '/var/www/alpha.chainlogic.net/web/will/cms',
