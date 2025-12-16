@@ -1,0 +1,14 @@
+
+new_tab
+layout splits:split_axis=horizontal
+enabled_layouts splits:split_axis=horizontal,fat:bias=50;full_size=1;mirrored=false
+set_layout_state {"pairs": {"horizontal": false, "one": 1, "two": {"horizontal": false, "one": 2, "two": {"one": 3, "two": 4}}}, "opts": {"default_axis_is_horizontal": true}, "class": "Splits", "all_windows": {"active_group_idx": 3, "active_group_history": [4, 1, 2, 3], "window_groups": [{"id": 1, "window_ids": [1]}, {"id": 2, "window_ids": [2]}, {"id": 3, "window_ids": [3]}, {"id": 4, "window_ids": [4]}]}}
+cd ../../..
+
+launch 'kitty-unserialize-data={"id": 1, "cmd_at_shell_startup": ["/home/whleucka/.neovim/nvim-linux-x86_64/bin/nvim"]}' '--var=IS_NVIM=1 '
+launch 'kitty-unserialize-data={"id": 2, "cmd_at_shell_startup": ["kitten", "ssh", "cl-alpha"]}'
+launch 'kitty-unserialize-data={"id": 3, "cmd_at_shell_startup": ["kitten", "ssh", "--kitten=cwd=/var/log/php", "cl-alpha"]}'
+launch 'kitty-unserialize-data={"id": 4, "cmd_at_shell_startup": ["kitten", "ssh", "--kitten=cwd=/var/www/alpha.chainlogic.net/web/will/cms", "cl-alpha"]}' '--cwd=../../../.wine/drive_c/Program Files/Octoparse/resources/test/static/css'
+focus
+
+focus_tab 0
