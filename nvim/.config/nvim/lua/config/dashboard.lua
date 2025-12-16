@@ -37,7 +37,7 @@ return {
       {
         desc = 'Git',
         group = 'Label',
-        action = ':Git',
+        action = ':Neogit',
         key = 'g',
       },
       {

@@ -1,12 +1,12 @@
 -- Plugins
 require("plugins.which-key-nvim")
-require('plugins.vim-fugitive')
 require("plugins.omarchy")
 require("plugins.oil-nvim")
 require('plugins.fzf-lua')
 require("plugins.lualine-nvim")
 require("plugins.sshfs-nvim")
 require("plugins.dashboard-nvim")
+require('plugins.neogit')
 
 -- Lazy load these ones
 local loaded_lazy_plugins = false
