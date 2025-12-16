@@ -27,8 +27,8 @@ wk.add({
     { "<leader>fo", ":FzfLua oldfiles<cr>",  desc = "Opened files" },
     { "<leader>fb", ":FzfLua buffers<cr>",   desc = "Buffers" },
     { "<leader>ft", ":FzfLua tabs<cr>",      desc = "Tabs" },
-    { "<leader>f/", ":FzfLua blines<cr>",    desc = "Lines" },
     { "<leader>fq", ":FzfLua quickfix<cr>",  desc = "Quickfix" },
     { "<leader>fl", ":FzfLua loclist<cr>",   desc = "Location list" },
+    { "<leader>/", ":FzfLua blines<cr>",    desc = "Lines" },
   },
 })
