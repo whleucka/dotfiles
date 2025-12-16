@@ -9,6 +9,11 @@ wk.add({
   {
     "<leader>g",
     group = "Git (neogit)",
-    { "<leader>gg",  ":Neogit<CR>",             desc = "Neogit Status" },
+    {
+      "<leader>gg",
+      function()
+        require('neogit').open({ kind = "auto" })
+      end,
+    },
   },
 })
