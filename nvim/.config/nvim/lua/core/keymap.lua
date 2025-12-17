@@ -200,7 +200,7 @@ wk.add({
     { "<C-p>",           ":FzfLua files<CR>",         desc = "Picker" },
     { "H",               ":bprev<CR>",                desc = "Previous Buffer" },
     { "L",               ":bnext<CR>",                desc = "Previous Buffer" },
-    { "<F5>",            ":update<CR> :source<CR>",   desc = "Source file", },
+    { "<leader>so",      ":update<CR> :source<CR>",   desc = "Source file", },
     { "<A-=>",           "  <C-w>=<CR>",              desc = "Automatically resize windows" },
     { "gd",              vim.lsp.buf.definition,      desc = "Go to definition" },
     { "gD",              vim.lsp.buf.declaration,     desc = "Go to declaration" },
