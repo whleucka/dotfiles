@@ -195,6 +195,7 @@ wk.add({
   {
     { "q",               "<nop>" },
     { "<esc><esc>",      ":noh<CR>" },
+    { "<C-q>",           ":qa!<CR>",         desc = "Exit" },
     { "<C-s>",           ":update<CR>",               desc = "Save" },
     { "<C-p>",           ":FzfLua files<CR>",         desc = "Picker" },
     { "<leader>Q",       ":qa<CR>",                   desc = "Close Neovim" },
