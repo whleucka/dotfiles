@@ -195,10 +195,9 @@ wk.add({
   {
     { "q",               "<nop>" },
     { "<esc><esc>",      ":noh<CR>" },
-    { "<C-q>",           ":qa!<CR>",         desc = "Exit" },
+    { "<leader>Q",       ":qa<CR>",                   desc = "Close Neovim" },
     { "<C-s>",           ":update<CR>",               desc = "Save" },
     { "<C-p>",           ":FzfLua files<CR>",         desc = "Picker" },
-    { "<leader>Q",       ":qa<CR>",                   desc = "Close Neovim" },
     { "H",               ":bprev<CR>",                desc = "Previous Buffer" },
     { "L",               ":bnext<CR>",                desc = "Previous Buffer" },
     { "<F5>",            ":update<CR> :source<CR>",   desc = "Source file", },

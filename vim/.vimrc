@@ -122,11 +122,16 @@ let g:lightline = {'colorscheme': 'catppuccin_macchiato'}
 " Mappings
 nnoremap <ESC><ESC> :noh<CR>
 nnoremap <leader><Space> :w<CR>
+
+" Picker
+nnoremap <C-p> :FZF<CR>
 nnoremap <leader>ff :FZF<CR>
 
 " Quit
+nnoremap <leader>Q :qa<CR>
+
+" Windows
 nnoremap <leader>wq :q<CR>
-nnoremap <leader>wQ :qa<CR>
 
 " Tabs
 nnoremap <leader>1 1gt
