@@ -50,7 +50,7 @@
       "src": "https://github.com/neanias/everforest-nvim"
     },
     "fff.nvim": {
-      "rev": "a4f87bd4f2ba37e9bc141d1bfba563dabd3dbc91",
+      "rev": "abfa5d0ef7629867f2546b16e50cdeacbea471fc",
       "src": "https://github.com/dmtrKovalenko/fff.nvim"
     },
     "flash.nvim": {
@@ -162,7 +162,7 @@
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "sshfs": {
-      "rev": "c9d41c51d9bfaf33d6f3679a0d47a8bac6b77de8",
+      "rev": "36b031f1e6416c37e2b501b6fe9468893dde980b",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
     "tokyonight.nvim": {

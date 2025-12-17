@@ -53,7 +53,7 @@ return {
         key = 'f',
       },
       {
-        desc = 'Update Plugins',
+        desc = 'Update',
         group = 'Label',
         action = function()
           vim.pack.update()
