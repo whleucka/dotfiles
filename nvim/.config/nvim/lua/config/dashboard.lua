@@ -55,9 +55,7 @@ return {
       {
         desc = 'Update',
         group = 'Label',
-        action = function()
-          vim.pack.update()
-        end,
+        action = ':StimUpdate',
         key = 'u',
       },
       {
@@ -87,5 +85,3 @@ return {
     }
   }
 }
-
- 

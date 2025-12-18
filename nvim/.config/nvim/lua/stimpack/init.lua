@@ -32,6 +32,11 @@ local function _load_specs(dir)
       end
     end
   end
+  -- higher priority plugins should load first
+  local default_priority = 50
+  table.sort(specs, function(a, b)
+    return (a.priority or default_priority) > (b.priority or default_priority)
+  end)
   return specs
 end
 
@@ -66,6 +71,9 @@ local function _pack_spec(spec)
     end
     if spec.version then
       pack.version = spec.version
+    end
+    if spec.data then
+      pack.data = spec.data
     end
   else
     local source = _get_source(spec)
@@ -143,5 +151,11 @@ function M.setup(opts)
   -- register keybinds
   _register_keys(M.config.specs)
 end
+
+function M.update()
+  vim.pack.update()
+end
+
+vim.api.nvim_create_user_command("StimUpdate", M.update, {})
 
 return M

@@ -1,4 +1,3 @@
-local wk = require("which-key")
 local folds_enabled = vim.opt.foldenable
 local current_colorscheme = vim.g.colors_name
 
@@ -9,7 +8,14 @@ end
 
 local transparent_enabled = is_transparent()
 
-wk.add({
+return {
+  {
+    "<leader>?",
+    function()
+      require("which-key").show({ global = false })
+    end,
+    desc = "Help",
+  },
   {
     "<leader>c",
     group = "Code",
@@ -224,4 +230,4 @@ wk.add({
     { "J", ":m '>+1<CR>gv=gv", desc = "Move selected line down" },
     { "K", ":m '<-2<CR>gv=gv", desc = "Move selected line up" },
   },
-})
+}

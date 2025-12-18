@@ -1,6 +1,6 @@
 return {
   ensure_installed = {
-    'lua', 'php', 'phpdoc', 'twig', 'html', 'css', 'bash', 'python', 'c', 'cpp', 'rust', 'sql', 'javascript',
+    'lua', 'php', 'phpdoc', 'twig', 'html', 'css', 'bash', 'python', 'c', 'cpp', 'rust', 'sql', 'javascript', 'kitty',
   },
   auto_install = false,
   highlight = {

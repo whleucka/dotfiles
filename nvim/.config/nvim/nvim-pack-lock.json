@@ -9,7 +9,7 @@
       "src": "https://github.com/bjarneo/aether.nvim"
     },
     "blink.cmp": {
-      "rev": "e72fc4443f2f91e023d0edd168074ba16898e970",
+      "rev": "37ce860d8eeeee92d60b9a72db21e369d97e6a75",
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "bodybuilder.nvim": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "sshfs.nvim": {
-      "rev": "864ecb55c293674a5aafa8b1a1aeca2056c4972a",
+      "rev": "c38013446e07747a428d5408e2f542fc768ddedb",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
     "tokyonight.nvim": {
