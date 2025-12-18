@@ -1,21 +1,12 @@
 vim.pack.add({
   {
     src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    version = "master"
   },
 })
 
 local config = require("config.treesitter")
 require("nvim-treesitter").setup(config)
-
-local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
-parser_configs.cfml = {
-  install_info = {
-    url = "https://github.com/cfmleditor/tree-sitter-cfml",
-    files = {"cfml/src/parser.c"},
-    branch = "master",
-  },
-  filetype = "cfml",
-}
 
 vim.api.nvim_create_autocmd('PackChanged', {
     group = vim.api.nvim_create_augroup('nvim-treesitter-pack-changed-update-handler', { clear = true }),

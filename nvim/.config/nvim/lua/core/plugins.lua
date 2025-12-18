@@ -20,10 +20,9 @@ vim.api.nvim_create_autocmd("BufRead", {
       require("plugins.nvim-treesitter")
       require('plugins.flash-nvim')
       require("plugins.blink-cmp")
-      require("plugins.smart-splits-nvim")
       require("plugins.luasnip")
       require("plugins.gitsigns")
-      require("plugins.bodybuilder-nvim")
+      --require("plugins.bodybuilder-nvim")
     end
   end
 })
