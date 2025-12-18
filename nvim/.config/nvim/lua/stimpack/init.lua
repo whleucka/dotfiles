@@ -1,4 +1,5 @@
 -- STIMPACK.NVIM
+-- A simple vim.pack wrapper
 
 local M = {}
 
@@ -26,8 +27,8 @@ local function _load_specs(dir)
       local basename = name:gsub("%.lua$", "")
       local spec = _safe_require("plugins." .. basename)
       if spec then
-          -- add plugin to specs
-          table.insert(specs, spec)
+        -- add spec to specs
+        table.insert(specs, spec)
       end
     end
   end
@@ -35,88 +36,96 @@ local function _load_specs(dir)
 end
 
 local function _get_source(spec)
-    local source
-    if type(spec) == "string" then
-        source = spec
-    else
-        source = spec[1]
-    end
+  local source
+  if type(spec) == "string" then
+    source = spec
+  else
+    source = spec[1]
+  end
 
-    if not string.find(source, "^http") then
-        -- ensure a slash between github base and path
-        if source:sub(1,1) ~= "/" then
-            source = "/" .. source
-        end
-        -- assume github url, I suppose?
-        source = "https://github.com" .. source
+  if not string.find(source, "^http") then
+    -- ensure a slash between github base and path
+    if source:sub(1, 1) ~= "/" then
+      source = "/" .. source
     end
-    return source
+    -- assume github url?
+    source = "https://github.com" .. source
+  end
+  return source
 end
 
 local function _pack_spec(spec)
-    -- the goal is the mimic the vim.pack plugin spec
-    -- see https://neovim.io/doc/user/pack.html 
-    local pack = {}
-    if type(spec) == "table" then
-        local source = _get_source(spec)
-        pack.src = source
-        if spec.name then
-            pack.name = spec.name
-        end
-        if spec.version then
-            pack.version = spec.version
-        end
-    else
-        local source = _get_source(spec)
-        pack.src = source
+  -- the goal is the mimic the vim.pack plugin spec
+  -- see https://neovim.io/doc/user/pack.html
+  local pack = {}
+  if type(spec) == "table" then
+    local source = _get_source(spec)
+    pack.src = source
+    if spec.name then
+      pack.name = spec.name
     end
-    return pack
+    if spec.version then
+      pack.version = spec.version
+    end
+  else
+    local source = _get_source(spec)
+    pack.src = source
+  end
+  return pack
 end
 
 local function _load_plugin(pack)
-    vim.pack.add({ pack })
+  vim.pack.add({ pack })
 end
 
-local function _lazy_load_plugin(pack)
-  vim.api.nvim_create_autocmd("BufRead", {
-  once = true, -- load only once
-  callback = function()
-    -- do the actual load
-    _load_plugin(pack)
-  end,
-})
+local function _run_config(config)
+  if type(config) == "function" then
+    local ok, err = pcall(config)
+    if not ok then
+      vim.notify(err, vim.log.levels.ERROR)
+    end
+  end
 end
 
 local function _load_plugins(specs)
-    for i, spec in ipairs(specs) do
-        -- try to load the dep specs, first
-        if spec.dependencies then
-            for i, dependency in ipairs(spec.dependencies) do
-                local pack = _pack_spec(dependency)
-                _load_plugin(pack)
-            end
-        end
-
-        -- load main spec
-        local pack = _pack_spec(spec)
+  for i, spec in ipairs(specs) do
+    -- try to load the dep specs, first
+    if spec.dependencies then
+      for i, dependency in ipairs(spec.dependencies) do
+        local pack = _pack_spec(dependency)
         _load_plugin(pack)
-
-        if spec.config then
-            -- there is a config in the spec, run it
-            spec.config()
-        end
+      end
     end
+
+    -- load main spec
+    local pack = _pack_spec(spec)
+    _load_plugin(pack)
+
+    -- run config
+    if spec.config then
+      if spec.event then
+        vim.api.nvim_create_autocmd(spec.event, {
+          once = true,
+          callback = function()
+            _run_config(spec.config)
+          end,
+        })
+      else
+        _run_config(spec.config)
+      end
+    end
+  end
 end
 
 local function _register_keys(specs)
-    for i, spec in ipairs(specs) do
-      if spec.keys then
-        local with = require("core.utils").with
-        with("which-key", function(m)
-          m.add(spec.keys)
-        end)
-      end
+  for i, spec in ipairs(specs) do
+    if spec.keys then
+      local with = require("core.utils").with
+      with("which-key", function(m)
+        m.add(spec.keys)
+      end)
     end
+  end
 end
 
 local function _defaults()
@@ -125,16 +134,12 @@ end
 
 function M.setup(opts)
   opts = opts or {}
-
   -- warning, config is not validated!
   M.config = vim.tbl_deep_extend("force", _defaults(), opts)
-
   -- load the specs
   M.config.specs = _load_specs(M.config.paths.plugins)
-
   -- load the plugins
   _load_plugins(M.config.specs)
-
   -- register keybinds
   _register_keys(M.config.specs)
 end
