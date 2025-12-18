@@ -1,10 +1,15 @@
 vim.lsp.enable({
-  "intelephense",
-  "ts_ls",
-  "clangd",
   "bashls",
+  "clangd",
+  "cssls",
+  "html",
+  "htmx",
+  "intelephense",
   "lua_ls",
   "ruff",
+  "rust_analyzer",
+  "sqls",
+  "ts_ls",
 })
 
 vim.diagnostic.config({
