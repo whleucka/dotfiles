@@ -1,11 +1,10 @@
-local with = require("core.utils").with
-
-vim.pack.add {
-  "https://github.com/onsails/lspkind.nvim",
-  "https://github.com/Saghen/blink.cmp",
+return {
+  "Saghen/blink.cmp",
+  dependencies = {
+    "onsails/lspkind.nvim"
+  },
+  config = function()
+    local config = require("config.blink")
+    require("blink.cmp").setup(config)
+  end
 }
-
-with("blink.cmp", function(m)
-  local config = require("config.blink")
-  m.setup(config)
-end)

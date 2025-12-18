@@ -15,7 +15,14 @@ local THEME_FILE = os.getenv("HOME") .. "/.config/omarchy/current/theme/neovim.l
 
 -- Fallback to Catppuccin
 local function fallback_theme()
-  require("plugins.catppuccin")
+  vim.cmd.colorscheme "catppuccin"
+  vim.cmd [[
+    hi Normal guibg=NONE ctermbg=NONE
+    hi NormalNC guibg=NONE ctermbg=NONE
+    hi SignColumn guibg=NONE ctermbg=NONE
+    hi LineNr guibg=NONE ctermbg=NONE
+    hi EndOfBuffer guibg=NONE ctermbg=NONE
+  ]]
 end
 
 -- Safe load of theme.lua

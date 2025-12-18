@@ -1,17 +1,13 @@
-local with = require("core.utils").with
-
-vim.pack.add {
-  "https://github.com/stevearc/oil.nvim",
-  "https://github.com/nvim-tree/nvim-web-devicons"
+return {
+    "stevearc/oil.nvim",
+    dependencies = {
+        "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      local config = require("config.oil")
+      require("oil").setup(config)
+    end,
+    keys = {
+        { "<leader>o", ":Oil<CR>", desc = "Oil" },
+    }
 }
-
-with("oil", function(m)
-  local config = require("config.oil")
-  m.setup(config)
-end)
-
-with("which-key", function(m)
-  m.add({
-    { "<leader>o", ":Oil<CR>", desc = "Oil" },
-  })
-end)
