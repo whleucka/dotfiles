@@ -77,6 +77,16 @@ local function _load_plugin(pack)
     vim.pack.add({ pack })
 end
 
+local function _lazy_load_plugin(pack)
+  vim.api.nvim_create_autocmd("BufRead", {
+  once = true, -- load only once
+  callback = function()
+    -- do the actual load
+    _load_plugin(pack)
+  end,
+})
+end
+
 local function _load_plugins(specs)
     for i, spec in ipairs(specs) do
         -- try to load the dep specs, first
