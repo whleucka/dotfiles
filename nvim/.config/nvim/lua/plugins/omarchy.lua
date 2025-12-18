@@ -13,12 +13,12 @@ local uv = vim.loop
 -- Direct path to your theme file
 local THEME_FILE = os.getenv("HOME") .. "/.config/omarchy/current/theme/neovim.lua"
 
--- --- Fallback to Catppuccin --- --
+-- Fallback to Catppuccin
 local function fallback_theme()
   require("plugins.catppuccin")
 end
 
--- --- Safe load of theme.lua --- --
+-- Safe load of theme.lua
 local function load_theme()
   local ok, theme_chunk = pcall(loadfile, THEME_FILE)
   if not ok or not theme_chunk then
@@ -35,7 +35,7 @@ local function load_theme()
   return theme
 end
 
--- --- Apply theme and re-sync UI plugins --- --
+-- Apply theme and re-sync UI plugins
 local known_schemes = {
   tokyonight = "folke/tokyonight.nvim",
   catppuccin = "catppuccin/nvim",
@@ -53,6 +53,13 @@ local function apply_theme()
   for _, spec in ipairs(specs) do
     local repo = spec[1]
     if type(repo) == "string" and not repo:match("LazyVim/LazyVim") then
+      if spec.dependencies then
+        for _, dep in ipairs(spec.dependencies) do
+          local dep_src = "https://github.com/" .. dep
+          vim.pack.add({ { src = dep_src } })
+        end
+      end
+
       local src = "https://github.com/" .. repo
       vim.pack.add({ { src = src } })
 
@@ -92,7 +99,7 @@ local function apply_theme()
   end, 50)
 end
 
--- --- Watcher logic --- --
+-- Watcher logic
 _G._omarchy_state = _G._omarchy_state or { file_poll = nil }
 local W = _G._omarchy_state
 
