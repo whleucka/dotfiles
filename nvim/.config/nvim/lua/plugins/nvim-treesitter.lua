@@ -1,9 +1,13 @@
-vim.pack.add({
+local with = require("core.utils").with
+
+vim.pack.add {
   {
     src = "https://github.com/nvim-treesitter/nvim-treesitter",
     version = "master"
   },
-})
+}
 
-local config = require("config.treesitter")
-require("nvim-treesitter").setup(config)
+with("nvim-treesitter", function(m)
+  local config = require("config.treesitter")
+  m.setup(config)
+end)

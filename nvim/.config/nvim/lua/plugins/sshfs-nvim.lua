@@ -1,30 +1,32 @@
-vim.pack.add({
-  {
-    src = "https://github.com/uhs-robert/sshfs.nvim",
-    name = "sshfs",
-  }
-})
+local with = require("core.utils").with
 
-local config = require("config.sshfs")
-require("sshfs").setup(config)
+vim.pack.add {
+  "https://github.com/uhs-robert/sshfs.nvim",
+}
 
-local wk = require("which-key")
-wk.add({
-  {
-    "<leader>m",
-    group = "SSHFS",
+with("sshfs", function(m)
+  local config = require("config.sshfs")
+  m.setup(config)
+end)
+
+with("which-key", function(m)
+  m.add({
     {
-      {"<leader>mm", ":SSHConnect<cr>", desc = "Mount"},
-      {"<leader>mu", ":SSHDisconnect<cr>", desc = "Disconnect"},
-      {"<leader>mr", ":SSHReload<cr>", desc = "Reload"},
-      {"<leader>mf", ":SSHFiles<cr>", desc = "Browse Files"},
-      {"<leader>mF", ":SSHLiveFind ", desc = "Live Find"},
-      {"<leader>mg", ":SSHGrep<cr>", desc = "Grep"},
-      {"<leader>mG", ":SSHLiveGrep ", desc = "Live Grep"},
-      {"<leader>md", ":SSHChangeDir<cr>", desc = "Change Directory"},
-      {"<leader>me", ":SSHEdit<cr>", desc = "Edit Config"},
-      {"<leader>mc", ":SSHCommand<cr>", desc = "Command"},
-      {"<leader>mt", ":SSHTerminal<cr>", desc = "Terminal"},
+      "<leader>m",
+      group = "SSHFS",
+      {
+        { "<leader>mm", ":SSHConnect<cr>",    desc = "Mount" },
+        { "<leader>mu", ":SSHDisconnect<cr>", desc = "Disconnect" },
+        { "<leader>mr", ":SSHReload<cr>",     desc = "Reload" },
+        { "<leader>mf", ":SSHFiles<cr>",      desc = "Browse Files" },
+        { "<leader>mF", ":SSHLiveFind ",      desc = "Live Find" },
+        { "<leader>mg", ":SSHGrep<cr>",       desc = "Grep" },
+        { "<leader>mG", ":SSHLiveGrep ",      desc = "Live Grep" },
+        { "<leader>md", ":SSHChangeDir<cr>",  desc = "Change Directory" },
+        { "<leader>me", ":SSHEdit<cr>",       desc = "Edit Config" },
+        { "<leader>mc", ":SSHCommand<cr>",    desc = "Command" },
+        { "<leader>mt", ":SSHTerminal<cr>",   desc = "Terminal" },
+      },
     },
-  },
-})
+  })
+end)

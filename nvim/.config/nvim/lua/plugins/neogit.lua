@@ -1,19 +1,22 @@
-vim.pack.add({
+local with = require("core.utils").with
+
+vim.pack.add {
   'https://github.com/nvim-lua/plenary.nvim',
   'https://github.com/sindrets/diffview.nvim',
   'https://github.com/NeogitOrg/neogit',
-})
+}
 
-local wk = require("which-key")
-wk.add({
-  {
-    "<leader>g",
-    group = "Git (neogit)",
+with("which-key", function(m)
+  m.add({
     {
-      "<leader>gg",
-      function()
-        require('neogit').open({ kind = "auto" })
-      end,
+      "<leader>g",
+      group = "Git (neogit)",
+      {
+        "<leader>gg",
+        function()
+          require('neogit').open({ kind = "auto" })
+        end,
+      },
     },
-  },
-})
+  })
+end)

@@ -1,11 +1,16 @@
+local with = require("core.utils").with
+
 vim.pack.add {
   "https://github.com/nvimdev/dashboard-nvim",
 }
 
-local config = require("config.dashboard")
-require('dashboard').setup(config)
+with("dashboard", function(m)
+  local config = require("config.dashboard")
+  m.setup(config)
+end)
 
-local wk = require("which-key")
-wk.add({
-  { "<leader>D", ":Dashboard<cr>", desc = "Dashboard" },
-})
+with("which-key", function(m)
+  m.add({
+    { "<leader>D", ":Dashboard<cr>", desc = "Dashboard" },
+  })
+end)
