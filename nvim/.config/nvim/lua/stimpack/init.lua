@@ -94,6 +94,31 @@ local function _run_config(config)
   end
 end
 
+local function _in_table(tbl, value)
+  for _, v in ipairs(tbl) do
+    if v == value then
+      return true
+    end
+  end
+  return false
+end
+
+local function _normalize_event(event)
+  if not event then
+    return {}
+  end
+
+  if type(event) == "string" then
+    return { event }
+  end
+
+  if type(event) == "table" then
+    return event
+  end
+
+  error("event must be a string or table of strings")
+end
+
 local function _load_plugins(specs)
   for i, spec in ipairs(specs) do
     -- try to load the dep specs, first
@@ -111,12 +136,23 @@ local function _load_plugins(specs)
     -- run config
     if spec.config then
       if spec.event then
-        vim.api.nvim_create_autocmd(spec.event, {
-          once = true,
-          callback = function()
-            _run_config(spec.config)
-          end,
-        })
+        event = _normalize_event(spec.event)
+        if event and _in_table(event, "VeryLazy") then
+            vim.api.nvim_create_autocmd("User", {
+              once = true,
+              pattern = "VeryLazy",
+              callback = function()
+                _run_config(spec.config)
+              end,
+            })
+        else
+          vim.api.nvim_create_autocmd(spec.event, {
+            once = true,
+            callback = function()
+              _run_config(spec.config)
+            end,
+          })
+        end
       else
         _run_config(spec.config)
       end
@@ -153,23 +189,33 @@ end
 
 function M.sync()
   vim.pack.update()
-  vim.notify("All plugins have been updated successfully!", vim.log.levels.INFO)
+  vim.notify("✅ All plugins have been updated successfully!", vim.log.levels.INFO)
 end
 
 function M.delete(name)
   vim.pack.del({ name })
-  vim.notify(("Successfully deleted %s!"):format(name), vim.log.levels.INFO)
+  vim.notify(("✅ Successfully deleted %s!"):format(name), vim.log.levels.INFO)
 end
 
 function M.update(name, opts)
   vim.pack.update({ name }, opts)
-  vim.notify(("Successfully updated %s!"):format(name), vim.log.levels.INFO)
+  vim.notify(("✅ Successfully updated %s!"):format(name), vim.log.levels.INFO)
 end
 
 function M.nuke()
+  local choice = vim.fn.confirm(
+    "☢️ This will DELETE all Neovim plugins on disk.\nAre you sure?",
+    "&Yes\n&No",
+    2
+  )
+  if choice ~= 1 then
+    vim.notify("😎 Aborted. Plugins live another day.", vim.log.levels.INFO)
+    return
+  end
+
   local pack_dir = vim.fn.stdpath("data") .. "/site/pack"
   vim.fn.delete(pack_dir, "rf")
-  vim.notify("All plugins have been nuked! RIP", vim.log.levels.INFO)
+  vim.notify("✅ All plugins have been nuked! You may now :restart Neovim!", vim.log.levels.INFO)
 end
 
 -- cmd updates all plugins
@@ -188,9 +234,25 @@ vim.api.nvim_create_user_command("StimUpdate", function(args)
 end, {
   nargs = 1,
 })
--- cmd deletes all plugins on disk (be careful)
+-- cmd deletes all plugins on disk (be careful y'all!)
 vim.api.nvim_create_user_command("StimNuke", function()
   M.nuke()
 end, {})
+
+function M.very_lazy()
+  -- trigger the very lazy autocmd
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "VeryLazy"
+  })
+end
+-- similar event to lazy
+vim.api.nvim_create_autocmd({
+  "CursorMoved",
+  "InsertEnter",
+  "CmdlineEnter",
+}, {
+  once = true,
+  callback = M.very_lazy,
+})
 
 return M

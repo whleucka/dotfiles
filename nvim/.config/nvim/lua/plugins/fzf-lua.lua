@@ -4,6 +4,7 @@ return {
       local config = { 'fzf-native' }
       require("fzf-lua").setup(config)
     end,
+    event = "VeryLazy",
     keys = {
         {
             "<leader>s",

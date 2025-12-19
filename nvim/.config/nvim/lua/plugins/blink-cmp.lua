@@ -3,7 +3,7 @@ return {
   dependencies = {
     "onsails/lspkind.nvim"
   },
-  event = { "BufRead" },
+  event = "InsertEnter",
   config = function()
     local config = require("config.blink")
     require("blink.cmp").setup(config)

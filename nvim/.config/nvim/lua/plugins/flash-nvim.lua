@@ -1,6 +1,6 @@
 return {
   "folke/flash.nvim",
-  event = { "BufRead" },
+  event = "VeryLazy",
   -- keys = {
   --   {
   --     mode = "o",
