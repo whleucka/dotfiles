@@ -73,7 +73,7 @@ local function _pack_spec(spec, lazy)
   local pack = {}
   local source = _get_source(spec)
   pack.src = source
-  
+
   if type(spec) == "table" then
     pack.name = spec.name or _get_name(source)
     if spec.version then
@@ -161,15 +161,15 @@ local function _load_plugins(specs)
 
         -- load dependencies first
         for _, dep_name in ipairs(dep_names) do
-           vim.cmd.packadd(dep_name)
+          vim.cmd.packadd(dep_name)
         end
 
         vim.cmd.packadd(pack.name)
-        
+
         if spec.config then
           _run_config(spec.config)
         end
-        
+
         -- if invoked via command, we might need to re-run the command?
         -- For simplicity, we assume the user just wanted the plugin loaded.
         -- But for perfect emulation, we should execute the command if args are passed.
@@ -178,16 +178,16 @@ local function _load_plugins(specs)
       if spec.event then
         local events = _normalize_event(spec.event)
         if _in_table(events, "VeryLazy") then
-           vim.api.nvim_create_autocmd("User", {
-             once = true,
-             pattern = "VeryLazy",
-             callback = load_handler,
-           })
+          vim.api.nvim_create_autocmd("User", {
+            once = true,
+            pattern = "VeryLazy",
+            callback = load_handler,
+          })
         else
-           vim.api.nvim_create_autocmd(events, {
-             once = true,
-             callback = load_handler,
-           })
+          vim.api.nvim_create_autocmd(events, {
+            once = true,
+            callback = load_handler,
+          })
         end
       end
 
@@ -210,15 +210,14 @@ local function _load_plugins(specs)
             -- This is tricky because we don't know if the plugin creates the command.
             -- If the plugin creates the command, it might have been created during packadd/config.
             -- We try to execute it.
-             local ok, err = pcall(vim.cmd, { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang })
-             if not ok then
-               -- It's possible the plugin didn't create the command immediately or mapped it differently.
-               -- We ignore for now or notify.
-             end
+            local ok, err = pcall(vim.cmd, { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang })
+            if not ok then
+              -- It's possible the plugin didn't create the command immediately or mapped it differently.
+              -- We ignore for now or notify.
+            end
           end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
         end
       end
-
     else
       -- Eager load
       -- Dependencies are already added (assumed eager if parent is eager)
@@ -347,6 +346,7 @@ function M.very_lazy()
     pattern = "VeryLazy"
   })
 end
+
 -- similar event to lazy
 vim.api.nvim_create_autocmd({
   "CursorMoved",
