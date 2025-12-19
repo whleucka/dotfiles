@@ -59,16 +59,23 @@ local function _get_source(spec)
   return source
 end
 
-local function _pack_spec(spec)
+local function _get_name(source)
+  local name = source:match(".*/(.*)")
+  if name and name:sub(-4) == ".git" then
+    name = name:sub(1, -5)
+  end
+  return name or source
+end
+
+local function _pack_spec(spec, lazy)
   -- the goal is the mimic the vim.pack plugin spec
   -- see https://neovim.io/doc/user/pack.html
   local pack = {}
   local source = _get_source(spec)
+  pack.src = source
+  
   if type(spec) == "table" then
-    pack.src = source
-    if spec.name then
-      pack.name = spec.name
-    end
+    pack.name = spec.name or _get_name(source)
     if spec.version then
       pack.version = spec.version
     end
@@ -76,8 +83,13 @@ local function _pack_spec(spec)
       pack.data = spec.data
     end
   else
-    pack.src = source
+    pack.name = _get_name(source)
   end
+
+  if lazy then
+    pack.opt = true
+  end
+
   return pack
 end
 
@@ -121,39 +133,96 @@ end
 
 local function _load_plugins(specs)
   for i, spec in ipairs(specs) do
-    -- try to load the dep specs, first
+    local is_lazy = spec.event ~= nil or spec.lazy == true or spec.cmd ~= nil or spec.ft ~= nil
+    local dep_names = {}
+
+    -- load dependencies
     if spec.dependencies then
       for i, dependency in ipairs(spec.dependencies) do
-        local pack = _pack_spec(dependency)
+        -- dependencies inherit lazy status from parent
+        local pack = _pack_spec(dependency, is_lazy)
         _load_plugin(pack)
+        if is_lazy then
+          table.insert(dep_names, pack.name)
+        end
       end
     end
 
     -- load main spec
-    local pack = _pack_spec(spec)
+    local pack = _pack_spec(spec, is_lazy)
     _load_plugin(pack)
 
-    -- run config
-    if spec.config then
-      if spec.event then
-        event = _normalize_event(spec.event)
-        if event and _in_table(event, "VeryLazy") then
-            vim.api.nvim_create_autocmd("User", {
-              once = true,
-              pattern = "VeryLazy",
-              callback = function()
-                _run_config(spec.config)
-              end,
-            })
-        else
-          vim.api.nvim_create_autocmd(spec.event, {
-            once = true,
-            callback = function()
-              _run_config(spec.config)
-            end,
-          })
+    if is_lazy then
+      -- Setup lazy loading
+      local loaded = false
+      local load_handler = function(args)
+        if loaded then return end
+        loaded = true
+
+        -- load dependencies first
+        for _, dep_name in ipairs(dep_names) do
+           vim.cmd.packadd(dep_name)
         end
-      else
+
+        vim.cmd.packadd(pack.name)
+        
+        if spec.config then
+          _run_config(spec.config)
+        end
+        
+        -- if invoked via command, we might need to re-run the command?
+        -- For simplicity, we assume the user just wanted the plugin loaded.
+        -- But for perfect emulation, we should execute the command if args are passed.
+      end
+
+      if spec.event then
+        local events = _normalize_event(spec.event)
+        if _in_table(events, "VeryLazy") then
+           vim.api.nvim_create_autocmd("User", {
+             once = true,
+             pattern = "VeryLazy",
+             callback = load_handler,
+           })
+        else
+           vim.api.nvim_create_autocmd(events, {
+             once = true,
+             callback = load_handler,
+           })
+        end
+      end
+
+      if spec.ft then
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = spec.ft,
+          once = true,
+          callback = load_handler,
+        })
+      end
+
+      if spec.cmd then
+        local cmds = type(spec.cmd) == "table" and spec.cmd or { spec.cmd }
+        for _, cmd in ipairs(cmds) do
+          vim.api.nvim_create_user_command(cmd, function(cmd_args)
+            -- Remove the self-destructing command to avoid infinite loop if the plugin doesn't define it
+            vim.api.nvim_del_user_command(cmd)
+            load_handler()
+            -- Re-execute the command if the plugin defined it, or just let it be
+            -- This is tricky because we don't know if the plugin creates the command.
+            -- If the plugin creates the command, it might have been created during packadd/config.
+            -- We try to execute it.
+             local ok, err = pcall(vim.cmd, { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang })
+             if not ok then
+               -- It's possible the plugin didn't create the command immediately or mapped it differently.
+               -- We ignore for now or notify.
+             end
+          end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
+        end
+      end
+
+    else
+      -- Eager load
+      -- Dependencies are already added (assumed eager if parent is eager)
+      if spec.config then
         _run_config(spec.config)
       end
     end
