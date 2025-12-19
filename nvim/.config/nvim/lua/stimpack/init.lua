@@ -151,10 +151,46 @@ function M.setup(opts)
   _register_keys(M.config.specs)
 end
 
-function M.update()
+function M.sync()
   vim.pack.update()
+  vim.notify("All plugins have been updated successfully!", vim.log.levels.INFO)
 end
 
-vim.api.nvim_create_user_command("StimUpdate", M.update, {})
+function M.delete(name)
+  vim.pack.del({ name })
+  vim.notify(("Successfully deleted %s!"):format(name), vim.log.levels.INFO)
+end
+
+function M.update(name, opts)
+  vim.pack.update({ name }, opts)
+  vim.notify(("Successfully updated %s!"):format(name), vim.log.levels.INFO)
+end
+
+function M.nuke()
+  local pack_dir = vim.fn.stdpath("data") .. "/site/pack"
+  vim.fn.delete(pack_dir, "rf")
+  vim.notify("All plugins have been nuked! RIP", vim.log.levels.INFO)
+end
+
+-- cmd updates all plugins
+vim.api.nvim_create_user_command("StimSync", M.sync, {})
+-- cmd deletes a single plugin
+vim.api.nvim_create_user_command("StimDelete", function(args)
+  local name = args.fargs[1]
+  M.delete(name)
+end, {
+  nargs = 1,
+})
+-- cmd updates a single plugin
+vim.api.nvim_create_user_command("StimUpdate", function(args)
+  local name = args.fargs[1]
+  M.update(name, { force = true })
+end, {
+  nargs = 1,
+})
+-- cmd deletes all plugins on disk (be careful)
+vim.api.nvim_create_user_command("StimNuke", function()
+  M.nuke()
+end, {})
 
 return M

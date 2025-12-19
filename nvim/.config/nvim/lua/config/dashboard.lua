@@ -53,10 +53,10 @@ return {
         key = 'f',
       },
       {
-        desc = 'Update',
+        desc = 'Sync',
         group = 'Label',
-        action = ':StimUpdate',
-        key = 'u',
+        action = ':StimSync',
+        key = 's',
       },
       {
         desc = 'Config',

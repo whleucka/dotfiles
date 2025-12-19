@@ -4,17 +4,9 @@
       "rev": "3732756842a2f7e0e76a7b0487e9692072857277",
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
-    "aether.nvim": {
-      "rev": "e4c485f6fea6170fe2da17e87ca98cd25d215cd5",
-      "src": "https://github.com/bjarneo/aether.nvim"
-    },
     "blink.cmp": {
       "rev": "37ce860d8eeeee92d60b9a72db21e369d97e6a75",
       "src": "https://github.com/Saghen/blink.cmp"
-    },
-    "bodybuilder.nvim": {
-      "rev": "d036ee9ffdd117817992696e07b755d1c3e24c03",
-      "src": "https://github.com/whleucka/bodybuilder.nvim"
     },
     "catppuccin": {
       "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
@@ -44,10 +36,6 @@
       "rev": "5813e4878748805f1518cee7abb50fd7205a3a48",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
-    "hackerman.nvim": {
-      "rev": "8134000fa4de5036d1af519774c3e373887226e3",
-      "src": "https://github.com/bjarneo/hackerman.nvim"
-    },
     "lspkind.nvim": {
       "rev": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3",
       "src": "https://github.com/onsails/lspkind.nvim"
@@ -59,10 +47,6 @@
     "neogit": {
       "rev": "d8bf9102692250193b855acd9025a826f1af2729",
       "src": "https://github.com/NeogitOrg/neogit"
-    },
-    "nvim": {
-      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
-      "src": "https://github.com/catppuccin/nvim"
     },
     "nvim-treesitter": {
       "rev": "42fc28ba918343ebfd5565147a42a26580579482",
@@ -84,10 +68,6 @@
     "sshfs.nvim": {
       "rev": "c38013446e07747a428d5408e2f542fc768ddedb",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
-    },
-    "tokyonight.nvim": {
-      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
-      "src": "https://github.com/folke/tokyonight.nvim"
     },
     "vim-repeat": {
       "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",
