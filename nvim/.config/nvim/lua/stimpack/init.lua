@@ -63,8 +63,8 @@ local function _pack_spec(spec)
   -- the goal is the mimic the vim.pack plugin spec
   -- see https://neovim.io/doc/user/pack.html
   local pack = {}
+  local source = _get_source(spec)
   if type(spec) == "table" then
-    local source = _get_source(spec)
     pack.src = source
     if spec.name then
       pack.name = spec.name
@@ -76,7 +76,6 @@ local function _pack_spec(spec)
       pack.data = spec.data
     end
   else
-    local source = _get_source(spec)
     pack.src = source
   end
   return pack
