@@ -271,6 +271,32 @@ function M.update(name, opts)
   vim.notify(("✅ Successfully updated %s!"):format(name), vim.log.levels.INFO)
 end
 
+function M.get(name)
+  local info_list = vim.pack.get({ name }, { info = true })
+  if not info_list or #info_list == 0 then
+    vim.notify("Plugin not found: " .. name, vim.log.levels.WARN)
+    return
+  end
+
+  local info = info_list[1]
+  local msg = {
+    "Plugin Info: " .. name,
+    "Path: " .. (info.path or "N/A"),
+    "Active: " .. tostring(info.active),
+    "Revision: " .. (info.rev or "N/A"),
+  }
+
+  if info.branches then
+    table.insert(msg, "Branches: " .. table.concat(info.branches, ", "))
+  end
+
+  if info.tags then
+    table.insert(msg, "Tags: " .. table.concat(info.tags, ", "))
+  end
+
+  vim.notify(table.concat(msg, "\n"), vim.log.levels.INFO)
+end
+
 function M.nuke()
   local choice = vim.fn.confirm(
     "☢️ This will DELETE all Neovim plugins on disk.\nAre you sure?",
@@ -300,6 +326,13 @@ end, {
 vim.api.nvim_create_user_command("StimUpdate", function(args)
   local name = args.fargs[1]
   M.update(name, { force = true })
+end, {
+  nargs = 1,
+})
+-- cmd gets info for a single plugin
+vim.api.nvim_create_user_command("StimGet", function(args)
+  local name = args.fargs[1]
+  M.get(name)
 end, {
   nargs = 1,
 })
