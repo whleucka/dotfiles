@@ -61,9 +61,8 @@
       "src": "https://github.com/rcarriga/nvim-notify"
     },
     "nvim-treesitter": {
-      "rev": "42fc28ba918343ebfd5565147a42a26580579482",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
-      "version": "'master'"
+      "rev": "4fc09bee78e91bf4ba471cdab4bf9dfa37fde51c",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-web-devicons": {
       "rev": "8dcb311b0c92d460fac00eac706abd43d94d68af",
@@ -80,6 +79,10 @@
     "sshfs.nvim": {
       "rev": "c38013446e07747a428d5408e2f542fc768ddedb",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
+    },
+    "treesitter-modules.nvim": {
+      "rev": "dcb5030422732af54631083316887e512e4a79a3",
+      "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
     },
     "vim-repeat": {
       "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",

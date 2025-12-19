@@ -55,10 +55,13 @@ vim.opt.whichwrap:append('<,>,[,]') -- Left/right move across lines
 
 -- Folds
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 1
 vim.opt.foldenable = false
+
+-- Indent
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
 vim.wo.winbar = ""
 
