@@ -267,7 +267,6 @@ end
 
 function M.update(name, opts)
   vim.pack.update({ name }, opts)
-  vim.notify(("✅ Successfully updated %s!"):format(name), vim.log.levels.INFO)
 end
 
 function M.get(name)
