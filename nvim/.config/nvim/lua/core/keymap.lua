@@ -8,6 +8,13 @@ end
 
 local transparent_enabled = is_transparent()
 
+-- Default background transparent
+vim.cmd("hi! Normal guibg=NONE ctermbg=NONE")
+vim.cmd("hi! NormalNC guibg=NONE ctermbg=NONE")
+vim.cmd("hi! SignColumn guibg=NONE ctermbg=NONE")
+vim.cmd("hi! LineNr guibg=NONE ctermbg=NONE")
+vim.cmd("hi! EndOfBuffer guibg=NONE ctermbg=NONE")
+
 return {
   {
     "<leader>?",
