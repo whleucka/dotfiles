@@ -163,7 +163,7 @@ function M.load_plugins(specs)
               -- if opts or main were given, but we couldn't find setup, it's a problem.
               vim.notify(
                 ("STIMPACK: could not auto-setup '%s'. No 'setup' function found for module '%s'.")
-                  :format(pack.name, module_name),
+                :format(pack.name, module_name),
                 vim.log.levels.WARN
               )
             end
