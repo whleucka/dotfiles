@@ -139,12 +139,17 @@ local function _run_build(spec, pack_name, force)
     return
   end
 
-  local info_list = vim.pack.get({ pack_name }, { info = true })
-  if not info_list or #info_list == 0 or not info_list[1].path then
-    vim.notify("Could not find path for " .. pack_name .. " to run build.", vim.log.levels.WARN)
-    return
+  local plugin_path
+  if spec.dir then
+    plugin_path = spec.dir
+  else
+    local info_list = vim.pack.get({ pack_name }, { info = true })
+    if not info_list or #info_list == 0 or not info_list[1].path then
+      vim.notify("Could not find path for " .. pack_name .. " to run build.", vim.log.levels.WARN)
+      return
+    end
+    plugin_path = info_list[1].path
   end
-  local plugin_path = info_list[1].path
   local marker_file = plugin_path .. "/.stimpack_built"
 
   if not force then
@@ -230,92 +235,112 @@ local function _load_plugins(specs)
         end
       end
 
-      -- load main spec
-      local pack = _pack_spec(spec, is_lazy)
-      _load_plugin(pack)
+      local pack
+      local process_plugin = true
+      if spec.dir then
+        local dir_path = vim.fn.expand(spec.dir)
+        if vim.fn.isdirectory(dir_path) == 1 then
+          vim.opt.rtp:append(dir_path)
+          pack = { name = spec.name or spec.dir }
+        else
+          process_plugin = false
+          local name = spec.name or _get_name(_get_source(spec))
+          vim.notify(
+            ("❌ Directory not found for plugin '%s': %s"):format(name, spec.dir),
+            vim.log.levels.WARN
+          )
+        end
+      else
+        pack = _pack_spec(spec, is_lazy)
+        _load_plugin(pack)
+      end
 
-      if is_lazy then
-        -- Setup lazy loading
-        local loaded = false
-        local load_handler = function(args)
-          if loaded then
-            return
+      if process_plugin then
+        if is_lazy then
+          -- Setup lazy loading
+          local loaded = false
+          local load_handler = function(args)
+            if loaded then
+              return
+            end
+            loaded = true
+
+            -- load dependencies first
+            for _, dep_name in ipairs(dep_names) do
+              vim.cmd.packadd(dep_name)
+            end
+
+            if not spec.dir then
+              vim.cmd.packadd(pack.name)
+            end
+            _run_build(spec, pack.name, false)
+
+            if spec.config then
+              _run_config(spec.config)
+            end
+
+            _register_key(spec)
+
+            -- if invoked via command, we might need to re-run the command?
+            -- For simplicity, we assume the user just wanted the plugin loaded.
+            -- But for perfect emulation, we should execute the command if args are passed.
           end
-          loaded = true
 
-          -- load dependencies first
-          for _, dep_name in ipairs(dep_names) do
-            vim.cmd.packadd(dep_name)
+          if spec.event then
+            local events = _normalize_event(spec.event)
+            if _in_table(events, "VeryLazy") then
+              vim.api.nvim_create_autocmd("User", {
+                once = true,
+                pattern = "VeryLazy",
+                callback = load_handler,
+              })
+            else
+              vim.api.nvim_create_autocmd(events, {
+                once = true,
+                callback = load_handler,
+              })
+            end
           end
 
-          vim.cmd.packadd(pack.name)
+          if spec.ft then
+            vim.api.nvim_create_autocmd("FileType", {
+              pattern = spec.ft,
+              once = true,
+              callback = load_handler,
+            })
+          end
+
+          if spec.cmd then
+            local cmds = type(spec.cmd) == "table" and spec.cmd or { spec.cmd }
+            for _, cmd in ipairs(cmds) do
+              vim.api.nvim_create_user_command(cmd, function(cmd_args)
+                -- Remove the self-destructing command to avoid infinite loop if the plugin doesn't define it
+                vim.api.nvim_del_user_command(cmd)
+                load_handler()
+                -- Re-execute the command if the plugin defined it, or just let it be
+                -- This is tricky because we don't know if the plugin creates the command.
+                -- If the plugin creates the command, it might have been created during packadd/config.
+                -- We try to execute it.
+                local ok, err = pcall(
+                  vim.cmd,
+                  { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang }
+                )
+                if not ok then
+                  -- It's possible the plugin didn't create the command immediately or mapped it differently.
+                  -- We ignore for now or notify.
+                end
+              end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
+            end
+          end
+        else
+          -- Eager load
+          -- Dependencies are already added (assumed eager if parent is eager)
           _run_build(spec, pack.name, false)
-
           if spec.config then
             _run_config(spec.config)
           end
-
           _register_key(spec)
-
-          -- if invoked via command, we might need to re-run the command?
-          -- For simplicity, we assume the user just wanted the plugin loaded.
-          -- But for perfect emulation, we should execute the command if args are passed.
         end
-
-        if spec.event then
-          local events = _normalize_event(spec.event)
-          if _in_table(events, "VeryLazy") then
-            vim.api.nvim_create_autocmd("User", {
-              once = true,
-              pattern = "VeryLazy",
-              callback = load_handler,
-            })
-          else
-            vim.api.nvim_create_autocmd(events, {
-              once = true,
-              callback = load_handler,
-            })
-          end
-        end
-
-        if spec.ft then
-          vim.api.nvim_create_autocmd("FileType", {
-            pattern = spec.ft,
-            once = true,
-            callback = load_handler,
-          })
-        end
-
-        if spec.cmd then
-          local cmds = type(spec.cmd) == "table" and spec.cmd or { spec.cmd }
-          for _, cmd in ipairs(cmds) do
-            vim.api.nvim_create_user_command(cmd, function(cmd_args)
-              -- Remove the self-destructing command to avoid infinite loop if the plugin doesn't define it
-              vim.api.nvim_del_user_command(cmd)
-              load_handler()
-              -- Re-execute the command if the plugin defined it, or just let it be
-              -- This is tricky because we don't know if the plugin creates the command.
-              -- If the plugin creates the command, it might have been created during packadd/config.
-              -- We try to execute it.
-              local ok, err = pcall(
-                vim.cmd,
-                { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang }
-              )
-              if not ok then
-                -- It's possible the plugin didn't create the command immediately or mapped it differently.
-                -- We ignore for now or notify.
-              end
-            end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
-          end
-        end
-      else
-        -- Eager load
-        -- Dependencies are already added (assumed eager if parent is eager)
-        _run_build(spec, pack.name, false)
-        if spec.config then
-          _run_config(spec.config)
-        end
-        _register_key(spec)
       end
     end
   end
@@ -339,9 +364,11 @@ function M.sync()
   vim.pack.update()
   vim.notify("Plugins updated, running build steps...", vim.log.levels.INFO)
   for _, spec in ipairs(M.config.specs) do
-    if spec.build then
-      local pack_name = spec.name or _get_name(_get_source(spec))
-      _run_build(spec, pack_name, true)
+    if not spec.dir then
+      if spec.build then
+        local pack_name = spec.name or _get_name(_get_source(spec))
+        _run_build(spec, pack_name, true)
+      end
     end
   end
 end
@@ -354,10 +381,12 @@ end
 function M.update(name, opts)
   vim.pack.update({ name }, opts)
   for _, spec in ipairs(M.config.specs) do
-    local pack_name = spec.name or _get_name(_get_source(spec))
-    if pack_name == name and spec.build then
-      _run_build(spec, name, true)
-      break
+    if not spec.dir then
+      local pack_name = spec.name or _get_name(_get_source(spec))
+      if pack_name == name and spec.build then
+        _run_build(spec, name, true)
+        break
+      end
     end
   end
 end

@@ -24,6 +24,12 @@ return {
   -- Can be a short form like "owner/repo".
   "owner/repo-name",
 
+  -- Load a local plugin from the specified directory (optional).
+  -- This is useful for plugin development.
+  -- If this key is set, the plugin will be loaded from this path
+  -- instead of being fetched from a remote repository.
+  dir = "/path/to/my/local/plugin",
+
   -- The name of the plugin (optional).
   -- If not provided, it will be inferred from the URL.
   name = "my-plugin-name",
