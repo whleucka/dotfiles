@@ -63,8 +63,7 @@ vim.opt.foldenable = false
 -- Indent
 vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
--- Winbar
-vim.wo.winbar = "%t"
+vim.wo.winbar = ""
 
 -- Neovim 0.12+
 vim.opt.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
