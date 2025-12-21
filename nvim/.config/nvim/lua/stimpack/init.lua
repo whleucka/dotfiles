@@ -257,7 +257,6 @@ end
 
 function M.sync()
   vim.pack.update()
-  vim.notify("✅ All plugins have been updated successfully!", vim.log.levels.INFO)
 end
 
 function M.delete(name)
