@@ -131,6 +131,19 @@ local function _normalize_event(event)
   error("event must be a string or table of strings")
 end
 
+local function _register_key(spec)
+  if spec.keys then
+    local keys_table = spec.keys
+    if type(keys_table) == "function" then
+      keys_table = keys_table()
+    end
+    local with = require("core.utils").with
+    with("which-key", function(m)
+      m.add(keys_table)
+    end)
+  end
+end
+
 local function _load_plugins(specs)
   for i, spec in ipairs(specs) do
     local is_lazy = spec.event ~= nil or spec.lazy == true or spec.cmd ~= nil or spec.ft ~= nil
@@ -169,6 +182,8 @@ local function _load_plugins(specs)
         if spec.config then
           _run_config(spec.config)
         end
+
+        _register_key(spec)
 
         -- if invoked via command, we might need to re-run the command?
         -- For simplicity, we assume the user just wanted the plugin loaded.
@@ -224,17 +239,7 @@ local function _load_plugins(specs)
       if spec.config then
         _run_config(spec.config)
       end
-    end
-  end
-end
-
-local function _register_keys(specs)
-  for i, spec in ipairs(specs) do
-    if spec.keys then
-      local with = require("core.utils").with
-      with("which-key", function(m)
-        m.add(spec.keys)
-      end)
+      _register_key(spec)
     end
   end
 end
@@ -251,8 +256,6 @@ function M.setup(opts)
   M.config.specs = _load_specs(M.config.paths.plugins)
   -- load the plugins
   _load_plugins(M.config.specs)
-  -- register keybinds
-  _register_keys(M.config.specs)
 end
 
 function M.sync()

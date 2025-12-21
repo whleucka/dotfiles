@@ -3,9 +3,10 @@ return {
     dependencies = {
       "MeanderingProgrammer/treesitter-modules.nvim"
     },
+    lazy = false,
     config = function()
-      local config = require("config.treesitter")
       require("nvim-treesitter").setup()
+      local config = require("config.treesitter")
       require("treesitter-modules").setup(config)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = { '<filetype>' },

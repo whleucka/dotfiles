@@ -1,35 +1,41 @@
 return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPost", "VeryLazy" },
-  -- keys = {
-  --   {
-  --     "]c",
-  --     function()
-  --       require("gitsigns").nav_hunk('next')
-  --     end,
-  --     desc = "Next hunk"
-  --   },
-  --   {
-  --     "[c",
-  --     function()
-  --       require("gitsigns").nav_hunk('prev')
-  --     end,
-  --     desc = "Prev hunk"
-  --   },
-  --   {
-  --     "<leader>gh",
-  --     group = "Hunk",
-  --     { "<leader>ghs", require("gitsigns").stage_hunk,          desc = "Stage" },
-  --     { "<leader>ghr", require("gitsigns").reset_hunk,          desc = "Reset" },
-  --     { "<leader>ghp", require("gitsigns").preview_hunk,        desc = "Preview" },
-  --     { "<leader>ghP", require("gitsigns").preview_hunk_inline, desc = "Preview inline" },
-  --     {
-  --       "<leader>ghb",
-  --       function()
-  --         require("gitsigns").blame_line({ full = true })
-  --       end,
-  --       desc = "Blame line"
-  --     },
-  --   }
-  -- }
+  keys = function()
+    return {
+      {
+        "]c",
+        function()
+          require("gitsigns").nav_hunk("next")
+        end,
+        desc = "Next hunk",
+      },
+      {
+        "[c",
+        function()
+          require("gitsigns").nav_hunk("prev")
+        end,
+        desc = "Prev hunk",
+      },
+      {
+        "<leader>gh",
+        group = "Hunk",
+        { "<leader>ghs", require("gitsigns").stage_hunk, desc = "Stage" },
+        { "<leader>ghr", require("gitsigns").reset_hunk, desc = "Reset" },
+        { "<leader>ghp", require("gitsigns").preview_hunk, desc = "Preview" },
+        {
+          "<leader>ghP",
+          require("gitsigns").preview_hunk_inline,
+          desc = "Preview inline",
+        },
+        {
+          "<leader>ghb",
+          function()
+            require("gitsigns").blame_line({ full = true })
+          end,
+          desc = "Blame line",
+        },
+      },
+    }
+  end,
 }
