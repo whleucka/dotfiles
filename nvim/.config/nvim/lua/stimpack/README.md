@@ -12,6 +12,22 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
 
+## Setup
+
+```lua
+require("stimpack").setup()
+```
+
+## Default Config
+
+```lua
+{
+  paths = {
+    plugins = vim.fn.stdpath("config") .. "/lua/plugins",
+  }
+}
+```
+
 ## Plugin Specification
 
 Plugins are defined as `.lua` files in the `lua/plugins` directory. Each file returns a table that represents the plugin's specification.
@@ -53,9 +69,9 @@ return {
 
   -- Specify the main module of a plugin (optional).
   -- This is useful if the plugin's main module is not the same as its name
-  -- (e.g. 'dashboard-nvim' needs to be required as 'dashboard').
+  -- (e.g. 'plugin-nvim' needs to be required as 'plugin').
   -- When using `opts`, this module will be used for the setup function.
-  main = "dashboard",
+  main = "plugin",
 
   -- Plugin options table (optional).
   -- A simpler alternative to the `config` function. If this key is provided,
