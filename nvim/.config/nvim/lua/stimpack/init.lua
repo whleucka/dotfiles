@@ -246,7 +246,7 @@ local function _load_plugins(specs)
           process_plugin = false
           local name = spec.name or _get_name(_get_source(spec))
           vim.notify(
-            ("❌ Directory not found for plugin '%s': %s"):format(name, spec.dir),
+            ("stimpack: Directory not found for plugin '%s': %s"):format(name, spec.dir),
             vim.log.levels.WARN
           )
         end
@@ -256,6 +256,37 @@ local function _load_plugins(specs)
       end
 
       if process_plugin then
+        if not spec.config then
+          -- If no config, we might auto-generate one from opts, or a default one.
+          spec.config = function()
+            local module_name
+            if spec.main then
+              module_name = spec.main
+            else
+              module_name = pack.name:gsub("[-.]nvim$", "")
+            end
+
+            local ok, mod = pcall(require, module_name)
+            if ok and mod and type(mod.setup) == "function" then
+              local opts_table = spec.opts or {}
+              local setup_ok, err = pcall(mod.setup, opts_table)
+              if not setup_ok then
+                vim.notify(
+                  ("stimpack: error calling setup for '%s': %s"):format(pack.name, err),
+                  vim.log.levels.ERROR
+                )
+              end
+            elseif spec.opts ~= nil or spec.main then
+              -- if opts or main were given, but we couldn't find setup, it's a problem.
+              vim.notify(
+                ("stimpack: could not auto-setup '%s'. No 'setup' function found for module '%s'.")
+                  :format(pack.name, module_name),
+                vim.log.levels.WARN
+              )
+            end
+          end
+        end
+
         if is_lazy then
           -- Setup lazy loading
           local loaded = false

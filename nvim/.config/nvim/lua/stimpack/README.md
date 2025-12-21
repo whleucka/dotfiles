@@ -51,6 +51,20 @@ return {
   -- Defaults to true. If false, the plugin will not be loaded.
   enabled = true,
 
+  -- Specify the main module of a plugin (optional).
+  -- This is useful if the plugin's main module is not the same as its name
+  -- (e.g. 'dashboard-nvim' needs to be required as 'dashboard').
+  -- When using `opts`, this module will be used for the setup function.
+  main = "dashboard",
+
+  -- Plugin options table (optional).
+  -- A simpler alternative to the `config` function. If this key is provided,
+  -- stimpack will automatically call the plugin's `setup` function with this table.
+  -- If you also provide a `config` function, the `opts` table will be ignored.
+  opts = {
+    -- plugin options here
+  },
+
   -- Configuration function to run after the plugin is loaded (optional).
   config = function()
     require("my-plugin-name").setup({
@@ -83,3 +97,5 @@ return {
   end,
 }
 ```
+
+**Note:** If neither `config` nor `opts` are specified for a plugin, `stimpack` will automatically attempt to call the plugin's `setup` function with an empty table (e.g., `require("plugin-name").setup({})`). It determines the `plugin-name` by first checking for a `main` key in your spec, and if not found, by stripping `[-.]nvim$` from the plugin's repository name.

@@ -1,11 +1,9 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
+  main = "which-key",
   config = function()
-    local with = require("core.utils").with
-    with("which-key", function(m)
-      local keymap = require("core.keymap")
-      m.add(keymap)
-    end)
+    local keymap = require("core.keymap")
+    require("which-key").add(keymap)
   end
 }

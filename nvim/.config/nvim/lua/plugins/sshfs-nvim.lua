@@ -1,10 +1,7 @@
 return {
     "uhs-robert/sshfs.nvim",
     event = "VeryLazy",
-    config = function()
-      local config = require("config.sshfs")
-      require("sshfs").setup(config)
-    end,
+    opts = require("config.sshfs"),
     keys = {
         {
             "<leader>m",
