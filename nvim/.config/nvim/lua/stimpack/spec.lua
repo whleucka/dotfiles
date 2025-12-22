@@ -70,14 +70,14 @@ function M.pack_spec(spec, lazy)
   return pack
 end
 
-function M.load_all(dir)
+function M.load_all(dir, prefix)
   local specs = {}
   for name, type in vim.fs.dir(dir) do
     -- get all the lua files in the plugin dir
     if type == "file" and name:sub(-4) == ".lua" then
       -- strip off .lua
       local basename = name:gsub("%.lua$", "")
-      local spec = _safe_require("plugins." .. basename)
+      local spec = _safe_require(prefix .. "." .. basename)
       if spec then
         -- add spec to specs
         table.insert(specs, spec)

@@ -4,9 +4,9 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 
 ## Commands
 
-- `:StimSync`: Updates all installed plugins. This command is equivalent to running `vim.pack.update()`.
+- `:StimSync`: Updates all installed plugins and runs their build commands if defined. This command internally calls `vim.pack.update()`.
 - `:StimDelete <plugin-name>`: Deletes a specific plugin by its name. For example, `:StimDelete nvim-tree.lua`.
-- `:StimUpdate <plugin-name>`: Updates a specific plugin by its name. For example, `:StimUpdate plenary.nvim`.
+- `:StimUpdate <plugin-name>`: Updates a specific plugin by its name and runs its build command if defined. This command internally calls `vim.pack.update()`.
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
 - `:StimStatus`: Displays a list of all loaded plugins, indicating whether they are local (development) plugins or providing the short commit hash for installed plugins. It does not currently track plugin load times.
@@ -58,8 +58,8 @@ return {
   },
 
   -- A build command to run on install or update (optional).
-  -- Can be a string or a function.
-  build = "make", -- or "npm install" or "cargo build --release"
+  -- Can be a string (shell command or Neovim command prefixed with ':') or a function.
+  build = "make", -- or ":TSUpdate" or "npm install" or "cargo build --release"
 
   -- A flag to enable or disable the plugin (optional).
   -- Can be a boolean or a function that returns a boolean.

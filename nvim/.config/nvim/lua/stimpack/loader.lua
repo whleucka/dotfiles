@@ -13,66 +13,7 @@ local function _run_config(config)
   end
 end
 
-function M.run_build(spec, pack_name, force)
-  if not spec.build then
-    return
-  end
 
-  local plugin_path
-  if spec.dir then
-    plugin_path = spec.dir
-  else
-    local info_list = vim.pack.get({ pack_name }, { info = true })
-    if not info_list or #info_list == 0 or not info_list[1].path then
-      vim.notify("STIMPACK: Could not find path for " .. pack_name .. " to run build.", vim.log.levels.WARN)
-      return
-    end
-    plugin_path = info_list[1].path
-  end
-  local marker_file = plugin_path .. "/.stimpack_built"
-
-  if not force then
-    local f = io.open(marker_file, "r")
-    if f then
-      f:close()
-      return -- build already done
-    end
-  end
-
-  vim.notify("STIMPACK: Building " .. pack_name .. "...", vim.log.levels.INFO)
-
-  local build_cmd = spec.build
-  local success = false
-  if type(build_cmd) == "string" then
-    local result = vim.fn.system("cd " .. vim.fn.shellescape(plugin_path) .. " && " .. build_cmd)
-    if vim.v.shell_error == 0 then
-      success = true
-    else
-      vim.notify("STIMPACK: Failed to build " .. pack_name .. ":\n" .. result, vim.log.levels.ERROR)
-    end
-  elseif type(build_cmd) == "function" then
-    local ok, err = pcall(build_cmd)
-    if ok then
-      success = true
-    else
-      vim.notify("STIMPACK: Failed to build " .. pack_name .. ":\n" .. err, vim.log.levels.ERROR)
-    end
-  end
-
-  if success then
-    vim.notify("STIMPACK: Successfully built " .. pack_name, vim.log.levels.INFO)
-    -- create marker file
-    local f = io.open(marker_file, "w")
-    if f then
-      f:close()
-    end
-  else
-    -- if we forced a build and it failed, remove the marker so we can try again next time
-    if force then
-      os.remove(marker_file)
-    end
-  end
-end
 
 local function _register_key(spec)
   if spec.keys then
@@ -187,7 +128,7 @@ function M.load_plugins(specs)
             if not spec.dir then
               vim.cmd.packadd(pack.name)
             end
-            M.run_build(spec, pack.name, false)
+  
 
             if spec.config then
               _run_config(spec.config)
@@ -204,7 +145,7 @@ function M.load_plugins(specs)
         else
           -- Eager load
           -- Dependencies are already added (assumed eager if parent is eager)
-          M.run_build(spec, pack.name, false)
+
           if spec.config then
             _run_config(spec.config)
           end

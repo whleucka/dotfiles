@@ -8,6 +8,7 @@ M.config = {}
 local spec_util = require("stimpack.spec")
 local loader = require("stimpack.loader")
 local commands = require("stimpack.commands")
+local build = require("stimpack.build")
 
 local function _defaults()
   return require("stimpack.defaults").get()
@@ -19,7 +20,7 @@ function M.setup(opts)
   -- warning, config is not validated!
   M.config = vim.tbl_deep_extend("force", _defaults(), opts)
   -- load the specs
-  M.config.specs = spec_util.load_all(M.config.paths.plugins)
+  M.config.specs = spec_util.load_all(M.config.paths.plugins, "plugins")
   -- load the plugins
   loader.load_plugins(M.config.specs)
   -- setup commands
@@ -39,15 +40,6 @@ end
 
 function M.sync()
   vim.pack.update()
-  vim.notify("STIMPACK: Plugins updated, running build steps...", vim.log.levels.INFO)
-  for _, spec in ipairs(M.config.specs) do
-    if not spec.dir then
-      if spec.build then
-        local pack_name = spec.name or spec_util.get_name(spec_util.get_source(spec))
-        loader.run_build(spec, pack_name, true)
-      end
-    end
-  end
 end
 
 function M.delete(name)
@@ -57,15 +49,6 @@ end
 
 function M.update(name, opts)
   vim.pack.update({ name }, opts)
-  for _, spec in ipairs(M.config.specs) do
-    if not spec.dir then
-      local pack_name = spec.name or spec_util.get_name(spec_util.get_source(spec))
-      if pack_name == name and spec.build then
-        loader.run_build(spec, name, true)
-        break
-      end
-    end
-  end
 end
 
 function M.get(name)
@@ -126,5 +109,23 @@ vim.api.nvim_create_autocmd({
   once = true,
   callback = M.very_lazy,
 })
+
+local function hooks(ev)
+  local name, kind = ev.data.spec.name, ev.data.kind
+  if kind == 'install' or kind == 'update' then
+    for _, spec in ipairs(M.config.specs) do
+        local spec_name = type(spec) == 'string' and require('stimpack.spec').get_name(spec) or spec.name or require('stimpack.spec').get_name(spec[1])
+        if spec_name == name then
+            if not ev.data.active then
+                vim.cmd.packadd(name)
+            end
+            build.run(spec, name)
+            break
+        end
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 return M

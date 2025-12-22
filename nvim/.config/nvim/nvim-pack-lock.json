@@ -89,7 +89,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "sshfs.nvim": {
-      "rev": "c38013446e07747a428d5408e2f542fc768ddedb",
+      "rev": "cfb4d0cc9dccdffc0ba64c1d28efc85e838b0ba3",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
     "tokyonight.nvim": {
