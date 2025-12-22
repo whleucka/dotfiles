@@ -35,7 +35,7 @@ return {
     ['chainlogic'] = '/mnt/enc/chainlogic-dev',
     ['elitedesk'] = {
       '/home/whleucka/Projects/music',
-      '/home/whleucka/projects/echo',
+      '/home/whleucka/Projects/echo',
     },
     ['williamhleucka.com'] = {
       '/var/www/',
