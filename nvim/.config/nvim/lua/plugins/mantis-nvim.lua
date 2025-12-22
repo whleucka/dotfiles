@@ -1,4 +1,5 @@
 return {
+  enabled = false,
   dir = "/home/whleucka/Projects/mantis.nvim",
   name = "mantis.nvim",
   config = function()
