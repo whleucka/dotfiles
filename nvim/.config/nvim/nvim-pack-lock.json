@@ -24,6 +24,10 @@
       "rev": "a0ec73332e537228981b6a4f465cef82bb3e1d36",
       "src": "https://github.com/bjarneo/ethereal.nvim"
     },
+    "everforest-nvim": {
+      "rev": "557bce922401e247a596583679bc181d4d688554",
+      "src": "https://github.com/neanias/everforest-nvim"
+    },
     "flash.nvim": {
       "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
       "src": "https://github.com/folke/flash.nvim"
