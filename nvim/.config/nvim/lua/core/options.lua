@@ -60,9 +60,6 @@ vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 1
 vim.opt.foldenable = false
 
--- Indent
-vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-
 vim.wo.winbar = ""
 
 -- Neovim 0.12+

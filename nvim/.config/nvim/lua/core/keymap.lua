@@ -9,11 +9,11 @@ end
 local transparent_enabled = is_transparent()
 
 -- Default background transparent
-vim.cmd("hi! Normal guibg=NONE ctermbg=NONE")
-vim.cmd("hi! NormalNC guibg=NONE ctermbg=NONE")
-vim.cmd("hi! SignColumn guibg=NONE ctermbg=NONE")
-vim.cmd("hi! LineNr guibg=NONE ctermbg=NONE")
-vim.cmd("hi! EndOfBuffer guibg=NONE ctermbg=NONE")
+-- vim.cmd("hi! Normal guibg=NONE ctermbg=NONE")
+-- vim.cmd("hi! NormalNC guibg=NONE ctermbg=NONE")
+-- vim.cmd("hi! SignColumn guibg=NONE ctermbg=NONE")
+-- vim.cmd("hi! LineNr guibg=NONE ctermbg=NONE")
+-- vim.cmd("hi! EndOfBuffer guibg=NONE ctermbg=NONE")
 
 return {
   {
@@ -219,13 +219,6 @@ return {
     { "<C-k>",           "  <C-w>k<CR>",              desc = "Move to upper window" },
     { "<C-l>",           "  <C-w>l<CR>",              desc = "Move to right window" },
     { "<A-=>",           "  <C-w>=<CR>",              desc = "Automatically resize windows" },
-    { "gd",              vim.lsp.buf.definition,      desc = "Go to definition" },
-    { "gD",              vim.lsp.buf.declaration,     desc = "Go to declaration" },
-    { "gi",              vim.lsp.buf.implementation,  desc = "Go to implementation" },
-    { "gr",              vim.lsp.buf.references,      desc = "Go to references" },
-    { "gT",              vim.lsp.buf.type_definition, desc = "Go to type definition" },
-    { "g0",              vim.lsp.buf.document_symbol, desc = "Go to table of contents" },
-    { "gs",              vim.lsp.buf.signature_help,  desc = "Signature help" },
     { "<leader><space>", ":b#<CR>zz",                 desc = "Last buffer" },
   },
   {

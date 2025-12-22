@@ -1,4 +1,18 @@
 return {
+  enusre_installed = {
+    'php',
+    'bash',
+    'c',
+    'css',
+    'html',
+    'htmx',
+    'lua',
+    'python',
+    'rust',
+    'sql',
+    'javascript',
+  },
+  auto_install = true,
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -8,4 +22,13 @@ return {
       node_decremental = "<BS>",
     },
   },
+  --fold = {
+  --  true
+  --},
+  highlight = {
+    enabled = true,
+  },
+  indent = {
+    enable = true,
+  }
 }
