@@ -9,6 +9,7 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 - `:StimUpdate <plugin-name>`: Updates a specific plugin by its name. For example, `:StimUpdate plenary.nvim`.
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
+- `:StimStatus`: Displays a list of all loaded plugins, indicating whether they are local (development) plugins or providing the short commit hash for installed plugins. It does not currently track plugin load times.
 
 ## Setup
 
