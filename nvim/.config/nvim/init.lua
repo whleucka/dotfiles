@@ -1,6 +1,4 @@
--- This will record startup time
-vim.g.__nvim_start_time = vim.loop.hrtime()
-
+vim.g.start_time = vim.fn.reltime()
 require("stimpack").setup()
 
 require("core.omarchy")

@@ -14,6 +14,7 @@ local function _defaults()
 end
 
 function M.setup(opts)
+  local start_time = vim.loop.hrtime()
   opts = opts or {}
   -- warning, config is not validated!
   M.config = vim.tbl_deep_extend("force", _defaults(), opts)
@@ -23,7 +24,18 @@ function M.setup(opts)
   loader.load_plugins(M.config.specs)
   -- setup commands
   commands.setup(M)
+  local end_time = vim.loop.hrtime()
+  M.config.startup_time_ms = (end_time - start_time) / 1e6
+  M.config.loaded_plugins = #M.config.specs
 end
+
+function M.get_stats()
+  return {
+    startup_time_ms = M.config.startup_time_ms,
+    loaded_plugins = M.config.loaded_plugins,
+  }
+end
+
 
 function M.sync()
   vim.pack.update()

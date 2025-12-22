@@ -1,12 +1,10 @@
 return function()
-  local startup_ms = nil
+  local stats = require("stimpack").get_stats()
+  local stimpack_startup_ms = stats.startup_time_ms
+  local plugins = stats.loaded_plugins
 
-  -- Compute startup time
-  if vim.g.__nvim_start_time then
-    startup_ms = (vim.loop.hrtime() - vim.g.__nvim_start_time) / 1e6
-  else
-    startup_ms = 0
-  end
+  local end_time = vim.fn.reltime()
+  local total_startup_ms = vim.fn.reltimefloat(vim.fn.reltime(vim.g.start_time, end_time)) * 1000
 
   return {
     theme = "hyper",
@@ -82,7 +80,8 @@ return function()
         "",
         "With great power comes great responsibility",
         "",
-        string.format("⚡ Startup time: %.2f ms", startup_ms),
+        string.format("💉 Stimpack configured (%d plugins) in %.2fms", plugins, stimpack_startup_ms),
+        string.format("⚡ Neovim UI loaded in %.2fms", total_startup_ms),
       },
     },
   }
