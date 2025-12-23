@@ -93,53 +93,36 @@ alias shutdown='sudo /sbin/shutdown'
 # wget
 alias wget='wget -c'
 
-# tar
-alias untar='tar -zxvf '
-
 # ping
 alias ping='ping -c 5'
 
-# prettier
-if command -v prettier >/dev/null; then
-  alias pw='prettier --write --ignore-unknown "{app,resources,src}/**/*"'
-fi
-
-# md files
-if command -v grip >/dev/null; then
-  alias serve-md="grip -b "
-fi
-
-# ssh
+# kittens
 alias s="kitty +kitten ssh"
-alias d="kitty +kitten diff"
-alias tf="kitty +kitten transfer"
-alias rf="kitty +kitten transfer --direction=receive"
 alias icat="kitty +kitten icat"
 
 # git
 alias g="git"
-alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
-alias gp='git pull'
-alias gpu='git push'
-alias gco='git checkout'
-alias gcb="git checkout -b"
-alias gs='git status'
 alias ga='git add'
-alias gc='git commit'
-alias gc!="git commit -v"
-alias gcm="git commit -m"
-alias gca='git commit -a'
-alias gca!='git commit -av'
-alias gcam='git commit -am'
-alias gcA='git commit --amend'
 alias gb='git branch'
-alias gbd='git branch -d'
 alias gbD='git branch -D'
-alias gf='git fetch'
-alias gm='git merge'
-alias grb='git rebase'
+alias gbd='git branch -d'
+alias gc!="git commit -v"
+alias gc='git commit'
+alias gcA='git commit --amend'
+alias gca!='git commit -av'
+alias gca='git commit -a'
+alias gcam='git commit -am'
+alias gcb="git checkout -b"
+alias gcm="git commit -m"
+alias gco='git checkout'
 alias gcp='git cherry-pick'
-alias gstore="git config credential.helper store"
+alias gf='git fetch'
+alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)'"
+alias gm='git merge'
+alias gpl='git pull'
+alias gpu='git push'
+alias grb='git rebase'
+alias gs='git status'
 
 # yay
 if command -v yay >/dev/null; then
@@ -151,26 +134,6 @@ if command -v yay >/dev/null; then
   alias upd='yay -Sy'
 elif command -v apt >/dev/null; then
   alias upd='sudo apt update'
-fi
-if command -v yay >/dev/null; then
-  alias install='yay -S '
-elif command -v apt >/dev/null; then
-  alias install='sudo apt install '
-fi
-if command -v yay >/dev/null; then
-  alias uninstall='yay -R '
-elif command -v apt >/dev/null; then
-  alias uninstall='sudo apt remove '
-fi
-if command -v yay >/dev/null; then
-  alias purge='yay -Rcns '
-elif command -v apt >/dev/null; then
-  alias purge='sudo apt remove --purge '
-fi
-if command -v yay >/dev/null; then
-  alias clr='yay -Sc '
-elif command -v apt >/dev/null; then
-  alias clr='sudo apt autoremove && sudo apt autoclean '
 fi
 
 # nvim/vim/vi
@@ -188,13 +151,9 @@ if command -v rsync >/dev/null; then
 fi
 
 # list directories
-if command -v lsd >/dev/null; then
-  alias ls='lsd --config-file ~/.config/lsd'
-fi
 alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
-alias lt='ls --tree'
 
 # bat cat
 # if command -v bat > /dev/null; then
