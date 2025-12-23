@@ -55,7 +55,6 @@ vim.opt.whichwrap:append('<,>,[,]') -- Left/right move across lines
 
 -- Folds
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 1
 vim.opt.foldenable = false

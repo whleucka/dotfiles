@@ -22,9 +22,9 @@ return {
       node_decremental = "<BS>",
     },
   },
-  --fold = {
-  --  true
-  --},
+  fold = {
+    true
+  },
   highlight = {
     enabled = true,
   },
