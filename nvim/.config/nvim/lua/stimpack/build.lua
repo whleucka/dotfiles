@@ -1,4 +1,3 @@
--- lua/stimpack/build.lua
 local M = {}
 
 function M.run(spec, pack_name)

@@ -1,4 +1,3 @@
--- lua/stimpack/loader.lua
 local M = {}
 
 local lazy = require("stimpack.lazy")

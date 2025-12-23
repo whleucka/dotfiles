@@ -1,4 +1,3 @@
--- lua/stimpack/lazy.lua
 local M = {}
 
 local function _in_table(tbl, value)

@@ -1,4 +1,3 @@
--- lua/stimpack/spec.lua
 local M = {}
 
 local function _safe_require(mod)

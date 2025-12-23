@@ -1,4 +1,3 @@
--- lua/stimpack/commands.lua
 local M = {}
 
 function M.setup(stimpack)
