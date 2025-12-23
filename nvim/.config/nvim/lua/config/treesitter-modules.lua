@@ -23,10 +23,10 @@ return {
     },
   },
   fold = {
-    true
+    enable = true,
   },
   highlight = {
-    enabled = true,
+    enable = true,
   },
   indent = {
     enable = true,
