@@ -13,7 +13,7 @@ return {
       },
       {
         mode = { "n", "x", "o" },
-        { "s", require("flash").jump, desc = "Flash" },
+        { "s", require("flash").jump,       desc = "Flash" },
         { "S", require("flash").treesitter, desc = "Flash treesitter" },
       },
       {

@@ -60,6 +60,10 @@
       "rev": "8134000fa4de5036d1af519774c3e373887226e3",
       "src": "https://github.com/bjarneo/hackerman.nvim"
     },
+    "incline.nvim": {
+      "rev": "8b54c59bcb23366645ae10edca6edfb9d3a0853e",
+      "src": "https://github.com/b0o/incline.nvim"
+    },
     "lspkind.nvim": {
       "rev": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3",
       "src": "https://github.com/onsails/lspkind.nvim"

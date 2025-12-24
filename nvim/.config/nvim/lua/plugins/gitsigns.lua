@@ -20,8 +20,8 @@ return {
       {
         "<leader>gh",
         group = "Hunk",
-        { "<leader>ghs", require("gitsigns").stage_hunk, desc = "Stage" },
-        { "<leader>ghr", require("gitsigns").reset_hunk, desc = "Reset" },
+        { "<leader>ghs", require("gitsigns").stage_hunk,   desc = "Stage" },
+        { "<leader>ghr", require("gitsigns").reset_hunk,   desc = "Reset" },
         { "<leader>ghp", require("gitsigns").preview_hunk, desc = "Preview" },
         {
           "<leader>ghP",
