@@ -64,6 +64,10 @@
       "rev": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3",
       "src": "https://github.com/onsails/lspkind.nvim"
     },
+    "lualine-lsp-progress": {
+      "rev": "56842d097245a08d77912edf5f2a69ba29f275d7",
+      "src": "https://github.com/arkav/lualine-lsp-progress"
+    },
     "lualine.nvim": {
       "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
