@@ -9,28 +9,103 @@ fg() {
     fi
 }
 
-tsm() { transmission-remote -l; }
-tsm-f() { watch 'transmission-remote -l'; }
-tsm-init() { transmission-daemon --no-auth; }
-tsm-pause() { transmission-remote -t "$1" --stop; }
-tsm-start() { transmission-remote -t "$1" -s; }
-tsm-enablealtspeed() { transmission-remote --alt-speed; }
-tsm-disablealtspeed() { transmission-remote --no-alt-speed; }
-tsm-purge () { transmission-remote -t "$1" --remove-and-delete; }
-tsm-remove () { transmission-remote -t "$1" -r; }
-tsm-info () { transmission-remote -t "$1" -i; }
-tsm-speed () { transmission -t"$1" -i | grep speed; }
-tsm-add () { transmission-remote -a "$1"; }
-tsm-pauseall () { transmission-remote -tall -S; }
-tsm-startall () { transmission-remote -tall -s; }
-tsm-search () { echo "================================="; transmission-remote -l | grep -i $1; }
+tsm() {
+  local cmd="$1"
+  shift
 
-portal-up() {
-    wg-quick up will_laptop
+  case "$cmd" in
+    ""|list)
+      transmission-remote -l
+      ;;
+
+    watch)
+      watch 'transmission-remote -l'
+      ;;
+
+    init)
+      transmission-daemon --no-auth
+      ;;
+
+    pause)
+      transmission-remote -t "$1" --stop
+      ;;
+
+    start)
+      transmission-remote -t "$1" -s
+      ;;
+
+    pause-all)
+      transmission-remote -tall -S
+      ;;
+
+    start-all)
+      transmission-remote -tall -s
+      ;;
+
+    alt-on)
+      transmission-remote --alt-speed
+      ;;
+
+    alt-off)
+      transmission-remote --no-alt-speed
+      ;;
+
+    purge)
+      transmission-remote -t "$1" --remove-and-delete
+      ;;
+
+    remove)
+      transmission-remote -t "$1" -r
+      ;;
+
+    info)
+      transmission-remote -t "$1" -i
+      ;;
+
+    speed)
+      transmission-remote -t "$1" -i | grep speed
+      ;;
+
+    add)
+      transmission-remote -a "$1"
+      ;;
+
+    search)
+      echo "================================="
+      transmission-remote -l | grep -i "$1"
+      ;;
+
+    help|-h|--help)
+      cat <<EOF
+tsm commands:
+  tsm list                 List torrents
+  tsm watch                Watch torrent list
+  tsm init                 Start transmission daemon (no auth)
+  tsm add <url>            Add torrent
+  tsm pause <id>           Pause torrent
+  tsm start <id>           Start torrent
+  tsm pause-all            Pause all torrents
+  tsm start-all            Start all torrents
+  tsm info <id>            Torrent info
+  tsm speed <id>           Show torrent speed
+  tsm remove <id>          Remove torrent
+  tsm purge <id>           Remove + delete data
+  tsm alt-on               Enable alt speed
+  tsm alt-off              Disable alt speed
+  tsm search <query>       Search torrent list
+EOF
+      ;;
+
+    *)
+      echo "Unknown command: $cmd"
+      echo "Run: tsm help"
+      return 1
+      ;;
+  esac
 }
 
-portal-down() {
-    wg-quick down will_laptop
+portal() {
+    wg-quick "$1" will_t14s
 }
 
 what() {
@@ -50,10 +125,6 @@ killer() {
   else
     echo "No process selected."
   fi
-}
-
-check-url() {
-    curl -Ifs "$1" > /dev/null
 }
 
 nvim-update() {
@@ -115,7 +186,7 @@ nvim-update() {
     fi
 
     cd "$cwd" || return 1
-    echo "Done!"
+    echo "✔ Done!"
 }
 
 extract() {
@@ -209,9 +280,10 @@ archive() {
     echo "✔ Archive created: $output"
 }
 
-backup_drive() {
+bd() {
   if [[ $# -lt 1 || $# -gt 2 ]]; then
-    printf "Usage: backup_drive <source_device> [target.img]\n"
+    printf "Backup Drive\n"
+    printf "Usage: bd <source_device> [target.img]\n"
     return 1
   fi
 
@@ -242,7 +314,7 @@ backup_drive() {
 
   # Perform the dd backup
   if sudo dd if="$source" of="$target" bs=4M status=progress conv=noerror,sync; then
-    log "Backup completed successfully at $(date)"
+    log "✔ Backup completed successfully at $(date)"
   else
     log "Backup FAILED at $(date)"
     return 1
@@ -251,7 +323,8 @@ backup_drive() {
 
 cc() {
 if [[ $# -lt 1 || $# -gt 2 ]]; then
-    printf "Usage: compress_copy <source> [target.tar.gz]\n"
+    printf "Compress Copy\n"
+    printf "Usage: cc <source> [target.tar.gz]\n"
     return 1
   fi
 
