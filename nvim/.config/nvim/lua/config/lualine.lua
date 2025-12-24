@@ -33,11 +33,11 @@ return {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { 'buffers' },
+    lualine_b = { 'diagnostics', 'buffers' },
+    lualine_c = {},
     lualine_x = { 'lsp_progress' },
-    lualine_y = { 'encoding', 'fileformat' },
-    lualine_z = { 'location' }
+    lualine_y = { 'branch', 'diff' },
+    lualine_z = { 'progress' }
   },
   inactive_sections = {
     lualine_a = {},
