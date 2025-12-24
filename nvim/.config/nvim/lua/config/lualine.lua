@@ -37,7 +37,7 @@ return {
     lualine_c = { 'buffers' },
     lualine_x = { 'lsp_progress' },
     lualine_y = { 'encoding', 'fileformat' },
-    lualine_z = { 'fileformat', 'location' }
+    lualine_z = { 'location' }
   },
   inactive_sections = {
     lualine_a = {},
