@@ -126,7 +126,8 @@ function M.nuke()
 
   local pack_dir = vim.fn.stdpath("data") .. "/site/pack"
   vim.fn.delete(pack_dir, "rf")
-  vim.notify("STIMPACK: All plugins have been nuked! You may now :restart Neovim!", vim.log.levels.INFO)
+  vim.notify("STIMPACK: All plugins have been nuked!", vim.log.levels.INFO)
+  vim.cmd("restart")
 end
 
 function M.clean()
