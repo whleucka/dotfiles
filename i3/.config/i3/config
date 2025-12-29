@@ -308,19 +308,19 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-# easy-i3-neovim-nav
 # Move focus
-bindsym $mod+h exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav focus left
-bindsym $mod+j exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav focus down
-bindsym $mod+k exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav focus up
-bindsym $mod+l exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
-# Resizing                                                               
-bindsym $mod+minus  exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav resize shrink width  5 10 5
-bindsym $mod+equal exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav resize grow   width  5 10 5
-bindsym $mod+Shift+equal    exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav resize grow   height 5 10 5
-bindsym $mod+Shift+minus  exec --no-startup-id /home/whleucka/.cargo/bin/easy-i3-neovim-nav resize shrink height 5 10 5
+# Width
+bindsym $mod+minus resize shrink width 10 px or 10 ppt
+bindsym $mod+equal resize grow   width 10 px or 10 ppt
 
+# Height (hold Shift)
+bindsym $mod+Shift+minus resize shrink height 10 px or 10 ppt
+bindsym $mod+Shift+equal resize grow   height 10 px or 10 ppt
 
 #########################################################################################
 # Mouse bindings
