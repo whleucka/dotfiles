@@ -24,6 +24,8 @@ require("stimpack").setup{}
 
 ## Default Config
 
+Configure paths.plugins to reference the directory containing your plugin specification files.
+
 ```lua
 {
   paths = {
