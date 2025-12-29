@@ -8,10 +8,6 @@
       "rev": "18712d9d292dd362067de74d3b54eb90ce860ba9",
       "src": "https://github.com/Saghen/blink.cmp"
     },
-    "catppuccin": {
-      "rev": "ce8d176faa4643e026e597ae3c31db59b63cef09",
-      "src": "https://github.com/catppuccin/nvim"
-    },
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
@@ -66,7 +62,7 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
-      "rev": "bbfa7cba85967dc9dbfe0ca486fd4b17084bf846",
+      "rev": "634049414b9ba7b827f050dc5a873bf68944c640",
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {

@@ -1,4 +1,8 @@
-return {
+local M = {}
+
+M.theme_file = os.getenv("HOME") .. "/.config/omarchy/current/theme/neovim.lua"
+
+M.fallback_theme = {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
@@ -9,3 +13,5 @@ return {
     vim.cmd.colorscheme "catppuccin"
   end
 }
+
+return M
