@@ -81,7 +81,7 @@ return function()
         "With great power comes great responsibility",
         "",
         string.format("💉 Stimpack configured (%d plugins) in %.2fms", plugins, stimpack_startup_ms),
-        string.format("⚡ Neovim UI loaded in %.2fms", total_startup_ms),
+        string.format("⚡ Dashboard loaded in %.2fms", total_startup_ms),
       },
     },
   }
