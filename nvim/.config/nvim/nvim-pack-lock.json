@@ -4,10 +4,6 @@
       "rev": "3732756842a2f7e0e76a7b0487e9692072857277",
       "src": "https://github.com/L3MON4D3/LuaSnip"
     },
-    "aether.nvim": {
-      "rev": "e4c485f6fea6170fe2da17e87ca98cd25d215cd5",
-      "src": "https://github.com/bjarneo/aether.nvim"
-    },
     "blink.cmp": {
       "rev": "18712d9d292dd362067de74d3b54eb90ce860ba9",
       "src": "https://github.com/Saghen/blink.cmp"
@@ -35,10 +31,6 @@
     "gitsigns.nvim": {
       "rev": "130beacf8a51f00aede9c31064c749136679a321",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
-    },
-    "hackerman.nvim": {
-      "rev": "8134000fa4de5036d1af519774c3e373887226e3",
-      "src": "https://github.com/bjarneo/hackerman.nvim"
     },
     "incline.nvim": {
       "rev": "8b54c59bcb23366645ae10edca6edfb9d3a0853e",

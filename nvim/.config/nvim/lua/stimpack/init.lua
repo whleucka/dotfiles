@@ -127,7 +127,7 @@ function M.clean()
     end
 
     if spec.dependencies then
-      local deps = flatten_specs(spec.dependencies)
+      local deps = spec_util.flatten_specs(spec.dependencies)
       for _, dependency in ipairs(deps) do
         if not (type(dependency) == "table" and dependency.dir) and dependency.install ~= false then
           local dep_name = (type(dependency) == "table" and dependency.name)
