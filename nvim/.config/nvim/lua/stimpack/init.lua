@@ -10,24 +10,6 @@ local loader = require("stimpack.loader")
 local commands = require("stimpack.commands")
 local build = require("stimpack.build")
 
-local function flatten_specs(specs)
-  local flat_specs = {}
-  if not specs then
-    return flat_specs
-  end
-  for _, item in ipairs(specs) do
-    if type(item[1]) == "table" then
-      local sub_specs = flatten_specs(item)
-      for _, sub_item in ipairs(sub_specs) do
-        table.insert(flat_specs, sub_item)
-      end
-    else
-      table.insert(flat_specs, item)
-    end
-  end
-  return flat_specs
-end
-
 local function _defaults()
   return require("stimpack.defaults").get()
 end
@@ -51,7 +33,13 @@ function M.setup(opts)
     end
   end
 
-  M.config.specs = flatten_specs(specs)
+  -- higher priority plugins should load first
+  local default_priority = 50
+  table.sort(specs, function(a, b)
+    return (a.priority or default_priority) > (b.priority or default_priority)
+  end)
+
+  M.config.specs = spec_util.flatten_specs(specs)
   -- load the plugins
   loader.load_plugins(M.config.specs)
   -- setup commands

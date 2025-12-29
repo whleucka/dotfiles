@@ -83,12 +83,25 @@ function M.load_all(dir, prefix)
       end
     end
   end
-  -- higher priority plugins should load first
-  local default_priority = 50
-  table.sort(specs, function(a, b)
-    return (a.priority or default_priority) > (b.priority or default_priority)
-  end)
   return specs
+end
+
+function M.flatten_specs(specs)
+  local flat_specs = {}
+  if not specs then
+    return flat_specs
+  end
+  for _, item in ipairs(specs) do
+    if type(item[1]) == "table" then
+      local sub_specs = M.flatten_specs(item)
+      for _, sub_item in ipairs(sub_specs) do
+        table.insert(flat_specs, sub_item)
+      end
+    else
+      table.insert(flat_specs, item)
+    end
+  end
+  return flat_specs
 end
 
 return M
