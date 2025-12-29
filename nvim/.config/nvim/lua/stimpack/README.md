@@ -19,38 +19,7 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 ## Setup
 
 ```lua
-require("stimpack").setup({
-  -- Optional: A list of functions that return additional plugin specifications.
-  -- This is useful for integrating specs from external sources, like a theme file.
-  additional_specs = {
-    function()
-      local THEME_FILE = os.getenv("HOME") .. "/.config/omarchy/current/theme/neovim.lua"
-      if vim.fn.filereadable(THEME_FILE) == 0 then
-        return nil
-      end
-      local ok, theme_chunk = pcall(loadfile, THEME_FILE)
-      if not ok or not theme_chunk then
-        return nil
-      end
-      local ok_run, theme = pcall(theme_chunk)
-      if not ok_run or not theme then
-        return nil
-      end
-      -- Example: Filter out LazyVim if it's part of the theme config but not meant to be installed
-      local processed_specs = {}
-      for _, spec in ipairs(theme) do
-        if spec[1] == "LazyVim/LazyVim" then
-          local new_spec = vim.deepcopy(spec)
-          new_spec.install = false -- Mark as not to be installed
-          table.insert(processed_specs, new_spec)
-        else
-          table.insert(processed_specs, spec)
-        end
-      end
-      return processed_specs
-    end,
-  },
-})
+require("stimpack").setup{}
 ```
 
 ## Default Config
