@@ -19,6 +19,9 @@ function M.setup(opts)
   opts = opts or {}
   -- warning, config is not validated!
   M.config = vim.tbl_deep_extend("force", _defaults(), opts)
+  M.config.plugin_load_times = {}
+  M.config.ui_ready_time_ms = nil -- Initialize UI ready time
+
   -- load the specs
   local specs = spec_util.load_all(M.config.paths.plugins, "plugins")
 
@@ -41,12 +44,21 @@ function M.setup(opts)
 
   M.config.specs = spec_util.flatten_specs(specs)
   -- load the plugins
-  loader.load_plugins(M.config.specs)
+  loader.load_plugins(M, M.config.specs)
   -- setup commands
   commands.setup(M)
   local end_time = vim.loop.hrtime()
   M.config.startup_time_ms = (end_time - start_time) / 1e6
   M.config.loaded_plugins = #M.config.specs
+
+  -- Autocmd to capture UI ready time
+  vim.api.nvim_create_autocmd("VimEnter", {
+    once = true,
+    callback = function()
+      local ui_ready_end_time = vim.fn.reltime()
+      M.config.ui_ready_time_ms = vim.fn.reltimefloat(vim.fn.reltime(vim.g.start_time, ui_ready_end_time)) * 1000
+    end,
+  })
 end
 
 function M.get_stats()
@@ -60,6 +72,8 @@ function M.get_stats()
   return {
     startup_time_ms = M.config.startup_time_ms,
     loaded_plugins = #loaded_plugins + local_plugins,
+    plugin_load_times = M.config.plugin_load_times,
+    ui_ready_time_ms = M.config.ui_ready_time_ms -- Include UI ready time
   }
 end
 

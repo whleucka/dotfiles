@@ -34,10 +34,34 @@ function M.setup(stimpack)
   vim.api.nvim_create_user_command("StimClean", function()
     stimpack.clean()
   end, {})
-  -- cmd lists all plugins on disk
-  vim.api.nvim_create_user_command("StimStatus", function()
+
+  vim.api.nvim_create_user_command("StimProfile", function()
     local spec_util = require("stimpack.spec")
-    local lines = {}
+    local stats = stimpack.get_stats()
+    local stimpack_startup_ms = stats.startup_time_ms
+    local plugins = stats.loaded_plugins
+    local plugin_load_times = stats.plugin_load_times
+    local total_plugin_load_time = 0
+    for _, time in pairs(plugin_load_times) do
+      total_plugin_load_time = total_plugin_load_time + time
+    end
+
+    local profile_lines = {
+      "--- Stimpack Profile ---",
+      string.format("💉 Stimpack configured (%d plugins) in %.2fms", plugins, stimpack_startup_ms),
+      string.format("🔌 Plugins loaded in %.2fms", total_plugin_load_time),
+    }
+
+    if stats.ui_ready_time_ms then
+      table.insert(profile_lines, string.format("⚡ UI Ready Time: %.2fms", stats.ui_ready_time_ms))
+    else
+      table.insert(profile_lines, "⚡ UI Ready Time: Not yet available (run after VimEnter)")
+    end
+
+    table.insert(profile_lines, "") -- Add a blank line for separation
+    table.insert(profile_lines, "--- Plugin Tree ---")
+
+    local tree_lines = {}
 
     local function build_plugin_tree(spec, level, processed_plugins)
       local name
@@ -64,8 +88,14 @@ function M.setup(stimpack)
         end
       end
 
-      local line = string.rep("  ", level) .. string.format("- %s (%s)", name, rev)
-      table.insert(lines, line)
+      local line
+      local load_time = plugin_load_times[name]
+      if load_time then
+        line = string.rep("  ", level) .. string.format("- %s (%s, %.2fms)", name, rev, load_time)
+      else
+        line = string.rep("  ", level) .. string.format("- %s (%s)", name, rev)
+      end
+      table.insert(tree_lines, line)
 
       if type(spec) == "table" and spec.dependencies then
         local deps = spec_util.flatten_specs(spec.dependencies)
@@ -80,9 +110,9 @@ function M.setup(stimpack)
       build_plugin_tree(spec, 0, processed_plugins)
     end
 
-    vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO)
-    vim.notify("Stimpack does not yet track plugin load times.", vim.log.levels.INFO)
+    vim.notify(table.concat(profile_lines, "\n") .. "\n" .. table.concat(tree_lines, "\n"), vim.log.levels.INFO)
   end, {})
 end
 
 return M
+

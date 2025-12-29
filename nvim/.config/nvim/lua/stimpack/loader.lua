@@ -31,7 +31,8 @@ local function _load_plugin(pack)
   vim.pack.add({ pack })
 end
 
-function M.load_plugins(specs)
+function M.load_plugins(stimpack, specs)
+  local plugin_load_times = stimpack.config.plugin_load_times
   for i, spec in ipairs(specs) do
     local should_load = true
     if spec.enabled ~= nil then
@@ -120,6 +121,7 @@ function M.load_plugins(specs)
               return
             end
             loaded = true
+            local start_time = vim.loop.hrtime()
 
             -- load dependencies first
             for _, dep_name in ipairs(dep_names) do
@@ -129,13 +131,14 @@ function M.load_plugins(specs)
             if not spec.dir then
               vim.cmd.packadd(pack.name)
             end
-  
 
             if spec.config then
               _run_config(spec.config)
             end
 
             _register_key(spec)
+            local end_time = vim.loop.hrtime()
+            plugin_load_times[pack.name] = (end_time - start_time) / 1e6
 
             -- if invoked via command, we might need to re-run the command?
             -- For simplicity, we assume the user just wanted the plugin loaded.
@@ -146,11 +149,13 @@ function M.load_plugins(specs)
         else
           -- Eager load
           -- Dependencies are already added (assumed eager if parent is eager)
-
+          local start_time = vim.loop.hrtime()
           if spec.config then
             _run_config(spec.config)
           end
           _register_key(spec)
+          local end_time = vim.loop.hrtime()
+          plugin_load_times[pack.name] = (end_time - start_time) / 1e6
         end
       end
     end

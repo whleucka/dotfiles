@@ -10,7 +10,11 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
 - `:StimClean`: Removes any installed plugins that are no longer defined in your `stimpack` plugin specifications (i.e., orphaned plugins). This command will prompt for confirmation before deleting.
-- `:StimStatus`: Displays a tree of all loaded plugins and their dependencies. For each plugin, it shows the short commit hash of the current revision or indicates if it's a local plugin. This provides a clear overview of your entire plugin structure at a glance. It does not currently track plugin load times.
+- `:StimProfile`: Displays a comprehensive performance profile of your Neovim setup. This includes:
+    *   **Stimpack Configuration Time**: How long it took Stimpack to configure itself.
+    *   **Total Plugin Load Time**: The sum of individual load times for all plugins managed by Stimpack.
+    *   **UI Ready Time**: The automated time it took for Neovim's UI to be considered ready (measured on `VimEnter`).
+    *   **Plugin Tree with Load Times**: A hierarchical view of all loaded plugins and their dependencies, showing the short commit hash of their current revision (or "local" for local plugins) and their individual load times.
 
 ## Setup
 
