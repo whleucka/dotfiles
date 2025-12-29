@@ -20,10 +20,6 @@
       "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
       "src": "https://github.com/sindrets/diffview.nvim"
     },
-    "everforest-nvim": {
-      "rev": "557bce922401e247a596583679bc181d4d688554",
-      "src": "https://github.com/neanias/everforest-nvim"
-    },
     "flash.nvim": {
       "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
       "src": "https://github.com/folke/flash.nvim"
@@ -80,6 +76,10 @@
     "sshfs.nvim": {
       "rev": "831f6c02264476a7247356096dc283e6b03ef6ba",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
+    },
+    "tokyonight.nvim": {
+      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
+      "src": "https://github.com/folke/tokyonight.nvim"
     },
     "treesitter-modules.nvim": {
       "rev": "dcb5030422732af54631083316887e512e4a79a3",
