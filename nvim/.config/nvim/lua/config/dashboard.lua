@@ -50,6 +50,12 @@ return {
         key = "s",
       },
       {
+        desc = "Profile",
+        group = "Label",
+        action = ":StimProfile",
+        key = "p",
+      },
+      {
         desc = "Config",
         group = "Label",
         action = function()
