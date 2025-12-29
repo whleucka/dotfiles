@@ -4,17 +4,49 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 
 ## Commands
 
-- `:StimSync`: Updates all installed plugins and runs their build commands if defined. This command internally calls `vim.pack.update()`.
+- `:StimSync`: Updates all installed plugins and runs their build commands if defined. This command internally calls `vim.pack.update()`, and now also automatically runs `:StimClean` first.
 - `:StimDelete <plugin-name>`: Deletes a specific plugin by its name. For example, `:StimDelete nvim-tree.lua`.
 - `:StimUpdate <plugin-name>`: Updates a specific plugin by its name and runs its build command if defined. This command internally calls `vim.pack.update()`.
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
+- `:StimClean`: Removes any installed plugins that are no longer defined in your `stimpack` plugin specifications (i.e., orphaned plugins). This command will prompt for confirmation before deleting.
 - `:StimStatus`: Displays a list of all loaded plugins, indicating whether they are local (development) plugins or providing the short commit hash for installed plugins. It does not currently track plugin load times.
 
 ## Setup
 
 ```lua
-require("stimpack").setup()
+require("stimpack").setup({
+  -- Optional: A list of functions that return additional plugin specifications.
+  -- This is useful for integrating specs from external sources, like a theme file.
+  additional_specs = {
+    function()
+      local THEME_FILE = os.getenv("HOME") .. "/.config/omarchy/current/theme/neovim.lua"
+      if vim.fn.filereadable(THEME_FILE) == 0 then
+        return nil
+      end
+      local ok, theme_chunk = pcall(loadfile, THEME_FILE)
+      if not ok or not theme_chunk then
+        return nil
+      end
+      local ok_run, theme = pcall(theme_chunk)
+      if not ok_run or not theme then
+        return nil
+      end
+      -- Example: Filter out LazyVim if it's part of the theme config but not meant to be installed
+      local processed_specs = {}
+      for _, spec in ipairs(theme) do
+        if spec[1] == "LazyVim/LazyVim" then
+          local new_spec = vim.deepcopy(spec)
+          new_spec.install = false -- Mark as not to be installed
+          table.insert(processed_specs, new_spec)
+        else
+          table.insert(processed_specs, spec)
+        end
+      end
+      return processed_specs
+    end,
+  },
+})
 ```
 
 ## Default Config
@@ -60,6 +92,15 @@ return {
   -- A build command to run on install or update (optional).
   -- Can be a string (shell command or Neovim command prefixed with ':') or a function.
   build = "make", -- or ":TSUpdate" or "npm install" or "cargo build --release"
+
+  -- A flag to explicitly control plugin installation (optional).
+  -- Defaults to `true`. If set to `false`, the plugin will *not* be physically
+  -- installed (i.e., `vim.pack.add` will not be called for it).
+  -- However, its `config` function and `opts` will still be processed, making it
+  -- useful for "virtual" plugins or configurations that don't correspond to
+  -- an installable repository. Plugins with `install = false` will be ignored
+  -- by `:StimClean` when identifying orphaned plugins.
+  install = true,
 
   -- A flag to enable or disable the plugin (optional).
   -- Can be a boolean or a function that returns a boolean.

@@ -75,7 +75,9 @@ function M.load_plugins(specs)
         end
       else
         pack = spec_util.pack_spec(spec, is_lazy)
-        _load_plugin(pack)
+        if spec.install ~= false then
+          _load_plugin(pack)
+        end
       end
 
       if process_plugin then

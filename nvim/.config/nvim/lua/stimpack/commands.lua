@@ -30,6 +30,10 @@ function M.setup(stimpack)
   vim.api.nvim_create_user_command("StimNuke", function()
     stimpack.nuke()
   end, {})
+  -- cmd cleans up orphaned plugins
+  vim.api.nvim_create_user_command("StimClean", function()
+    stimpack.clean()
+  end, {})
   -- cmd lists all plugins on disk
   vim.api.nvim_create_user_command("StimStatus", function()
     local spec_util = require("stimpack.spec")
