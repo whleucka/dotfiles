@@ -39,25 +39,21 @@ function M.setup(stimpack)
     local spec_util = require("stimpack.spec")
     local lines = {}
 
-    local function get_spec_by_name(name)
-      for _, spec in ipairs(stimpack.config.specs) do
-        local spec_name = spec.name or spec_util.get_name(spec_util.get_source(spec))
-        if spec_name == name then
-          return spec
-        end
-      end
-      return nil
-    end
-
     local function build_plugin_tree(spec, level, processed_plugins)
-      local name = spec.name or spec_util.get_name(spec_util.get_source(spec))
+      local name
+      if type(spec) == "table" then
+        name = spec.name or spec_util.get_name(spec_util.get_source(spec))
+      else
+        name = spec_util.get_name(spec_util.get_source(spec))
+      end
+
       if processed_plugins[name] then
         return
       end
       processed_plugins[name] = true
 
       local rev
-      if spec.dir then
+      if type(spec) == "table" and spec.dir then
         rev = "local"
       else
         local ok, info = pcall(vim.pack.get, { name }, { info = true })
@@ -71,39 +67,16 @@ function M.setup(stimpack)
       local line = string.rep("  ", level) .. string.format("- %s (%s)", name, rev)
       table.insert(lines, line)
 
-      if spec.dependencies then
+      if type(spec) == "table" and spec.dependencies then
         local deps = spec_util.flatten_specs(spec.dependencies)
         for _, dep_spec in ipairs(deps) do
-          local dep_name = dep_spec.name or spec_util.get_name(spec_util.get_source(dep_spec))
-          local full_dep_spec = get_spec_by_name(dep_name)
-          if full_dep_spec then
-            build_plugin_tree(full_dep_spec, level + 1, processed_plugins)
-          end
+          build_plugin_tree(dep_spec, level + 1, processed_plugins)
         end
-      end
-    end
-
-    local dependency_plugins = {}
-    for _, spec in ipairs(stimpack.config.specs) do
-      if spec.dependencies then
-        local deps = spec_util.flatten_specs(spec.dependencies)
-        for _, dep_spec in ipairs(deps) do
-          local dep_name = dep_spec.name or spec_util.get_name(spec_util.get_source(dep_spec))
-          dependency_plugins[dep_name] = true
-        end
-      end
-    end
-
-    local top_level_plugins = {}
-    for _, spec in ipairs(stimpack.config.specs) do
-      local name = spec.name or spec_util.get_name(spec_util.get_source(spec))
-      if not dependency_plugins[name] then
-        table.insert(top_level_plugins, spec)
       end
     end
 
     local processed_plugins = {}
-    for _, spec in ipairs(top_level_plugins) do
+    for _, spec in ipairs(stimpack.config.specs) do
       build_plugin_tree(spec, 0, processed_plugins)
     end
 

@@ -50,9 +50,16 @@ function M.setup(opts)
 end
 
 function M.get_stats()
+  local loaded_plugins = vim.pack.get() or {}
+  local local_plugins = 0
+  for _, spec in ipairs(M.config.specs) do
+    if type(spec) == "table" and spec.dir then
+      local_plugins = local_plugins + 1
+    end
+  end
   return {
     startup_time_ms = M.config.startup_time_ms,
-    loaded_plugins = M.config.loaded_plugins,
+    loaded_plugins = #loaded_plugins + local_plugins,
   }
 end
 
