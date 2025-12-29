@@ -4,7 +4,7 @@ return {
     local theme_file = require("omarchy.config").theme_file
 
     if vim.fn.filereadable(theme_file) == 0 then
-      local spec = require("omarchy.default")
+      local spec = require("omarchy.config").fallback_theme
       table.insert(processed_specs, spec)
       return processed_specs
     end
