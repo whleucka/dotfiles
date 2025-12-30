@@ -5,7 +5,7 @@ return {
   config = function()
     require("mantis.config").setup({
       url = "https://mantis.williamhleucka.com",
-      token = "TjmmrfGkagJXZXlu9UDXDqaIpyT-fjtB"
+      token = "gpYB3wZDDWxm0i0HvMHON2mfMkmq8cSh"
     })
 
 
