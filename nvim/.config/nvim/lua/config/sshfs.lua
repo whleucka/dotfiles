@@ -34,11 +34,16 @@ return {
     },
     ['chainlogic'] = '/mnt/enc/chainlogic-dev',
     ['elitedesk'] = {
+      '/home/whleucka/.dotfiles',
       '/home/whleucka/Projects/music',
       '/home/whleucka/Projects/echo',
     },
     ['williamhleucka.com'] = {
-      '/var/www/',
+      '/var/www/html/williamhleucka.com',
+      '/var/www/html/git.williamhleucka.com',
+      '/var/www/html/guitar.williamhleucka.com',
+      '/var/www/html/mantis.williamhleucka.com',
+      '/var/www/html/social.williamhleucka.com',
     }
   },
 }

@@ -121,6 +121,7 @@ alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold bl
 alias gm='git merge'
 alias gpl='git pull'
 alias gpu='git push'
+alias gpsu='git push --set-upstream'
 alias grb='git rebase'
 alias gs='git status'
 
