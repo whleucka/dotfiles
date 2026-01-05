@@ -32,6 +32,7 @@ return {
       '/var/www/beta.instacoinatm.com',
       '/var/www/instacoinatm.com',
     },
+    ['lamassu-polywell'] = '/opt/apps/machine/lamassu-machine',
     ['chainlogic'] = '/mnt/enc/chainlogic-dev',
     ['elitedesk'] = {
       '/home/whleucka/.dotfiles',
