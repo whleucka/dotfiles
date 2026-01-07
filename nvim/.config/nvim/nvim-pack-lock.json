@@ -7,7 +7,13 @@
     "blink.cmp": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 31858bf (fix: update a few things)
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
+=======
+      "rev": "6a4914ca987453464a7dfc7fc237a992adb567d0",
+>>>>>>> 922d7df (fix: update a few things)
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "catppuccin": {
@@ -46,6 +52,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
+<<<<<<< HEAD
       "rev": "e7773d0c863a31bfc8ab72dd1adbec4611a35409",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
@@ -54,7 +61,17 @@
       "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
 =======
       "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
+<<<<<<< HEAD
 >>>>>>> 5a5187f (fix: remove log)
+=======
+=======
+      "rev": "a03d68e40eea835a1cdbd9f93049708dab3621e6",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
+>>>>>>> 922d7df (fix: update a few things)
+>>>>>>> 31858bf (fix: update a few things)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -84,6 +101,7 @@
     "nvim-treesitter": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -91,6 +109,12 @@
 =======
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 >>>>>>> 5a5187f (fix: remove log)
+=======
+      "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
+=======
+      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+>>>>>>> 922d7df (fix: update a few things)
+>>>>>>> 31858bf (fix: update a few things)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
