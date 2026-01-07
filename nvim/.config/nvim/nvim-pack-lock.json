@@ -33,7 +33,7 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "6bd29494e3f79ff08be1d35bc1926ed23c22ed9a",
+      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "incline.nvim": {
@@ -55,6 +55,14 @@
     "neogit": {
       "rev": "d8bf9102692250193b855acd9025a826f1af2729",
       "src": "https://github.com/NeogitOrg/neogit"
+    },
+    "nui-components.nvim": {
+      "rev": "1654dd709f13874089eefc80d82e0eb667f7fdfb",
+      "src": "https://github.com/grapp-dev/nui-components.nvim"
+    },
+    "nui.nvim": {
+      "rev": "de740991c12411b663994b2860f1a4fd0937c130",
+      "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
