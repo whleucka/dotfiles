@@ -44,8 +44,12 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
+<<<<<<< HEAD
       "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
 >>>>>>> 922d7df (fix: update a few things)
+=======
+      "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
+>>>>>>> 2d32c92 (chore: cleaning shit up)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -74,10 +78,14 @@
     },
     "nvim-treesitter": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
 >>>>>>> 922d7df (fix: update a few things)
+=======
+      "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
+>>>>>>> 2d32c92 (chore: cleaning shit up)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
