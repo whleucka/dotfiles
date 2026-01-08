@@ -29,12 +29,8 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
+      "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
-    },
-    "incline.nvim": {
-      "rev": "8b54c59bcb23366645ae10edca6edfb9d3a0853e",
-      "src": "https://github.com/b0o/incline.nvim"
     },
     "lspkind.nvim": {
       "rev": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3",
@@ -61,7 +57,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
-      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+      "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
