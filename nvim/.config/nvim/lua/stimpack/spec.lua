@@ -17,6 +17,8 @@ function M.get_source(spec)
   local source
   if type(spec) == "string" then
     source = spec
+  elseif type(spec) == "table" and spec.dir then
+    source = spec.dir
   else
     source = spec[1]
   end
