@@ -5,6 +5,10 @@ return {
   keys = {
     { "<leader>e", ":Mantis<cr>", desc = "Mantis" },
   },
+  dependencies = {
+    "grapp-dev/nui-components.nvim",
+    "MunifTanjim/nui.nvim"
+  },
   config = function()
     require("mantis").setup({
       debug = false,
