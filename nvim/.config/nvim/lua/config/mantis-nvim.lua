@@ -10,4 +10,10 @@ return {
     --   token = "_RNzBd8Y2nDXS2_wR-rghoEfbfJDQ_J2"
     -- },
   },
+<<<<<<< HEAD
+=======
+  view_issues = {
+    page_size = 20,
+  }
+>>>>>>> 1fa60a5 (fix: add mantis-nvim config)
 }
