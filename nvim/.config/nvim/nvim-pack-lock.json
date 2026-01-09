@@ -315,6 +315,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 2e1c16f (fix: add smart-splits config)
@@ -332,16 +333,25 @@
 =======
 >>>>>>> e7232e0 (fix: add smart-splits config)
 =======
+>>>>>>> 38fed17 (fix: add toggle term plug)
+=======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
 >>>>>>> 3edca65 (fix: add smart-splits config)
+<<<<<<< HEAD
 >>>>>>> f064b90 (fix: add smart-splits config)
+=======
+=======
+=======
+>>>>>>> 065ce98 (fix: add toggle term plug)
+>>>>>>> 38fed17 (fix: add toggle term plug)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -368,6 +378,8 @@
 =======
 =======
 >>>>>>> f064b90 (fix: add smart-splits config)
+=======
+>>>>>>> 38fed17 (fix: add toggle term plug)
 =======
 >>>>>>> 755fbb8 (fix: mantis config)
 =======
@@ -398,7 +410,13 @@
 =======
 =======
 >>>>>>> 98e4984 (fix: add smart-splits config)
+<<<<<<< HEAD
 >>>>>>> e7232e0 (fix: add smart-splits config)
+=======
+=======
+>>>>>>> 72a721b (fix: add toggle term plug)
+>>>>>>> 065ce98 (fix: add toggle term plug)
+>>>>>>> 38fed17 (fix: add toggle term plug)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
