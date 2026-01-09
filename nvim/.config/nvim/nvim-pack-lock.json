@@ -8,12 +8,18 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 31858bf (fix: update a few things)
+=======
+>>>>>>> 47da07d (fix: add toggle term plug)
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
 =======
       "rev": "6a4914ca987453464a7dfc7fc237a992adb567d0",
 >>>>>>> 922d7df (fix: update a few things)
+=======
+      "rev": "6a4914ca987453464a7dfc7fc237a992adb567d0",
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "catppuccin": {
@@ -31,11 +37,14 @@
       "src": "https://github.com/Saghen/blink.cmp"
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     "catppuccin": {
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
 >>>>>>> 2dbdb65 (fix: add smart-splits config)
       "src": "https://github.com/catppuccin/nvim"
 =======
+=======
+>>>>>>> 47da07d (fix: add toggle term plug)
 <<<<<<< HEAD
     "colorful-winsep.nvim": {
       "rev": "e555611c8f39918e30d033a97ea1a5af457ce75e",
@@ -44,6 +53,8 @@
     },
 =======
 >>>>>>> 755fbb8 (fix: mantis config)
+=======
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
@@ -62,6 +73,7 @@
     },
     "fzf-lua": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "e7773d0c863a31bfc8ab72dd1adbec4611a35409",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
@@ -77,10 +89,13 @@
 >>>>>>> 5a5187f (fix: remove log)
 =======
 =======
+=======
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
       "rev": "a03d68e40eea835a1cdbd9f93049708dab3621e6",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
 >>>>>>> 922d7df (fix: update a few things)
@@ -96,7 +111,13 @@
 =======
       "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
 >>>>>>> 755fbb8 (fix: mantis config)
+<<<<<<< HEAD
 >>>>>>> 2d87331 (fix: mantis config)
+=======
+=======
+      "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
+>>>>>>> 47da07d (fix: add toggle term plug)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -129,6 +150,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -141,6 +163,8 @@
 >>>>>>> 2b12d0c (chore: cleaning shit up)
 =======
 >>>>>>> 2d87331 (fix: mantis config)
+=======
+>>>>>>> 47da07d (fix: add toggle term plug)
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -157,26 +181,43 @@
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
 >>>>>>> 755fbb8 (fix: mantis config)
+<<<<<<< HEAD
 >>>>>>> 2d87331 (fix: mantis config)
+=======
+=======
+      "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
+>>>>>>> 47da07d (fix: add toggle term plug)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-web-devicons": {
+<<<<<<< HEAD
       "rev": "803353450c374192393f5387b6a0176d0972b848",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+=======
+      "rev": "6788013bb9cb784e606ada44206b0e755e4323d7",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "81b8a91735ad5cd24a6b3137f14a89f19176364f",
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
       "rev": "b9fd5226c2f76c951fc8ed5923d85e4de065e509",
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
+<<<<<<< HEAD
     "smart-splits.nvim": {
       "rev": "fdd63c566e760f14d9390d43d5dc6bf6eea5a07b",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
+=======
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
     "sshfs.nvim": {
       "rev": "4516f32f2e104c31b7431b06d3a5c5c4f455038d",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
@@ -189,17 +230,23 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 2e1c16f (fix: add smart-splits config)
 =======
 >>>>>>> 2d87331 (fix: mantis config)
+=======
+=======
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
+>>>>>>> 47da07d (fix: add toggle term plug)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -221,6 +268,12 @@
 =======
 >>>>>>> 755fbb8 (fix: mantis config)
 >>>>>>> 2d87331 (fix: mantis config)
+=======
+=======
+>>>>>>> 755fbb8 (fix: mantis config)
+=======
+>>>>>>> 4ac2a0f (fix: add toggle term plug)
+>>>>>>> 47da07d (fix: add toggle term plug)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
