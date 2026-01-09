@@ -1,11 +1,14 @@
 
+
+new_os_window
+
 new_tab
 layout fat
 enabled_layouts fat,grid,horizontal,splits,stack,tall,vertical
-set_layout_state {"main_bias": [0.5, 0.5], "biased_map": {}, "opts": {"full_size": 1, "bias": 50, "mirrored": "n"}, "class": "Fat", "all_windows": {"active_group_idx": 0, "active_group_history": [], "window_groups": [{"id": 2, "window_ids": [3]}]}}
+set_layout_state {"main_bias": [0.5, 0.5], "biased_map": {}, "opts": {"full_size": 1, "bias": 50, "mirrored": "n"}, "class": "Fat", "all_windows": {"active_group_idx": 0, "active_group_history": [], "window_groups": [{"id": 9, "window_ids": [10]}]}}
 cd ../../../.dotfiles/nvim/.config/nvim
 
-launch 'kitty-unserialize-data={"id": 3, "cmd_at_shell_startup": "nvim"}'
+launch 'kitty-unserialize-data={"id": 10, "cmd_at_shell_startup": ["/home/whleucka/.neovim/nvim-linux-x86_64/bin/nvim"]}'
 focus
 
 focus_tab 1
