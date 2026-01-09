@@ -39,6 +39,7 @@ return {
       '/home/whleucka/Projects/music',
       '/home/whleucka/Projects/echo',
     },
+    ['hilt-app'] = '/var/www/app.hiltventures.com/hiltapp/dev',
     ['williamhleucka.com'] = {
       '/var/www/html/williamhleucka.com',
       '/var/www/html/git.williamhleucka.com',
