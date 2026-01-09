@@ -30,12 +30,24 @@
     },
     "gitsigns.nvim": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
 =======
+=======
+>>>>>>> ea6cbfc (fix: rebase)
       "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
 >>>>>>> e7ed039 (chore: cleaning shit up)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
+=======
+      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "incline.nvim": {
+      "rev": "8b54c59bcb23366645ae10edca6edfb9d3a0853e",
+      "src": "https://github.com/b0o/incline.nvim"
+    },
+>>>>>>> 90f73f3 (fix: rebase)
     "lspkind.nvim": {
       "rev": "3ddd1b4edefa425fda5a9f95a4f25578727c0bb3",
       "src": "https://github.com/onsails/lspkind.nvim"
@@ -62,10 +74,17 @@
     },
     "nvim-treesitter": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
 >>>>>>> e7ed039 (chore: cleaning shit up)
+=======
+      "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
+=======
+      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+>>>>>>> 90f73f3 (fix: rebase)
+>>>>>>> ea6cbfc (fix: rebase)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -85,10 +104,13 @@
       "rev": "4516f32f2e104c31b7431b06d3a5c5c4f455038d",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
     },
+<<<<<<< HEAD
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
     },
+=======
+>>>>>>> 90f73f3 (fix: rebase)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
