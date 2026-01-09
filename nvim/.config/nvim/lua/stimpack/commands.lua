@@ -77,8 +77,15 @@ function M.setup(stimpack)
       processed_plugins[name] = true
 
       local rev
+      local valid_plugin = true
       if type(spec) == "table" and spec.dir then
-        rev = "local"
+        local dir_path = vim.fn.expand(spec.dir)
+        if vim.fn.isdirectory(dir_path) == 1 then
+          rev = "local"
+        else
+          rev = "not found"
+          valid_plugin = false
+        end
       else
         local ok, info = pcall(vim.pack.get, { name }, { info = true })
         if ok and info and info[1] then
@@ -97,7 +104,7 @@ function M.setup(stimpack)
       end
       table.insert(tree_lines, line)
 
-      if type(spec) == "table" and spec.dependencies then
+      if valid_plugin and type(spec) == "table" and spec.dependencies then
         local deps = spec_util.flatten_specs(spec.dependencies)
         for _, dep_spec in ipairs(deps) do
           build_plugin_tree(dep_spec, level + 1, processed_plugins)

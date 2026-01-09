@@ -45,20 +45,7 @@ function M.load_plugins(stimpack, specs)
 
     if should_load then
       local is_lazy = spec.event ~= nil or spec.lazy == true or spec.cmd ~= nil or spec.ft ~= nil
-      local dep_names = {}
-
-      -- load dependencies
-      if spec.dependencies then
-        for i, dependency in ipairs(spec.dependencies) do
-          -- dependencies inherit lazy status from parent
-          local pack = spec_util.pack_spec(dependency, is_lazy)
-          _load_plugin(pack)
-          if is_lazy then
-            table.insert(dep_names, pack.name)
-          end
-        end
-      end
-
+      
       local pack
       local process_plugin = true
       if spec.dir then
@@ -82,6 +69,20 @@ function M.load_plugins(stimpack, specs)
       end
 
       if process_plugin then
+        local dep_names = {}
+
+        -- load dependencies
+        if spec.dependencies then
+          for i, dependency in ipairs(spec.dependencies) do
+            -- dependencies inherit lazy status from parent
+            local dep_pack = spec_util.pack_spec(dependency, is_lazy)
+            _load_plugin(dep_pack)
+            if is_lazy then
+              table.insert(dep_names, dep_pack.name)
+            end
+          end
+        end
+
         if not spec.config then
           -- If no config, we might auto-generate one from opts, or a default one.
           spec.config = function()
