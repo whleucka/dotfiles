@@ -8,6 +8,10 @@
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
       "src": "https://github.com/Saghen/blink.cmp"
     },
+    "catppuccin": {
+      "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
+      "src": "https://github.com/catppuccin/nvim"
+    },
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
@@ -29,7 +33,7 @@
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
+      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -57,7 +61,11 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
+=======
+      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+>>>>>>> 8050efd (fix: rebase issue)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -84,10 +92,6 @@
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
-    },
-    "tokyonight.nvim": {
-      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
-      "src": "https://github.com/folke/tokyonight.nvim"
     },
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
