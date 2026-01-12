@@ -10,7 +10,4 @@ return {
     --   token = "_RNzBd8Y2nDXS2_wR-rghoEfbfJDQ_J2"
     -- },
   },
-  view_issues = {
-    page_size = 20,
-  }
 }
