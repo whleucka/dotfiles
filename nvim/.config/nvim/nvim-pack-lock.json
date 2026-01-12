@@ -106,7 +106,14 @@
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 >>>>>>> 72a721b (fix: add toggle term plug)
+=======
+    "tokyonight.nvim": {
+      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
+      "src": "https://github.com/folke/tokyonight.nvim"
+    },
+>>>>>>> df90062 (fix: grbc)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
