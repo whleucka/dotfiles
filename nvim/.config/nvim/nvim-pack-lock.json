@@ -23,6 +23,9 @@
     "catppuccin": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 98e4984 (fix: add smart-splits config)
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
       "src": "https://github.com/catppuccin/nvim"
     },
@@ -210,6 +213,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
@@ -238,6 +242,8 @@
 =======
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 3edca65 (fix: add smart-splits config)
+=======
+>>>>>>> 98e4984 (fix: add smart-splits config)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
