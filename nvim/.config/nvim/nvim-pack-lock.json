@@ -248,8 +248,10 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
+<<<<<<< HEAD
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 =======
+<<<<<<< HEAD
       "rev": "6788013bb9cb784e606ada44206b0e755e4323d7",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
@@ -260,9 +262,14 @@
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
 =======
+<<<<<<< HEAD
+      "rev": "81b8a91735ad5cd24a6b3137f14a89f19176364f",
+>>>>>>> fe8c918 (fix: rebase)
+=======
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 08c47ef (fix: add smart-splits config)
+<<<<<<< HEAD
 =======
       "rev": "803353450c374192393f5387b6a0176d0972b848",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
@@ -270,6 +277,8 @@
     "oil.nvim": {
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 >>>>>>> c19f5d6 (fix: pack lock)
+=======
+>>>>>>> fe8c918 (fix: rebase)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
