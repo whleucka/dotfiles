@@ -70,7 +70,15 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
+<<<<<<< HEAD
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+=======
+<<<<<<< HEAD
+      "rev": "81b8a91735ad5cd24a6b3137f14a89f19176364f",
+=======
+      "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+>>>>>>> 52e1516 (fix: add smart-splits config)
+>>>>>>> 08c47ef (fix: add smart-splits config)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
@@ -88,10 +96,6 @@
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
-    },
-    "tokyonight.nvim": {
-      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
-      "src": "https://github.com/folke/tokyonight.nvim"
     },
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
