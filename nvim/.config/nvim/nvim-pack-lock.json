@@ -9,7 +9,11 @@
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "catppuccin": {
+<<<<<<< HEAD
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
+=======
+      "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
+>>>>>>> ff9d619 (fix: pack lock)
       "src": "https://github.com/catppuccin/nvim"
     },
     "dashboard-nvim": {
@@ -75,6 +79,7 @@
     },
     "oil.nvim": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 =======
 <<<<<<< HEAD
@@ -83,6 +88,9 @@
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 08c47ef (fix: add smart-splits config)
+=======
+      "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+>>>>>>> c19f5d6 (fix: pack lock)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
