@@ -22,6 +22,7 @@
     },
     "catppuccin": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
       "src": "https://github.com/catppuccin/nvim"
     },
@@ -37,6 +38,9 @@
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
       "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
+=======
+      "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
+>>>>>>> 3edca65 (fix: add smart-splits config)
       "src": "https://github.com/catppuccin/nvim"
     },
 >>>>>>> c19f5d6 (fix: pack lock)
@@ -205,14 +209,18 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
+=======
+>>>>>>> 3edca65 (fix: add smart-splits config)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 755fbb8 (fix: mantis config)
@@ -226,6 +234,10 @@
 >>>>>>> 0481043 (fix: grbc)
 =======
 >>>>>>> 08c47ef (fix: add smart-splits config)
+=======
+=======
+>>>>>>> 52e1516 (fix: add smart-splits config)
+>>>>>>> 3edca65 (fix: add smart-splits config)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
