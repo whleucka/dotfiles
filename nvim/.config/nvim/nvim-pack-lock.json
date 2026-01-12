@@ -33,6 +33,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
 =======
       "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
@@ -49,6 +50,10 @@
 >>>>>>> 1baeb10 (fix: pack lock)
 =======
 >>>>>>> f064b90 (fix: add smart-splits config)
+=======
+=======
+>>>>>>> 98e4984 (fix: add smart-splits config)
+>>>>>>> e7232e0 (fix: add smart-splits config)
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
       "src": "https://github.com/catppuccin/nvim"
 >>>>>>> 9794cd7 (fix: add smart-splits config)
@@ -300,6 +305,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 2e1c16f (fix: add smart-splits config)
@@ -314,6 +320,8 @@
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 >>>>>>> 47da07d (fix: add toggle term plug)
 =======
+=======
+>>>>>>> e7232e0 (fix: add smart-splits config)
 =======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
@@ -376,7 +384,12 @@
 =======
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 3edca65 (fix: add smart-splits config)
+<<<<<<< HEAD
 >>>>>>> f064b90 (fix: add smart-splits config)
+=======
+=======
+>>>>>>> 98e4984 (fix: add smart-splits config)
+>>>>>>> e7232e0 (fix: add smart-splits config)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
