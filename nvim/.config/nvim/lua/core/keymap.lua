@@ -199,6 +199,7 @@ return {
     { "<leader>bl", ":blast<CR>",  desc = "Last" },
   },
   {
+<<<<<<< HEAD
     { "q",          "<nop>" },
     { "<esc><esc>", ":noh<CR>" },
     { "<leader>Q",  ":qa<CR>",                           desc = "Close Neovim" },
@@ -209,6 +210,26 @@ return {
     { "<BS>",       ":b#<CR>",                           desc = "Last Buffer" },
     { "<leader>so", ":update<CR> :source<CR>",           desc = "Source file", },
     { "gd",         ":lua vim.lsp.buf.definition()<cr>", desc = "Go to definition" },
+=======
+    { "q",               "<nop>" },
+    { "<esc><esc>",      ":noh<CR>" },
+    { "<leader>Q",       ":qa<CR>",                           desc = "Close Neovim" },
+    { "<C-s>",           ":update<CR>",                       desc = "Save" },
+    { "<C-p>",           ":FzfLua files<CR>",                 desc = "Picker" },
+    { "H",               ":bprev<CR>",                        desc = "Previous Buffer" },
+    { "L",               ":bnext<CR>",                        desc = "Previous Buffer" },
+    { "<leader>so",      ":update<CR> :source<CR>",           desc = "Source file", },
+    -- { "<C-h>",           "<C-w>h<CR>",                        desc = "Move to left window" },
+    -- { "<C-j>",           "<C-w>j<CR>",                        desc = "Move to lower window" },
+    -- { "<C-k>",           "<C-w>k<CR>",                        desc = "Move to upper window" },
+    -- { "<C-l>",           "<C-w>l<CR>",                        desc = "Move to right window" },
+    -- { "<A-h>",           ":vertical resize +2<cr>",           desc = "Resize vertical split +" },
+    -- { "<A-j>",           ":horizontal resize -2<cr>",         desc = "Resize horizontal split -" },
+    -- { "<A-k>",           ":horizontal resize +2<cr>",         desc = "Resize horizontal split +" },
+    -- { "<A-l>",           ":vertical resize -2<cr>",           desc = "Resize vertical split -" },
+    -- { "<A-=>",           "<C-w>=<CR>",                        desc = "Automatically resize windows" },
+    { "gd",              ":lua vim.lsp.buf.definition()<cr>", desc = "Go to definition" },
+>>>>>>> 52e1516 (fix: add smart-splits config)
   },
   {
     mode = "i",
