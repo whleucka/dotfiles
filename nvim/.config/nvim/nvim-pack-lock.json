@@ -126,12 +126,15 @@
       "src": "https://github.com/akinsho/toggleterm.nvim"
 <<<<<<< HEAD
     },
+<<<<<<< HEAD
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+=======
+>>>>>>> 52e1516 (fix: add smart-splits config)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
