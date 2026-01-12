@@ -17,9 +17,5 @@ return {
   event = "VimEnter",
   keys = {
     { "<C-\\>", ":ToggleTerm<cr>", desc = "Toggle terminal" },
-    {
-      mode = "t",
-      { "<esc>",    "" },
-    },
   }
 }
