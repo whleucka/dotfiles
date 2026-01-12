@@ -1,5 +1,6 @@
 return {
   "mrjones2014/smart-splits.nvim",
+  event = "VeryLazy",
   opts = require("config.smart-splits"),
   keys = function()
     return {
