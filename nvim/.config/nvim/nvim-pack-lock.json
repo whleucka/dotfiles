@@ -21,6 +21,7 @@
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "catppuccin": {
+<<<<<<< HEAD
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
       "src": "https://github.com/catppuccin/nvim"
     },
@@ -34,6 +35,11 @@
 >>>>>>> 755fbb8 (fix: mantis config)
 =======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
+=======
+      "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
+      "src": "https://github.com/catppuccin/nvim"
+    },
+>>>>>>> c19f5d6 (fix: pack lock)
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
@@ -51,6 +57,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       "rev": "e7773d0c863a31bfc8ab72dd1adbec4611a35409",
@@ -79,6 +86,13 @@
 =======
       "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
+=======
+      "rev": "e7773d0c863a31bfc8ab72dd1adbec4611a35409",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
+>>>>>>> c19f5d6 (fix: pack lock)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -110,6 +124,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -123,10 +138,14 @@
 =======
       "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
+=======
+      "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
+>>>>>>> c19f5d6 (fix: pack lock)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-web-devicons": {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "rev": "803353450c374192393f5387b6a0176d0972b848",
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
@@ -147,6 +166,13 @@
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 08c47ef (fix: add smart-splits config)
+=======
+      "rev": "803353450c374192393f5387b6a0176d0972b848",
+      "src": "https://github.com/nvim-tree/nvim-web-devicons"
+    },
+    "oil.nvim": {
+      "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+>>>>>>> c19f5d6 (fix: pack lock)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
