@@ -30,11 +30,20 @@
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
       "src": "https://github.com/Saghen/blink.cmp"
     },
+<<<<<<< HEAD
     "catppuccin": {
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
 >>>>>>> 2dbdb65 (fix: add smart-splits config)
       "src": "https://github.com/catppuccin/nvim"
+=======
+<<<<<<< HEAD
+    "colorful-winsep.nvim": {
+      "rev": "e555611c8f39918e30d033a97ea1a5af457ce75e",
+      "src": "https://github.com/nvim-zh/colorful-winsep.nvim"
+>>>>>>> 2d87331 (fix: mantis config)
     },
+=======
+>>>>>>> 755fbb8 (fix: mantis config)
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
@@ -58,8 +67,11 @@
     },
     "gitsigns.nvim": {
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
 =======
+=======
+>>>>>>> 2d87331 (fix: mantis config)
       "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
 <<<<<<< HEAD
 >>>>>>> 5a5187f (fix: remove log)
@@ -78,7 +90,13 @@
 =======
       "rev": "72acb69020c92d99cf388bfeb390481ccec50c04",
 >>>>>>> 2d32c92 (chore: cleaning shit up)
+<<<<<<< HEAD
 >>>>>>> 2b12d0c (chore: cleaning shit up)
+=======
+=======
+      "rev": "dfac404ac94b0eb1461bd7da32279e16950dfd67",
+>>>>>>> 755fbb8 (fix: mantis config)
+>>>>>>> 2d87331 (fix: mantis config)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -110,6 +128,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -120,6 +139,8 @@
 =======
 =======
 >>>>>>> 2b12d0c (chore: cleaning shit up)
+=======
+>>>>>>> 2d87331 (fix: mantis config)
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -130,7 +151,13 @@
 =======
       "rev": "2ba5ec184609a96b513bf4c53a20512d64e27f39",
 >>>>>>> 2d32c92 (chore: cleaning shit up)
+<<<<<<< HEAD
 >>>>>>> 2b12d0c (chore: cleaning shit up)
+=======
+=======
+      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+>>>>>>> 755fbb8 (fix: mantis config)
+>>>>>>> 2d87331 (fix: mantis config)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -161,15 +188,19 @@
     },
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 2e1c16f (fix: add smart-splits config)
+=======
+>>>>>>> 2d87331 (fix: mantis config)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
 =======
 >>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -186,6 +217,10 @@
 =======
 >>>>>>> 52e1516 (fix: add smart-splits config)
 >>>>>>> 2e1c16f (fix: add smart-splits config)
+=======
+=======
+>>>>>>> 755fbb8 (fix: mantis config)
+>>>>>>> 2d87331 (fix: mantis config)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
