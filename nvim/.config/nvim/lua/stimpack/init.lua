@@ -15,6 +15,12 @@ local function _defaults()
 end
 
 function M.setup(opts)
+  -- Neovim 0.12+ is required
+  -- exit silently
+  if vim.fn.has("nvim-0.12") == 0 then
+    return
+  end
+
   local start_time = vim.loop.hrtime()
   opts = opts or {}
   -- warning, config is not validated!
@@ -226,6 +232,8 @@ local function hooks(ev)
   end
 end
 
-vim.api.nvim_create_autocmd("PackChanged", { callback = hooks })
+if vim.fn.has("nvim-0.12") == 1 then
+  vim.api.nvim_create_autocmd("PackChanged", { callback = hooks })
+end
 
 return M
