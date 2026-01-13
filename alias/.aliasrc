@@ -126,7 +126,9 @@ alias grb='git rebase'
 alias gs='git status'
 
 # yay
-if command -v yay >/dev/null; then
+if command -v omarchy-update >/dev/null; then
+  alias upg='omarchy-update'
+elif command -v yay >/dev/null; then
   alias upg='yay -Syu'
 elif command -v apt >/dev/null; then
   alias upg='sudo apt update && sudo apt upgrade -y'
