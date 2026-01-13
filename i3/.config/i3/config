@@ -88,8 +88,8 @@ exec --no-startup-id dunst
 # Dock
 #exec --no-startup-id plank
 
-# Swap alt and super
-exec setxkbmap -option altwin:swap_alt_win
+# Caps lock is the super key!
+#exec --no-startu-id setxkbmap -option caps:super
 
 # Other stuff
 # xmas!
