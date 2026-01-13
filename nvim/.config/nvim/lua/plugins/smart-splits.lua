@@ -12,7 +12,7 @@ return {
       { "<C-j>", require('smart-splits').move_cursor_down,     desc = "Move cursor down" },
       { "<C-k>", require('smart-splits').move_cursor_up,       desc = "Move cursor up" },
       { "<C-l>", require('smart-splits').move_cursor_right,    desc = "Move cursor right" },
-      { "<C-;>", require('smart-splits').move_cursor_previous, desc = "Move cursor previous" },
+      { "<leader>;", require('smart-splits').move_cursor_previous, desc = "Move cursor previous" },
       { "<leader><leader>h", require('smart-splits').swap_buf_left, desc = "Swap buffer left" },
       { "<leader><leader>j", require('smart-splits').swap_buf_down, desc = "Swap buffer odwn" },
       { "<leader><leader>k", require('smart-splits').swap_buf_up, desc = "Swap buffer up" },
