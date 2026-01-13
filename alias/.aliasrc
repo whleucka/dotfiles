@@ -138,8 +138,9 @@ elif command -v apt >/dev/null; then
 fi
 
 # nvim/vim/vi
-if command -v nvim >/dev/null; then
-  alias v='nvim'
+nightly=/home/whleucka/.neovim/nvim-linux-x86_64/bin/nvim
+if [ -f "$nightly" ]; then
+  alias v="$nightly"
 elif command -v vim >/dev/null; then
   alias v='vim'
 else
