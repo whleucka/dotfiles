@@ -61,9 +61,6 @@ vim.opt.foldenable = false
 
 vim.wo.winbar = ""
 
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#a6e3a1" })
-vim.api.nvim_set_hl(0, "WinSeparatorNC", { fg = "#4c566a" })
-
 -- Neovim 0.12+
 vim.opt.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
 vim.loader.enable()                    -- Fast startup via Lua module caching
