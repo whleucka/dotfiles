@@ -10,22 +10,32 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 31858bf (fix: update a few things)
 =======
 >>>>>>> 47da07d (fix: add toggle term plug)
 =======
 >>>>>>> 9794cd7 (fix: add smart-splits config)
+=======
+=======
+>>>>>>> a5db081 (fix: remove log)
+>>>>>>> 6acf17d (fix: remove log)
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
 =======
       "rev": "6a4914ca987453464a7dfc7fc237a992adb567d0",
 >>>>>>> 922d7df (fix: update a few things)
 =======
+<<<<<<< HEAD
       "rev": "6a4914ca987453464a7dfc7fc237a992adb567d0",
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
 =======
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
 >>>>>>> 08c47ef (fix: add smart-splits config)
+=======
+      "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
+>>>>>>> 5a5187f (fix: remove log)
+>>>>>>> a5db081 (fix: remove log)
       "src": "https://github.com/Saghen/blink.cmp"
     },
     "catppuccin": {
@@ -105,6 +115,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a5db081 (fix: remove log)
       "rev": "e7773d0c863a31bfc8ab72dd1adbec4611a35409",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
@@ -117,8 +130,11 @@
 >>>>>>> 2d87331 (fix: mantis config)
       "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 5a5187f (fix: remove log)
 =======
+=======
+>>>>>>> 6acf17d (fix: remove log)
 =======
 =======
 >>>>>>> 4ac2a0f (fix: add toggle term plug)
@@ -158,7 +174,12 @@
     "gitsigns.nvim": {
       "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
 >>>>>>> c19f5d6 (fix: pack lock)
+<<<<<<< HEAD
 >>>>>>> 1baeb10 (fix: pack lock)
+=======
+=======
+>>>>>>> a5db081 (fix: remove log)
+>>>>>>> 6acf17d (fix: remove log)
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -193,6 +214,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -209,6 +231,8 @@
 >>>>>>> 47da07d (fix: add toggle term plug)
 =======
 >>>>>>> 1baeb10 (fix: pack lock)
+=======
+>>>>>>> 6acf17d (fix: remove log)
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 =======
       "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
@@ -237,7 +261,13 @@
 =======
       "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
 >>>>>>> c19f5d6 (fix: pack lock)
+<<<<<<< HEAD
 >>>>>>> 1baeb10 (fix: pack lock)
+=======
+=======
+      "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
+>>>>>>> a5db081 (fix: remove log)
+>>>>>>> 6acf17d (fix: remove log)
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -248,8 +278,8 @@
       "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
-<<<<<<< HEAD
       "rev": "fbbb2a98721da86f46b06994fd3b4833b04c6e9b",
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
       "rev": "6788013bb9cb784e606ada44206b0e755e4323d7",
@@ -279,6 +309,8 @@
 >>>>>>> c19f5d6 (fix: pack lock)
 =======
 >>>>>>> fe8c918 (fix: rebase)
+=======
+>>>>>>> a5db081 (fix: remove log)
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "plenary.nvim": {
