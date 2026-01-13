@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> a5db081 (fix: remove log)
       "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
@@ -35,6 +36,13 @@
 =======
 >>>>>>> 98e4984 (fix: add smart-splits config)
       "rev": "beaf41a30c26fd7d6c386d383155cbd65dd554cd",
+=======
+      "rev": "b1b77404ce3c8b11e8f35611a28176b944c41e29",
+      "src": "https://github.com/Saghen/blink.cmp"
+    },
+    "catppuccin": {
+      "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
+>>>>>>> e2f054b (fix: plugs)
       "src": "https://github.com/catppuccin/nvim"
     },
 <<<<<<< HEAD
@@ -235,8 +243,8 @@
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
       "src": "https://github.com/akinsho/toggleterm.nvim"
-<<<<<<< HEAD
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -251,12 +259,13 @@
 =======
 =======
 >>>>>>> 065ce98 (fix: add toggle term plug)
+=======
+>>>>>>> e2f054b (fix: plugs)
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
       "src": "https://github.com/folke/tokyonight.nvim"
-=======
->>>>>>> 8a19953 (fix: add toggle term plug)
     },
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -281,6 +290,8 @@
 =======
 >>>>>>> 72a721b (fix: add toggle term plug)
 >>>>>>> 065ce98 (fix: add toggle term plug)
+=======
+>>>>>>> e2f054b (fix: plugs)
     "treesitter-modules.nvim": {
       "rev": "7efc486c933a361568855b10e0829aa2cda4b6b0",
       "src": "https://github.com/MeanderingProgrammer/treesitter-modules.nvim"
