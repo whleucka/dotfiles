@@ -55,11 +55,6 @@ function M.load_plugins(stimpack, specs)
           pack = { name = spec.name or spec.dir }
         else
           process_plugin = false
-          local name = spec.name or spec_util.get_name(spec_util.get_source(spec))
-          vim.notify(
-            ("STIMPACK: Directory not found for plugin '%s': %s"):format(name, spec.dir),
-            vim.log.levels.WARN
-          )
         end
       else
         pack = spec_util.pack_spec(spec, is_lazy)
