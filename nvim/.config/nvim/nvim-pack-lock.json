@@ -20,6 +20,10 @@
       "rev": "6efc53e42cfc97700f19043105bf73ba83c4ae7d",
       "src": "https://github.com/catppuccin/nvim"
     },
+    "colorful-winsep.nvim": {
+      "rev": "e555611c8f39918e30d033a97ea1a5af457ce75e",
+      "src": "https://github.com/nvim-zh/colorful-winsep.nvim"
+    },
     "dashboard-nvim": {
       "rev": "0775e567b6c0be96d01a61795f7b64c1758262f6",
       "src": "https://github.com/nvimdev/dashboard-nvim"
