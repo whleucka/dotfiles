@@ -7,6 +7,7 @@ return {
     { "<leader>M", ":Mantis<cr>", desc = "Mantis Issues" },
   },
   dependencies = {
+    "nvim-lua/plenary.nvim",
     "grapp-dev/nui-components.nvim",
     "MunifTanjim/nui.nvim"
   },
