@@ -207,7 +207,7 @@ return {
     { "H",          ":bprev<CR>",                        desc = "Previous Buffer" },
     { "L",          ":bnext<CR>",                        desc = "Previous Buffer" },
     { "<BS>",       ":b#<CR>",                           desc = "Last Buffer" },
-    { "<leader>so", ":update<CR> :source<CR>",           desc = "Source file", },
+    { "<F5>",       ":update<CR> :source<CR>",           desc = "Source file", },
     { "gd",         ":lua vim.lsp.buf.definition()<cr>", desc = "Go to definition" },
   },
   {

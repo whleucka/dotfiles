@@ -16,7 +16,7 @@ return {
   "akinsho/toggleterm.nvim",
   event = "VimEnter",
   keys = {
-    { "<C-\\>", ":ToggleTerm<cr>", desc = "Toggle terminal" },
+    { "<leader>T", ":ToggleTerm<cr>", desc = "Toggle terminal" },
     {
       mode = "t",
       { "<esc>",    "" },
