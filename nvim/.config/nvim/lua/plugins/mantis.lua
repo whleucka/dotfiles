@@ -1,10 +1,10 @@
 return {
   enabled = true,
-  dir = "/home/whleucka/Projects/mantis-nvim",
+  dir = "/home/whleucka/Projects/mantis.nvim",
   name = "mantis-nvim",
   event = "VimEnter",
   keys = {
-    { "<leader>M", ":Mantis<cr>", desc = "Mantis Issues" },
+    { "<C-i>", ":MantisIssues<cr>", desc = "Mantis Issues" },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",

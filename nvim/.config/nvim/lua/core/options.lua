@@ -64,9 +64,6 @@ vim.wo.winbar = ""
 -- Spelling
 vim.o.spelllang = 'en_ca'
 
--- Win sep
-vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#a6e3a1" })
-
 -- Neovim 0.12+
 --vim.o.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
 vim.loader.enable()                    -- Fast startup via Lua module caching
