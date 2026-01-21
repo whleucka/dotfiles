@@ -2,7 +2,7 @@ return {
   enabled = true,
   dir = "/home/whleucka/Projects/mantis.nvim",
   name = "mantis-nvim",
-  event = "VimEnter",
+  cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {
     { "<C-i>", ":MantisIssues<cr>", desc = "Mantis Issues" },
   },

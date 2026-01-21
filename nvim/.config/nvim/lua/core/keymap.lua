@@ -209,6 +209,7 @@ return {
     { "<BS>",       ":b#<CR>",                           desc = "Last Buffer" },
     { "<F5>",       ":update<CR> :source<CR>",           desc = "Source file", },
     { "gd",         ":lua vim.lsp.buf.definition()<cr>", desc = "Go to definition" },
+    { "<F5>",       ":restart<CR>",                      desc = "Restart" },
   },
   {
     mode = "i",

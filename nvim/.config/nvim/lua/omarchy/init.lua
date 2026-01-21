@@ -26,6 +26,7 @@ return {
         spec.priority = 1000
         spec.config = function()
           vim.cmd.colorscheme(lazy_spec.opts.colorscheme)
+          lazy_spec.opts.dim_inactive = true
           require("omarchy.watcher").setup()
         end
         table.insert(processed_specs, spec)

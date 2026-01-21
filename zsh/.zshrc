@@ -1,5 +1,8 @@
 export TMPDIR="/tmp"
 
+# mantis.nvim config
+export MANTIS_WH=gpYB3wZDDWxm0i0HvMHON2mfMkmq8cSh
+
 export POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # SSH gpg key

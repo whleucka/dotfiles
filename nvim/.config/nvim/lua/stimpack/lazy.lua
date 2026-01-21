@@ -57,18 +57,20 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
         -- Remove the self-destructing command to avoid infinite loop if the plugin doesn't define it
         vim.api.nvim_del_user_command(cmd)
         load_handler()
-        -- Re-execute the command if the plugin defined it, or just let it be
-        -- This is tricky because we don't know if the plugin creates the command.
-        -- If the plugin creates the command, it might have been created during packadd/config.
-        -- We try to execute it.
-        local ok, err = pcall(
-          vim.cmd,
-          { cmd = cmd, args = cmd_args.fargs, bang = cmd_args.bang }
-        )
-        if not ok then
-          -- It's possible the plugin didn't create the command immediately or mapped it differently.
-          -- We ignore for now or notify.
-        end
+        -- Re-execute the command if the plugin defined it
+        pcall(function()
+          local args_str = ""
+          if cmd_args.fargs and #cmd_args.fargs > 0 then
+            local V = vim.fn
+            local largs = {}
+            for _, val in ipairs(cmd_args.fargs) do
+              table.insert(largs, V.string(val))
+            end
+            args_str = " " .. table.concat(largs, " ")
+          end
+
+          vim.cmd(string.format("%s%s%s", cmd, cmd_args.bang and "!" or "", args_str))
+        end)
       end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
     end
   end

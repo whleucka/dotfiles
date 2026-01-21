@@ -78,6 +78,10 @@ function M.load_plugins(stimpack, specs)
           end
         end
 
+        if spec.keys and type(spec.keys) ~= "function" then
+          _register_key(spec)
+        end
+
         if not spec.config then
           -- If no config, we might auto-generate one from opts, or a default one.
           spec.config = function()
@@ -132,7 +136,9 @@ function M.load_plugins(stimpack, specs)
               _run_config(spec.config)
             end
 
-            _register_key(spec)
+            if spec.keys and type(spec.keys) == "function" then
+              _register_key(spec)
+            end
             local end_time = vim.loop.hrtime()
             plugin_load_times[pack.name] = (end_time - start_time) / 1e6
 
@@ -149,7 +155,9 @@ function M.load_plugins(stimpack, specs)
           if spec.config then
             _run_config(spec.config)
           end
-          _register_key(spec)
+          if spec.keys and type(spec.keys) == "function" then
+            _register_key(spec)
+          end
           local end_time = vim.loop.hrtime()
           plugin_load_times[pack.name] = (end_time - start_time) / 1e6
         end
