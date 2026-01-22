@@ -44,6 +44,10 @@
       "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
+    "mantis.nvim": {
+      "rev": "94b6845d441e1944676c4612c89ae40a26bb87d0",
+      "src": "https://github.com/whleucka/mantis.nvim"
+    },
     "neogit": {
       "rev": "d8bf9102692250193b855acd9025a826f1af2729",
       "src": "https://github.com/NeogitOrg/neogit"
@@ -80,10 +84,6 @@
     "sshfs.nvim": {
       "rev": "4516f32f2e104c31b7431b06d3a5c5c4f455038d",
       "src": "https://github.com/uhs-robert/sshfs.nvim"
-    },
-    "tint.nvim": {
-      "rev": "586e87f00c8b0f5e857cefe10839e41f3e8c6d01",
-      "src": "https://github.com/levouh/tint.nvim"
     },
     "toggleterm.nvim": {
       "rev": "9a88eae817ef395952e08650b3283726786fb5fb",

@@ -1,7 +1,7 @@
 return {
   enabled = true,
-  dir = "/home/whleucka/Projects/mantis.nvim",
-  name = "mantis-nvim",
+  -- dir = "/home/whleucka/Projects/mantis.nvim",
+  "whleucka/mantis.nvim",
   cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {
     { "<C-i>", ":MantisIssues<cr>", desc = "Mantis Issues" },
