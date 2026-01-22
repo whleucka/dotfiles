@@ -44,7 +44,7 @@ function M.load_plugins(stimpack, specs)
     end
 
     if should_load then
-      local is_lazy = spec.event ~= nil or spec.lazy == true or spec.cmd ~= nil or spec.ft ~= nil
+      local is_lazy = spec.event ~= nil or spec.lazy == true or spec.cmd ~= nil or spec.ft ~= nil or spec.keys ~= nil
       
       local pack
       local process_plugin = true
@@ -76,10 +76,6 @@ function M.load_plugins(stimpack, specs)
               table.insert(dep_names, dep_pack.name)
             end
           end
-        end
-
-        if spec.keys and type(spec.keys) ~= "function" then
-          _register_key(spec)
         end
 
         if not spec.config then
@@ -136,7 +132,7 @@ function M.load_plugins(stimpack, specs)
               _run_config(spec.config)
             end
 
-            if spec.keys and type(spec.keys) == "function" then
+            if spec.keys then
               _register_key(spec)
             end
             local end_time = vim.loop.hrtime()
@@ -155,7 +151,7 @@ function M.load_plugins(stimpack, specs)
           if spec.config then
             _run_config(spec.config)
           end
-          if spec.keys and type(spec.keys) == "function" then
+          if spec.keys then
             _register_key(spec)
           end
           local end_time = vim.loop.hrtime()

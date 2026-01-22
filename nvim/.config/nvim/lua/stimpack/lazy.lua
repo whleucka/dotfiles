@@ -74,6 +74,54 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
       end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
     end
   end
+
+  if spec.keys then
+    local keys = type(spec.keys) == "function" and spec.keys() or spec.keys
+
+    -- Recursively extract actual keymaps from nested structure
+    local function extract_keymaps(tbl, result)
+      result = result or {}
+      for _, item in ipairs(tbl) do
+        if type(item) == "table" then
+          local lhs = item[1]
+          local rhs = item[2]
+          -- It's an actual keymap if it has both lhs (string) and rhs (string or function)
+          if type(lhs) == "string" and (type(rhs) == "string" or type(rhs) == "function") then
+            table.insert(result, item)
+          end
+          -- Check for nested keymaps (entries at numeric indices > 2)
+          for i = 3, #item do
+            if type(item[i]) == "table" then
+              extract_keymaps({ item[i] }, result)
+            end
+          end
+        end
+      end
+      return result
+    end
+
+    local keymaps = extract_keymaps(keys)
+    for _, keymap in ipairs(keymaps) do
+      local lhs = keymap[1]
+      local rhs = keymap[2]
+      local mode = keymap.mode or "n"
+      local opts = { desc = keymap.desc }
+
+      vim.keymap.set(mode, lhs, function()
+        -- Delete the temporary keymap
+        vim.keymap.del(mode, lhs)
+        -- Load the plugin
+        load_handler()
+        -- Execute the original mapping
+        if type(rhs) == "function" then
+          rhs()
+        elseif type(rhs) == "string" then
+          local keys_to_feed = vim.api.nvim_replace_termcodes(rhs, true, false, true)
+          vim.api.nvim_feedkeys(keys_to_feed, "m", false)
+        end
+      end, opts)
+    end
+  end
 end
 
 return M
