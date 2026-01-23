@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# SSH tunnel + VNC connection script
+# Usage: ./vnc_tunnel <ssh-host> <vnc-target-ip> [display]
+
+SSH_HOST="${1:?Usage: $0 <ssh-host> <vnc-target-ip> [display]}"
+VNC_TARGET="${2:?Usage: $0 <ssh-host> <vnc-target-ip> [display]}"
+DISPLAY_NUM="${3:-0}"
+VNC_PORT=$((5900 + DISPLAY_NUM))
+LOCAL_PORT="$VNC_PORT"
+
+cleanup() {
+  fuser -k "$LOCAL_PORT/tcp" 2>/dev/null
+  echo "Tunnel closed."
+}
+trap cleanup EXIT
+
+# Kill any existing tunnel on this port
+fuser -k "$LOCAL_PORT/tcp" 2>/dev/null
+
+# Create SSH tunnel in background
+echo "Creating SSH tunnel to $SSH_HOST -> $VNC_TARGET:$VNC_PORT..."
+ssh -fNL "$LOCAL_PORT:$VNC_TARGET:$VNC_PORT" "$SSH_HOST"
+
+if [[ $? -eq 0 ]]; then
+  echo "Tunnel established. Connecting VNC..."
+  vncviewer "localhost:$DISPLAY_NUM"
+else
+  echo "Failed to create SSH tunnel" >&2
+  exit 1
+fi

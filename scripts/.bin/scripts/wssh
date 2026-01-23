@@ -5,7 +5,6 @@ import os
 import subprocess
 import sys
 
-from iterfzf import iterfzf
 
 hosts = {
     "chainlogic": {"mysql": "chainlogic_cms"},
@@ -58,7 +57,17 @@ def get_fingerprints(server):
 
 def select_fingerprint(fingerprints):
     global SELECTED, NAME
-    SELECTED = iterfzf(fingerprints, multi=False)
+    input_str = "\n".join(fingerprints)
+    result = subprocess.run(
+        ["fzf"],
+        input=input_str,
+        encoding="utf-8",
+        stdout=subprocess.PIPE,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        print("No selection made, exiting.")
+        sys.exit(1)
+    SELECTED = result.stdout.strip()
     SELECTED, btm_id, NAME = SELECTED.split(" | ")
     return SELECTED
 
