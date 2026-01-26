@@ -89,8 +89,9 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
           if type(lhs) == "string" and (type(rhs) == "string" or type(rhs) == "function") then
             table.insert(result, item)
           end
-          -- Check for nested keymaps (entries at numeric indices > 2)
-          for i = 3, #item do
+          -- Check for nested keymaps (entries at numeric indices >= 2)
+          -- When item[2] is not a valid rhs (string/function), it may be a nested keymap
+          for i = 2, #item do
             if type(item[i]) == "table" then
               extract_keymaps({ item[i] }, result)
             end

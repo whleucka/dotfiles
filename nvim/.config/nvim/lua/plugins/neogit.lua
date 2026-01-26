@@ -13,6 +13,7 @@ return {
         function()
           require('neogit').open({ kind = "auto" })
         end,
+        desc = "Open Neogit",
       },
     },
 
