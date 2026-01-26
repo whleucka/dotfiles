@@ -21,11 +21,11 @@
       "src": "https://github.com/folke/flash.nvim"
     },
     "friendly-snippets": {
-      "rev": "bde8ad444e85db81b7a451223192d9444927ea01",
+      "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "6b5bb1c8d86845c4b21e2146cc11e934a7f831cb",
+      "rev": "d59f857c76eb474ec00debcf043f14fd001805cc",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -45,11 +45,11 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mantis.nvim": {
-      "rev": "925398a322e63a002765d68f6538b55d7137e995",
+      "rev": "fe48045b155d4b74a045958b22a9734f51087da5",
       "src": "https://github.com/whleucka/mantis.nvim"
     },
     "neogit": {
-      "rev": "d8bf9102692250193b855acd9025a826f1af2729",
+      "rev": "73870229977fdd8747025820e15e98cfde787b9c",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui-components.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
-      "rev": "88f1dfc211c3a2fb47f1451fd5edc972ec697e58",
+      "rev": "568ede7e79172a0fe7c9d631454a97ad968deaf2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -78,7 +78,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "b544cd9254ad76bb5890dd653dd8e8ce8187d064",
+      "rev": "5442c06d2003a342c27213e580f58af8ddd577c4",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "sshfs.nvim": {
