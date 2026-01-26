@@ -1,5 +1,8 @@
 return {
   "uhs-robert/sshfs.nvim",
+  dependencies = {
+    "stevearc/oil.nvim",
+  },
   event = "VeryLazy",
   opts = require("config.sshfs"),
   keys = {
