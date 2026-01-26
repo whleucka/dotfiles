@@ -2,6 +2,7 @@ export TMPDIR="/tmp"
 
 # mantis.nvim config
 export MANTIS_WH=t9AN4GevwixYFrc9OUZC8H21vgCwIZB2
+export MANTIS_CL=7Ogo2zBDsHaL-aZKgvXQuq6_vVuw_j5I
 
 export POWERLEVEL9K_INSTANT_PROMPT=quiet
 
