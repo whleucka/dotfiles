@@ -44,10 +44,6 @@
       "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
-    "mantis.nvim": {
-      "rev": "95a12edf05d5687afeac3c23196bf170dc2d42d8",
-      "src": "https://github.com/whleucka/mantis.nvim"
-    },
     "neogit": {
       "rev": "d8bf9102692250193b855acd9025a826f1af2729",
       "src": "https://github.com/NeogitOrg/neogit"
