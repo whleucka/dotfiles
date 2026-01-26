@@ -45,11 +45,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mantis.nvim": {
-<<<<<<< HEAD
       "rev": "fe48045b155d4b74a045958b22a9734f51087da5",
-=======
-      "rev": "8ea3f035e0e20ebc27bf077f9b2687dd609ab674",
->>>>>>> d12cb6f (fix: merge)
       "src": "https://github.com/whleucka/mantis.nvim"
     },
     "neogit": {
