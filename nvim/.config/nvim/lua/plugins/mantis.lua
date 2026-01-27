@@ -1,7 +1,7 @@
 return {
   name = "mantis.nvim",
   enabled = true,
-  -- dir = "/home/whleucka/Projects/mantis.nvim",
+  --dir = "/home/whleucka/Projects/mantis.nvim",
   "whleucka/mantis.nvim",
   cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {
@@ -12,5 +12,5 @@ return {
     "grapp-dev/nui-components.nvim",
     "MunifTanjim/nui.nvim"
   },
-  opts = require("config.mantis-nvim")
+  opts = require("config.mantis")
 }
