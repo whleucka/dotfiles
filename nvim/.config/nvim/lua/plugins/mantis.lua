@@ -5,7 +5,7 @@ return {
   "whleucka/mantis.nvim",
   cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {
-    { "<C-i>", ":MantisIssues<cr>", desc = "Mantis Issues" },
+    { "<leader>M", ":MantisIssues<cr>", desc = "Mantis Issues" },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
