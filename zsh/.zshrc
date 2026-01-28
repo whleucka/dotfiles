@@ -1,3 +1,5 @@
+[[ -f ~/.zshenv ]] && source ~/.zshenv
+
 export TMPDIR="/tmp"
 
 export POWERLEVEL9K_INSTANT_PROMPT=quiet

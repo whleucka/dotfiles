@@ -45,7 +45,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mantis.nvim": {
-      "rev": "fe48045b155d4b74a045958b22a9734f51087da5",
+      "rev": "be7cbb30f6bad5ef5b8fc4d42d00bdc374e9e0b0",
       "src": "https://github.com/whleucka/mantis.nvim"
     },
     "neogit": {
