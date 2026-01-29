@@ -1,5 +1,8 @@
 [[ -f ~/.zshenv ]] && source ~/.zshenv
 
+# zoxide
+eval "$(zoxide init zsh)"
+
 export TMPDIR="/tmp"
 
 export POWERLEVEL9K_INSTANT_PROMPT=quiet
