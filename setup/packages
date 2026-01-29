@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-printf "Creating package list...\n"
-pacman -Qe | awk '{ print $1 }' > p43s
