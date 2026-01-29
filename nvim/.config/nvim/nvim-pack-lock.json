@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "d59f857c76eb474ec00debcf043f14fd001805cc",
+      "rev": "c9e07380df2826c63a8ae396559872b2553c22bc",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -33,7 +33,7 @@
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
-      "rev": "dbac5149fb5fb1b642266ff268b1e0f4ebac9293",
+      "rev": "c7274c48137396526b59d86232eabcdc7fed8a32",
       "src": "https://github.com/onsails/lspkind.nvim"
     },
     "lualine-lsp-progress": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
-      "rev": "568ede7e79172a0fe7c9d631454a97ad968deaf2",
+      "rev": "19c729dae6e0eeb79423df0cf37780aa9a7cc3b7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
