@@ -5,6 +5,10 @@
 
 alias h="history -E"
 
+if command -v zoxide >/dev/null; then
+  alias j="z"
+fi
+
 if command -v udisksctl >/dev/null; then
   alias mount-usb="udisksctl mount -b"
   alias unmount-usb="udisksctl unmount -b"
