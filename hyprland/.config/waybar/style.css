@@ -1,0 +1,94 @@
+/* Tokyo Night theme for waybar */
+
+* {
+    font-family: "CaskaydiaMono Nerd Font", monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: #1a1b26;
+    color: #c0caf5;
+}
+
+#workspaces {
+    margin: 2px 8px;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #565f89;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    margin-right: 4px;
+}
+
+#workspaces button:hover {
+    background: #24283b;
+    color: #c0caf5;
+}
+
+#workspaces button.active {
+    background: #7aa2f7;
+    color: #1a1b26;
+}
+
+#workspaces button.urgent {
+    background: #f7768e;
+    color: #1a1b26;
+}
+
+#clock,
+#cpu,
+#memory,
+#battery,
+#custom-weather,
+#tray {
+    padding: 0 10px;
+    margin: 2px 0;
+}
+
+#clock {
+    color: #a9b1d6;
+}
+
+#cpu {
+    color: #7dcfff;
+}
+
+#memory {
+    color: #bb9af7;
+}
+
+#custom-weather {
+    color: #c0caf5;
+}
+
+#battery {
+    color: #e0af68;
+}
+
+#battery.charging {
+    color: #9ece6a;
+}
+
+#battery.warning:not(.charging) {
+    color: #ff9e64;
+}
+
+#battery.critical:not(.charging) {
+    color: #f7768e;
+}
+
+#tray {
+    margin-right: 8px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
