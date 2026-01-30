@@ -40,7 +40,7 @@ def get_fingerprints(server):
     sql = """SELECT LEFT(Tablet.fingerprint,5) as fingerprint, BTM.id as btm_id, Location.name
     FROM Location INNER JOIN BTM ON BTM.location_id = Location.id
     INNER JOIN Tablet ON Tablet.btm_id = BTM.id
-    WHERE Location.status = 1
+    WHERE Location.enabled = 1
     ORDER BY Location.name"""
     lines = []
     mysql_cmd = hosts[server]["mysql"]
