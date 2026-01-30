@@ -136,7 +136,12 @@ fi
 # ----------------------------------------------------------------------------
 # FZF (load after oh-my-zsh)
 # ----------------------------------------------------------------------------
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+if [[ -f /usr/share/fzf/key-bindings.zsh ]]; then
+    source /usr/share/fzf/key-bindings.zsh
+    source /usr/share/fzf/completion.zsh
+elif [[ -f ~/.fzf.zsh ]]; then
+    source ~/.fzf.zsh
+fi
 
 # ----------------------------------------------------------------------------
 # Local Configuration
