@@ -27,6 +27,7 @@ return {
   },
   host_paths = {
     ['cl-alpha'] = '/var/www/alpha.chainlogic.net/web/will/cms',
+    ['americabitcoin'] = '/mnt/enc/chainlogic-live/',
     ['ic-atm'] = {
       '/var/www/dev.instacoinatm.com',
       '/var/www/beta.instacoinatm.com',
