@@ -80,7 +80,7 @@
 
     "pulseaudio": {
       "format": "{icon}  {volume}%",
-      "format-muted": "󰖁",
+      "format-muted": "󰖁 muted",
       "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
       "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
       "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%",
