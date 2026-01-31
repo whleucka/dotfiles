@@ -29,22 +29,22 @@
 
     "clock": {
         "format": "{:%a %b %d  %H:%M}",
-        "on-click": "foot -e calcurse",
+        "on-click": "kitty calcurse",
         "tooltip-format": "<tt>{calendar}</tt>"
     },
 
     "cpu": {
-        "format": "󰍛  {usage}%",
+        "format": "󰍛 {usage}%",
         "tooltip-format": "Load avg: {loadavg}",
         "interval": 2,
-        "on-click": "foot -e btop"
+        "on-click": "kitty btop"
     },
 
     "memory": {
-        "format": "󰘚  {percentage}%",
+        "format": "󰘚 {percentage}%",
         "tooltip-format": "{used:0.1f}G / {total:0.1f}G",
         "interval": 10,
-        "on-click": "foot -e btop"
+        "on-click": "kitty btop"
     },
 
     "custom/weather": {
@@ -56,7 +56,7 @@
     },
 
     "battery": {
-        "format": "{icon}  {capacity}%",
+        "format": "{icon} {capacity}%",
         "format-icons": [
             "󰁺",  // 0–10%
             "󰁻",  // 11–30%
@@ -79,7 +79,7 @@
     },
 
     "pulseaudio": {
-      "format": "{icon}  {volume}%",
+      "format": "{icon} {volume}%",
       "format-muted": "󰖁 muted",
       "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
       "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
