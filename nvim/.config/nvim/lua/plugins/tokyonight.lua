@@ -2,6 +2,6 @@ return {
   "folke/tokyonight.nvim",
   config = function()
     require("tokyonight")
-    vim.cmd[[colorscheme tokyonight]]
+    vim.cmd[[colorscheme tokyonight-night]]
   end
 }
