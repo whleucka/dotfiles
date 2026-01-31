@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "c9e07380df2826c63a8ae396559872b2553c22bc",
+      "rev": "b4b1f05957a77f7662de834328827890c1a8c02b",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mantis.nvim": {
-      "rev": "be7cbb30f6bad5ef5b8fc4d42d00bdc374e9e0b0",
+      "rev": "cb2b9b05dc77961cb62fb68b40c3c0295a447156",
       "src": "https://github.com/whleucka/mantis.nvim"
     },
     "neogit": {
@@ -78,7 +78,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "smart-splits.nvim": {
-      "rev": "5442c06d2003a342c27213e580f58af8ddd577c4",
+      "rev": "0e73ccf1d957c6d7b95435bd195dcbd62f44f8e2",
       "src": "https://github.com/mrjones2014/smart-splits.nvim"
     },
     "sshfs.nvim": {
