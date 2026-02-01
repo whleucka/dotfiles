@@ -64,9 +64,9 @@
             "󰁽",  // 51–80%
             "󰁾"   // 81–100%
         ],
-        "format-charging": "󰂄 {capacity}%",
-        "format-plugged": "󰂄 {capacity}%",
-        "format-full": "󰁹 100%",
+        "format-charging": " 󰂄 {capacity}%",
+        "format-plugged": " 󰂄 {capacity}%",
+        "format-full": " 󰁹 100%",
         "states": {
             "warning": 30,
             "critical": 15
@@ -80,7 +80,7 @@
 
     "pulseaudio": {
       "format": " {icon} {volume}%",
-      "format-muted": "󰖁 muted",
+      "format-muted": " 󰖁 muted",
       "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
       "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
       "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%",
