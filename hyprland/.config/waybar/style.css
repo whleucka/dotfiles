@@ -46,7 +46,12 @@ window#waybar {
 #custom-weather,
 #tray {
     padding: 0 10px;
-    margin: 2px 0;
+    margin-left: 2px;
+}
+
+#custom-tray-tag {
+    padding: 0 5px;
+    color: #7aa2f7;
 }
 
 #clock {
