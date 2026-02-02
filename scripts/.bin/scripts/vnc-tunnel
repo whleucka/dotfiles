@@ -167,7 +167,6 @@ def create_tunnel_and_connect(host, tunnel_ip, name):
     time.sleep(1)
 
     print(f"Connecting VNC to {name}...")
-    print("Tip: Set 'Scale to fit window' in Remmina preferences for auto-scaling")
     try:
         subprocess.Popen(["remmina", "-c", f"vnc://localhost:{LOCAL_PORT}"],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
