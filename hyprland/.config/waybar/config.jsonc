@@ -72,7 +72,6 @@
             "critical": 15
         },
         "tooltip-format": "{timeTo}\n{power} W",
-        "on-click": "notify-send 'Battery' \"$(upower -i $(upower -e | grep BAT) | grep -E 'percentage|time to|energy-rate')\"",
         "on-click-right": "powerprofilesctl cycle",
         "on-scroll-up": "brightnessctl set +5%",
         "on-scroll-down": "brightnessctl set 5%-"
@@ -81,7 +80,7 @@
     "pulseaudio": {
       "format": " {icon} {volume}%",
       "format-muted": " 󰖁 muted",
-      "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+      "on-click": "pavucontrol",
       "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
       "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%",
       "scroll-step": 1,
