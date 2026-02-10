@@ -202,7 +202,7 @@ return {
     { "q",          "<nop>" },
     { "<esc><esc>", ":noh<CR>" },
     { "<leader>Q",  ":qa<CR>",                           desc = "Close Neovim" },
-    { "<C-s>",      ":update<CR>",                       desc = "Save" },
+    { "<C-s>",      ":w!<CR>",                       desc = "Save" },
     { "<C-p>",      ":FzfLua files<CR>",                 desc = "Picker" },
     { "H",          ":bprev<CR>",                        desc = "Previous Buffer" },
     { "L",          ":bnext<CR>",                        desc = "Previous Buffer" },
