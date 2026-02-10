@@ -50,7 +50,7 @@
     "custom/weather": {
         "format": "{}",
         "exec": "curl -s 'wttr.in/?format=%c%t' | tr -s ' '",
-        "interval": 300,
+        "interval": 600,
         "tooltip": false,
         "on-click": "xdg-open 'https://weather.gc.ca/en/location/index.html?coords=49.693,-112.835'"
     },
