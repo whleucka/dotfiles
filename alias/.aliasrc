@@ -15,15 +15,26 @@ if command -v udisksctl >/dev/null; then
 fi
 
 if command -v docker >/dev/null; then
+  alias dc="docker compose"
+  alias dcu="docker compose up"
+  alias dcud="docker compose up -d"
+  alias dcd="docker compose down"
+  alias dcr="docker compose restart"
+  alias dcb="docker compose build"
+  alias dcub="docker compose up --build"
+  alias dcl="docker compose logs"
+  alias dclf="docker compose logs -f"
+  alias dce="docker compose exec"
+  alias dcrun="docker compose run --rm"
   alias dcps="docker compose ps"
-  alias dclogs="docker compose logs -n 100 -f"
-  alias dcbuild="docker compose build"
-  alias dcexec="docker exec -it"
-  alias dcmysql="docker exec -it mysql mysql -u root -p"
-  alias dcrestart="docker compose restart"
-  alias dcup="docker compose up --detach"
-  alias dcdown="docker compose down"
+  alias dcpull="docker compose pull"
+  alias dck="docker compose kill"
+  alias dcnuke="docker compose down -v --remove-orphans && docker compose up -d --build"
 fi
+
+dcebash() {
+  docker compose exec "$1" bash
+}
 
 # ncdu
 if command -v ncdu >/dev/null; then
