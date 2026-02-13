@@ -49,10 +49,11 @@
 
     "custom/weather": {
         "format": "{}",
-        "exec": "curl -s 'wttr.in/?format=%c%t' | tr -s ' '",
-        "interval": 800,
-        "tooltip": false,
-        "on-click": "xdg-open 'https://weather.gc.ca/en/location/index.html?coords=49.693,-112.835'"
+        "exec": "~/.dotfiles/hyprland/.config/waybar/scripts/weather.sh",
+        "interval": 600,
+        "tooltip": true,
+        "on-click": "xdg-open 'https://weather.gc.ca/en/location/index.html?coords=49.693,-112.835'",
+        "return-type": "json"
     },
 
     "battery": {

@@ -43,6 +43,7 @@ window#waybar {
 #cpu,
 #memory,
 #battery,
+#pulseaudio,
 #custom-weather,
 #tray {
     padding: 0 10px;
@@ -84,6 +85,14 @@ window#waybar {
 
 #battery.critical:not(.charging) {
     color: #f7768e;
+}
+
+#pulseaudio {
+    color: #9ece6a;
+}
+
+#pulseaudio.muted {
+    color: #565f89;
 }
 
 #tray {
