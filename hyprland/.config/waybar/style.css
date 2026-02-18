@@ -42,7 +42,7 @@ window#waybar {
 #clock,
 #cpu,
 #memory,
-#battery,
+#custom-battery,
 #pulseaudio,
 #custom-weather,
 #tray {
@@ -71,19 +71,19 @@ window#waybar {
     color: #c0caf5;
 }
 
-#battery {
+#custom-battery {
     color: #e0af68;
 }
 
-#battery.charging {
+#custom-battery.charging {
     color: #9ece6a;
 }
 
-#battery.warning:not(.charging) {
+#custom-battery.warning:not(.charging) {
     color: #ff9e64;
 }
 
-#battery.critical:not(.charging) {
+#custom-battery.critical:not(.charging) {
     color: #f7768e;
 }
 

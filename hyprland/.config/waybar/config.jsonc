@@ -6,7 +6,7 @@
 
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["clock"],
-    "modules-right": ["group/tray-drawer", "custom/weather", "cpu", "memory", "pulseaudio", "battery"],
+    "modules-right": ["group/tray-drawer", "custom/weather", "cpu", "memory", "pulseaudio", "custom/battery"],
 
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -56,24 +56,12 @@
         "return-type": "json"
     },
 
-    "battery": {
-        "format": "{icon} {capacity}%",
-        "format-icons": [
-            "󰁺",  // 0–10%
-            "󰁻",  // 11–30%
-            "󰁼",  // 31–50%
-            "󰁽",  // 51–80%
-            "󰁾"   // 81–100%
-        ],
-        "format-charging": "󰂄 {capacity}%",
-        "format-plugged": "󰂄 {capacity}%",
-        "format-full": "󰁹 100%",
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "tooltip-format": "{timeTo}\n{power} W",
-        "on-click-right": "powerprofilesctl cycle",
+    "custom/battery": {
+        "exec": "~/.dotfiles/hyprland/.config/waybar/scripts/battery.sh",
+        "interval": 5,
+        "return-type": "json",
+        "tooltip": true,
+        "on-click-right": "~/.dotfiles/hyprland/.config/waybar/scripts/cycle-power-profile.sh",
         "on-scroll-up": "brightnessctl set +5%",
         "on-scroll-down": "brightnessctl set 5%-"
     },
