@@ -25,7 +25,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "1749fedca3a0efdd47918f8b588f7c7abb4e5bd6",
+      "rev": "b2c0603216adb92c6bba81053bc996d7ae95b77a",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -49,7 +49,7 @@
       "src": "https://github.com/whleucka/mantis.nvim"
     },
     "neogit": {
-      "rev": "df323856553d4c5e5c41117606c63f628b24a3b0",
+      "rev": "2a47e1df95605b232fbdd5d369ab1bfaaf40fce4",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui-components.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/MunifTanjim/nui.nvim"
     },
     "nvim-treesitter": {
-      "rev": "2bd9b9b4f12eed175fba35ca2db8e8584546a4ec",
+      "rev": "fcd51bbe9245aa9b79a3930ed9ac42e16e1cf33f",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
