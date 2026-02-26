@@ -1,0 +1,3 @@
+#!/bin/bash
+FILE=~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png
+grim "$FILE" && dunstify "Screenshot saved" "$FILE" -t 2000
