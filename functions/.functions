@@ -112,7 +112,7 @@ EOF
 }
 
 portal() {
-    wg-quick "$1" will_t14s
+    wg-quick "$1" wg_client
 }
 
 what() {
