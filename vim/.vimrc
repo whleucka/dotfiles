@@ -11,141 +11,116 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+Plug 'ghifarit53/tokyonight-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 
 call plug#end()
 
-" Turn on syntax highlighting
-syntax on
-
-set termguicolors
-
-" No startup messages
-set shortmess+=I
-
 " For plugins to load correctly
 filetype plugin indent on
 
-let mapleader = " "
-
-set nowrap
-
+" --- General ---
+set encoding=utf-8
 set noswapfile
 set nobackup
 set undodir=~/.vim/undodir
 set undofile
-
-" Security
+set hidden
 set modelines=0
+set mouse=a
+set updatetime=200
+set timeoutlen=300
+set autoread
 
-" Show line numbers
+" --- UI ---
 set number
 set relativenumber
-
-" Show file stats
-set ruler
-
-" Blink cursor on error instead of beeping (grr)
-set visualbell
-" Don't flash the screen tho
-set t_vb=
-
-" Encoding
-set encoding=utf-8
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=50
-
-" Status bar config
-set statusline+=%#warningmsg#
-
-" Formatting
+set cursorline
+set termguicolors
+set guicursor=
+set signcolumn=yes
+set scrolloff=8
+set sidescrolloff=8
+set nowrap
 set colorcolumn=80
+set laststatus=2
+set cmdheight=1
+set noshowmode
+set visualbell
+set t_vb=
+set splitbelow
+set splitright
+set shortmess+=I
+
+" --- Indentation ---
+set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set expandtab
-set noshiftround
 set smartindent
+set autoindent
+set noshiftround
 
-let &t_ut=''
-
-" Cursor motion
-set scrolloff=6
-set backspace=indent,eol,start
-set matchpairs+=<:> " use % to jump between pairs
-runtime! macros/matchit.vim
-
-
-set guicursor=
-set modifiable
-
-" Allow hidden buffers
-set hidden
-
-" Rendering
-set ttyfast
-
-" Status bar
-set laststatus=2
-
-" Last line
-set showmode
-set showcmd
-
-" Searching
-nnoremap / /\v
-vnoremap / /\v
+" --- Search ---
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
 set showmatch
-set mouse=a
 
-" Color scheme (terminal)
+" --- Performance ---
+set ttyfast
+set lazyredraw
+
+" --- Misc ---
+set backspace=indent,eol,start
+set matchpairs+=<:>
+runtime! macros/matchit.vim
 set t_Co=256
+let &t_ut=''
+set completeopt=menuone,noinsert,noselect
 
-colorscheme catppuccin_macchiato
+" --- Theme ---
+let g:tokyonight_style = 'night'
+let g:tokyonight_enable_italic = 1
+colorscheme tokyonight
 
-" Status Bar
-set laststatus=2
-set cmdheight=1
-let g:lightline = {'colorscheme': 'catppuccin_macchiato'}
+" --- Statusline ---
+let g:lightline = {'colorscheme': 'tokyonight'}
 
-"hi Normal guibg=NONE ctermbg=NONE
+" --- Leader ---
+let mapleader = " "
 
-" Mappings
+" ============================================================
+" Keymaps
+" ============================================================
+
+" Clear search highlight
 nnoremap <ESC><ESC> :noh<CR>
+
+" Save / Quit
 nnoremap <leader><Space> :w<CR>
-
-" Picker
-nnoremap <C-p> :FZF<CR>
-nnoremap <leader>ff :FZF<CR>
-
-" Quit
 nnoremap <leader>Q :qa<CR>
 
-" Windows
-nnoremap <leader>wq :q<CR>
+" Last buffer
+nnoremap <BS> :b#<CR>
 
-" Tabs
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
-nnoremap <leader>0 :tablast<CR>
-nnoremap H :tabprev<CR>
-nnoremap L :tabnext<CR>
+" Picker
+nnoremap <leader>ff :FZF<CR>
+
+" Buffer nav (H/L like nvim)
+nnoremap H :bprev<CR>
+nnoremap L :bnext<CR>
+
+" Buffer group
+nnoremap <leader>bc :enew<CR>
+nnoremap <leader>bq :bd<CR>
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bprev<CR>
+nnoremap <leader>bf :bfirst<CR>
+nnoremap <leader>bl :blast<CR>
 
 " Window nav
 nnoremap <C-h> <C-w>h
@@ -159,30 +134,99 @@ nnoremap <M-l> :vertical resize +2<CR>
 nnoremap <M-j> :resize -2<CR>
 nnoremap <M-k> :resize +2<CR>
 
-" Splits
+" Window group
+nnoremap <leader>wc :new<CR>
+nnoremap <leader>wq :q<CR>
+nnoremap <leader>wQ :qall<CR>
+nnoremap <leader>ws :split<CR>
 nnoremap <leader>wv :vsplit<CR>
-nnoremap <leader>ws :sp<CR>
-highlight VertSplit guifg=#585b70 guibg=#1e1e2e ctermfg=grey ctermbg=black
 
-" Fixes
+" Tab group
+nnoremap <leader>tc :tabnew<CR>
+nnoremap <leader>tq :tabclose<CR>
+nnoremap <leader>tn :tabnext<CR>
+nnoremap <leader>tp :tabprev<CR>
+nnoremap <leader>tf :tabfirst<CR>
+nnoremap <leader>tl :tablast<CR>
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+
+" UI toggles
+nnoremap <leader>un :set relativenumber! \| set number!<CR>
+nnoremap <leader>ur :set relativenumber!<CR>
+nnoremap <leader>uw :set wrap!<CR>
+nnoremap <leader>us :set spell!<CR>
+nnoremap <leader>ul :set list!<CR>
+nnoremap <leader>uh :set hlsearch!<CR>
+nnoremap <leader>ui :set cursorline!<CR>
+nnoremap <leader>ua :set autoindent!<CR>
+nnoremap <leader>uP :set paste!<CR>
+nnoremap <leader>ue :set expandtab!<CR>
+nnoremap <leader>uc :if &colorcolumn == '' \| set colorcolumn=80 \| else \| set colorcolumn= \| endif<CR>
+
+" Fixes: move through wrapped lines naturally
 nnoremap j gj
 nnoremap k gk
+
+" Insert mode escape
 imap jk <ESC>
 imap kj <ESC>
+imap <leader>w <ESC>:update<CR>a
 
-" Move text
+" Visual mode indenting
 vnoremap < <gv
 xnoremap < <gv
 vnoremap > >gv
 xnoremap > >gv
 
-" Clipboard
+" Move selected lines up/down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" ============================================================
+" Autocmds
+" ============================================================
+
+" Restore last cursor position
+augroup RestoreCursor
+    autocmd!
+    autocmd BufReadPost *
+        \ let l:line = line("'\"") |
+        \ if l:line > 0 && l:line <= line("$") |
+        \   execute "normal! g`\"" |
+        \ endif
+augroup END
+
+" Auto-reload file when changed outside vim
+augroup AutoReload
+    autocmd!
+    autocmd FocusGained,BufEnter,CursorHold * checktime
+augroup END
+
+" Spell check in prose filetypes
+augroup SpellCheck
+    autocmd!
+    autocmd FileType gitcommit,markdown setlocal spell spelllang=en_ca
+augroup END
+
+" Clear search highlight when cursor moves in normal mode
+augroup ClearSearch
+    autocmd!
+    autocmd CursorMoved * if v:hlsearch && mode() ==# 'n' | nohlsearch | endif
+augroup END
+
+" ============================================================
+" Clipboard (OSC Yank for terminals without clipboard)
+" ============================================================
+
 if (!has('nvim') && !has('clipboard_working'))
-    " In the event that the clipboard isn't working, it's quite likely that
-    " the + and * registers will not be distinct from the unnamed register. In
-    " this case, a:event.regname will always be '' (empty string). However, it
-    " can be the case that `has('clipboard_working')` is false, yet `+` is
-    " still distinct, so we want to check them all.
     let s:VimOSCYankPostRegisters = ['', '+', '*']
     function! s:VimOSCYankPostCallback(event)
         if a:event.operator == 'y' && index(s:VimOSCYankPostRegisters, a:event.regname) != -1
@@ -195,8 +239,12 @@ if (!has('nvim') && !has('clipboard_working'))
     augroup END
 endif
 
-" Filetype
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType html       setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType css        setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType python     setlocal shiftwidth=4 softtabstop=4 expandtab
+" ============================================================
+" Filetype overrides
+" ============================================================
+
+augroup FiletypeIndent
+    autocmd!
+    autocmd FileType javascript,html,css setlocal shiftwidth=2 tabstop=2 softtabstop=2
+    autocmd FileType python              setlocal shiftwidth=4 softtabstop=4 expandtab
+augroup END
