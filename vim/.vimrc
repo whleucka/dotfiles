@@ -198,8 +198,7 @@ vnoremap K :m '<-2<CR>gv=gv
 augroup RestoreCursor
     autocmd!
     autocmd BufReadPost *
-        \ let l:line = line("'\"") |
-        \ if l:line > 0 && l:line <= line("$") |
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
         \   execute "normal! g`\"" |
         \ endif
 augroup END
