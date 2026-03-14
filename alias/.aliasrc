@@ -5,6 +5,10 @@
 
 alias h="history -E"
 
+alias a="screen-session"
+
+alias j='source job-viewer'
+
 if command -v udisksctl >/dev/null; then
   alias mount-usb="udisksctl mount -b"
   alias unmount-usb="udisksctl unmount -b"
