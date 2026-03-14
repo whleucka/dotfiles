@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+# This script is designed to be sourced by your shell to interact with its jobs.
+# Suggested alias: alias j='source j'
+
+# Detect if the script is being sourced or executed.
+(return 0 2>/dev/null) && IS_SOURCED=true || IS_SOURCED=false
+
+# Get the list of background jobs.
+# If not sourced, this will likely be empty.
+LIST=$(jobs)
+
+if [ -z "$LIST" ]; then
+    if [ "$IS_SOURCED" = false ]; then
+        echo "Error: 'j' must be sourced to see your shell's jobs."
+        echo "Try: source j"
+        echo "Or add this to your shell RC: alias j='source j'"
+    else
+        echo "No background jobs found."
+    fi
+    [ "$IS_SOURCED" = true ] && return 0 || exit 0
+fi
+
+# Use fzf to select a job from the list.
+SELECTED=$(echo "$LIST" | fzf --height 10 --reverse --header "Select a job to foreground")
+
+if [ -n "$SELECTED" ]; then
+    # Extract the job ID (e.g., [1] -> %1)
+    JOB_ID=$(echo "$SELECTED" | sed -E 's/\[([0-9]+)\].*/\1/')
+    
+    if [ "$IS_SOURCED" = true ]; then
+        # Actually bring the job to the foreground.
+        fg "%$JOB_ID"
+    else
+        # If not sourced, we can only suggest how to foreground it.
+        echo "Selected job: %$JOB_ID"
+        echo "To foreground it, you must run: fg %$JOB_ID"
+        echo "To make this automatic, alias j to 'source j'."
+    fi
+fi

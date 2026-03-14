@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Loop to allow multiple actions (like killing multiple sessions)
+while true; do
+    # List active screen sessions
+    LIST=$(screen -ls | grep -E '^\s+[0-9]+\.')
+
+    if [ -z "$LIST" ]; then
+        printf "No screen sessions found.\n"
+        exit 0
+    fi
+
+    # Use --expect to catch the Delete key for killing
+    # The first line of output will be the key pressed, the second is the selection.
+    RESULT=$(printf "%s" "$LIST" | fzf --height 40% --reverse \
+        --header "Enter: attach | Del: kill | Esc: exit" \
+        --expect=del)
+
+    # Check if the user cancelled (Esc/Ctrl-C)
+    if [ -z "$RESULT" ]; then
+        exit 0
+    fi
+
+    # Parse key and selection
+    # fzf output is:
+    # line 1: the key name (e.g., 'del' or empty for Enter)
+    # line 2: the selected item text
+    KEY=$(echo "$RESULT" | sed -n '1p')
+    SELECTION=$(echo "$RESULT" | sed -n '2p')
+    SESSION=$(echo "$SELECTION" | awk '{print $1}')
+
+    # If nothing was selected, exit
+    if [ -z "$SESSION" ]; then
+        exit 0
+    fi
+
+    if [ "$KEY" = "del" ]; then
+        # Kill the session
+        screen -X -S "$SESSION" quit
+        # The loop will refresh the list automatically
+    else
+        # Default action (Enter) is to attach
+        # We use -x to attach even if it's already attached elsewhere
+        screen -x "$SESSION"
+        exit 0
+    fi
+done
