@@ -59,18 +59,9 @@ export EDITOR="$VISUAL"
 # ----------------------------------------------------------------------------
 # FZF Configuration
 # ----------------------------------------------------------------------------
-export FZF_DEFAULT_OPTS="
-    --multi
-    --height=40%
-    --layout=reverse
-    --border=rounded
-    --bind='alt-k:up,alt-j:down'
-    --bind='ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up'
-    --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
-    --color=fg+:#c0caf5,bg+:#292e42,hl+:#7dcfff
-    --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
-    --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
-"
+export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/fzfrc"
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p 80%,40%"
 
 # File search with ripgrep
 if command -v rg &>/dev/null; then

@@ -170,7 +170,6 @@ interactive() {
 
         local result
         result=$(printf '%s\n' "$display" | fzf \
-            --height 40% --reverse --border rounded \
             --header "Enter:attach | Del:kill | ^R:rename | ^A:new | Esc:quit" \
             --expect=del,ctrl-r,ctrl-a \
             --ansi)
