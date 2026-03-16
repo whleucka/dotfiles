@@ -64,7 +64,7 @@ attach_session() {
 
 new_session() {
     local name="$1"
-    local dir="${2:-$(pwd)}"
+    local dir="${2:-}"
 
     if [ -z "$name" ]; then
         printf "Session name: "
@@ -75,6 +75,15 @@ new_session() {
     if tmux has-session -t "$name" 2>/dev/null; then
         err "Session '$name' already exists. Use 'ks attach $name'."
         return 1
+    fi
+
+    # If no dir specified, use zoxide interactive picker (falls back to cwd)
+    if [ -z "$dir" ]; then
+        if command -v zoxide &>/dev/null; then
+            dir=$(zoxide query -i 2>/dev/null) || dir="$(pwd)"
+        else
+            dir="$(pwd)"
+        fi
     fi
 
     # Expand ~ to $HOME
