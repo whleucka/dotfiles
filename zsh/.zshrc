@@ -153,8 +153,8 @@ fi
 # Bat Integration (must be after sourcing functions to avoid alias conflicts)
 # ----------------------------------------------------------------------------
 if command -v bat &>/dev/null; then
-    export MANROFFOPT="-Tascii"
-    export MANPAGER="less -R"
+    export MANROFFOPT="-c"
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
     alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
     alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 fi
