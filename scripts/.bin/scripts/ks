@@ -33,6 +33,8 @@ err()   { printf "${RED}:: ${NC}%s\n" "$*" >&2; }
 list_sessions_formatted() {
     tmux list-sessions -F '#{session_name}|#{session_windows}|#{session_attached}|#{session_path}' 2>/dev/null | \
     while IFS='|' read -r name windows attached path; do
+        # Hide the internal server-keepalive session
+        [ "$name" = "__server" ] && continue
         if [ "$attached" -gt 0 ]; then
             state="${GREEN}attached${NC}"
         else
@@ -44,7 +46,7 @@ list_sessions_formatted() {
 
 # List session names only (for fzf)
 list_session_names() {
-    tmux list-sessions -F '#{session_name}' 2>/dev/null
+    tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -v '^__server$'
 }
 
 attach_session() {
@@ -164,7 +166,7 @@ interactive() {
 
         # Build display list with status
         local display
-        display=$(tmux list-sessions -F '#{session_name} (#{session_windows}w) #{?session_attached,[attached],[detached]}' 2>/dev/null)
+        display=$(tmux list-sessions -F '#{session_name} (#{session_windows}w) #{?session_attached,[attached],[detached]}' 2>/dev/null | grep -v '^__server ')
 
         local result
         result=$(printf '%s\n' "$display" | fzf \
