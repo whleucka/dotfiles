@@ -13,6 +13,10 @@ default-timeout=3000
 group-by=summary
 icons=1
 
+[urgency=critical]
+default-timeout=10000
+border-color=#F7768EFF
+
 [grouped]
 format=<b>%s</b>\n%b
 
