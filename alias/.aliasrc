@@ -41,12 +41,6 @@ if command -v ncdu >/dev/null; then
   alias du="ncdu -x "
 fi
 
-# tmux
-if command -v tmux >/dev/null; then
-  alias tmux="tmux -u"
-  alias mux="tmuxinator"
-fi
-
 # composer
 if command -v composer >/dev/null; then
   alias cu="composer update"
@@ -112,7 +106,7 @@ alias wget='wget -c'
 alias ping='ping -c 5'
 
 # kittens
-alias s="kitty +kitten ssh"
+alias s="ssh "
 alias icat="kitty +kitten icat"
 
 # git
@@ -172,14 +166,3 @@ fi
 alias l='ls -l'
 alias la='ls -a'
 alias lla='ls -la'
-
-# bat cat
-# if command -v bat > /dev/null; then
-#     alias cat="bat -p "
-#     alias bd="batdiff"
-# elif command -v batcat > /dev/null; then
-#     alias cat="batcat -p"
-# fi
-# if command -v batgrep > /dev/null; then
-#     alias grep="batgrep "
-# fi
