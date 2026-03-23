@@ -126,11 +126,25 @@ def setup_vnc(host, fingerprint):
 
     if result.returncode != 0:
         print("Starting x11vnc...")
-        # Start x11vnc in background
-        start_cmd = f"pssh {fingerprint} 'nohup /usr/bin/x11vnc -shared -forever -display WAIT:0.0 -rfbport 5900 -nopw -xwarppointer -xrandr -auth /home/iva/.Xauthority >/dev/null 2>&1 &'"
+        # Kill any stale x11vnc first
+        kill_cmd = f"pssh {fingerprint} 'killall x11vnc 2>/dev/null; sleep 1'"
+        subprocess.run(["ssh", host, kill_cmd], capture_output=True)
+        # Start x11vnc in background, log to tmp for debugging
+        start_cmd = f"pssh {fingerprint} 'nohup /usr/bin/x11vnc -shared -forever -display :0 -rfbport 5900 -nopw -xwarppointer -xrandr -auth guess >/tmp/x11vnc.log 2>&1 &'"
         subprocess.run(["ssh", host, start_cmd])
-        time.sleep(2)
-        print("x11vnc started")
+        # Wait and verify x11vnc is actually listening
+        for i in range(5):
+            time.sleep(1)
+            verify_cmd = f"pssh {fingerprint} 'ss -tlnp | grep 5900'"
+            verify = subprocess.run(["ssh", host, verify_cmd], capture_output=True, encoding="utf-8")
+            if "5900" in verify.stdout:
+                print("x11vnc started and listening on port 5900")
+                break
+        else:
+            # Show logs if it failed to start
+            log_cmd = f"pssh {fingerprint} 'cat /tmp/x11vnc.log 2>/dev/null | tail -20'"
+            log_result = subprocess.run(["ssh", host, log_cmd], capture_output=True, encoding="utf-8")
+            print(f"WARNING: x11vnc may not be running. Logs:\n{log_result.stdout}")
     else:
         print("x11vnc already running")
 
