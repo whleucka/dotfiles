@@ -22,7 +22,7 @@ return {
   },
   mounts = {
     base_dir = vim.fn.expand("$HOME") .. "/.mount",
-    auto_unmount = true,
+    auto_unmount = false,
     auto_change_to_dir = true,
   },
   host_paths = {
