@@ -125,8 +125,11 @@ bindkey '^[OB' down-line-or-beginning-search
 bindkey '^n' expand-or-complete
 bindkey '^p' reverse-menu-complete
 
+# Kitty keyboard protocol sends ctrl+e as CSI 1;9u — bind it to end-of-line
+bindkey '\e[1;9u' end-of-line
+
 # ----------------------------------------------------------------------------
-# Kitty/Ghostty Integration
+# Kitty/Ghostty Integration (after oh-my-zsh so autosuggestions widget is intact)
 # ----------------------------------------------------------------------------
 if [[ -f /usr/lib/kitty/shell-integration/zsh/kitty.zsh ]]; then
     source /usr/lib/kitty/shell-integration/zsh/kitty.zsh
