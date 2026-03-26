@@ -60,6 +60,15 @@ now_if_args(function()
     -- - Execute `:=require('nvim-treesitter').get_available()`
     -- - Visit 'SUPPORTED_LANGUAGES.md' file at
     --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main
+    'php',
+    'python',
+    'bash',
+    'rust',
+    'c',
+    'cpp',
+    'html',
+    'css',
+    'sql',
   }
   local isnt_installed = function(lang)
     return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
