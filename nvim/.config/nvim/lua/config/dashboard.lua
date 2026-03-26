@@ -34,7 +34,9 @@ return {
       {
         desc = "Files",
         group = "Label",
-        action = ":Pick files",
+        action = function()
+            MiniPick.builtin.files({ tool = 'git' })
+        end,
         key = "f",
       },
       {
