@@ -21,4 +21,4 @@
     diff = always
     interactive = always
     status = always
-    ui = always
+    ui = auto
