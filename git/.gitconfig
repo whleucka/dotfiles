@@ -17,8 +17,4 @@
 	name = William Hleucka
 	email = william.hleucka@gmail.com
 [color]
-    branch = always
-    diff = always
-    interactive = always
-    status = always
     ui = auto
