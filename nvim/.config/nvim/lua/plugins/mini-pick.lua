@@ -9,9 +9,27 @@ return {
         {
           "<leader>ff",
           function()
+            MiniPick.builtin.files({ tool = 'git' })
+          end,
+          desc = "Files (git)"
+        },
+      },
+      {
+        {
+          "<leader>fF",
+          function()
             MiniPick.builtin.files()
           end,
           desc = "Files"
+        },
+      },
+      {
+        {
+          "<leader>fg",
+          function()
+            MiniPick.builtin.grep_live()
+          end,
+          desc = "Grep (live)"
         },
       },
       {
@@ -34,29 +52,11 @@ return {
       },
       {
         {
-          "<leader>fg",
-          function()
-            MiniPick.builtin.grep_live()
-          end,
-          desc = "Grep (live)"
-        },
-      },
-      {
-        {
           "<leader>fh",
           function()
             MiniPick.builtin.help()
           end,
           desc = "Help"
-        },
-      },
-      {
-        {
-          "<leader>fG",
-          function()
-            MiniPick.builtin.files({ tool = 'git' })
-          end,
-          desc = "Files (git)"
         },
       },
     },
