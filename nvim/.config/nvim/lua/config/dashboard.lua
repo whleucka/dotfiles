@@ -32,15 +32,9 @@ return {
         key = "g",
       },
       {
-        desc = "Oil",
-        group = "Label",
-        action = ":Oil",
-        key = "o",
-      },
-      {
         desc = "Files",
         group = "Label",
-        action = "FzfLua files",
+        action = ":Pick files",
         key = "f",
       },
       {

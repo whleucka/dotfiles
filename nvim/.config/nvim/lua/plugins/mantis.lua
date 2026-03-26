@@ -1,7 +1,4 @@
 return {
-  name = "mantis.nvim",
-  enabled = true,
-  --dir = "/home/whleucka/Projects/mantis.nvim",
   "whleucka/mantis.nvim",
   cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {

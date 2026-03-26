@@ -1,29 +1,33 @@
 return {
   connections = {
-    sshfs_args = {
-      "-o dir_cache=yes",          -- Enable directory entry caching
-      "-o dcache_max_size=100000", -- Max number of cached entries
-      "-o dcache_timeout=600",     -- Seconds entries are cached
-      "-o dcache_stat_timeout=600",
-      "-o dcache_link_timeout=600",
-      "-o dcache_dir_timeout=600",
-      --"-o large_read",             -- Reads more data per network roundtrip
-      --"-o no_readahead",           -- don’t speculatively read more than requested
-      --"-o sync_readdir",           -- For speed, probably leave off.
-      "-o max_conns=3",            -- Lets SSHFS use multiple SSH sessions for simultaneous reads
-      "-o reconnect",              -- Automatically reconnect if the connection drops
-      "-o ConnectTimeout=5",       -- Time (in seconds) to wait before failing a connection attempt
-      "-o compression=yes",        -- Enable compression to reduce bandwidth usage
-      "-o ServerAliveInterval=15", -- Send a keepalive packet every 15 seconds to prevent timeouts
-      "-o ServerAliveCountMax=3",  -- Number of missed keepalive packets before disconnecting
-      "-o TCPKeepAlive=yes",       -- helps with NATs / routers being dumb
-      --"-o IdentityFile=~/.ssh/id_rsa"
-    },
+    sshfs_options = {
+      reconnect = true,         -- Auto-reconnect on connection loss
+      ConnectTimeout = 5,       -- Connection timeout in seconds
+      compression = "yes",      -- Enable compression
+      ServerAliveInterval = 15, -- Keep-alive interval (15s × 3 = 45s timeout)
+      ServerAliveCountMax = 3,  -- Keep-alive message count
+      dir_cache = "yes",        -- Enable directory caching
+      dcache_timeout = 300,     -- Cache timeout in seconds
+      dcache_max_size = 10000,  -- Max cache size
+      -- allow_other = true,        -- Allow other users to access mount
+      -- uid = "1000,gid=1000",     -- Set file ownership (use string for complex values)
+      follow_symlinks = true, -- Follow symbolic links
+    }
   },
   mounts = {
     base_dir = vim.fn.expand("$HOME") .. "/.mount",
-    auto_unmount = false,
+    auto_unmount = true,
     auto_change_to_dir = true,
+  },
+  ui = {
+    local_picker = {
+      preferred_picker = "mini",  -- one of: "auto", "snacks", "fzf-lua", "mini", "telescope", "oil", "neo-tree", "nvim-tree", "yazi", "lf", "nnn", "ranger", "netrw"
+      fallback_to_netrw = true,   -- fallback to netrw if no picker is available
+      netrw_command = "Explore",  -- netrw command: "Explore", "Lexplore", "Sexplore", "Vexplore", "Texplore"
+    },
+    remote_picker = {
+      preferred_picker = "mini",  -- one of: "auto", "snacks", "fzf-lua", "telescope", "mini"
+    },
   },
   host_paths = {
     ['cl-alpha'] = '/var/www/alpha.chainlogic.net/web/will/cms',

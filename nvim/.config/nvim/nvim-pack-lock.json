@@ -28,12 +28,8 @@
       "rev": "6cd7280adead7f586db6fccbd15d2cac7e2188b9",
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
-    "fzf-lua": {
-      "rev": "8a79ee54d6216d10b2f153921a12b152be0c1a20",
-      "src": "https://github.com/ibhagwan/fzf-lua"
-    },
     "gitsigns.nvim": {
-      "rev": "7c4faa3540d0781a28588cafbd4dd187a28ac6e3",
+      "rev": "5310a7f3a97b6de629269f8935691627a076ae4b",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "lspkind.nvim": {
@@ -52,8 +48,20 @@
       "rev": "cb2b9b05dc77961cb62fb68b40c3c0295a447156",
       "src": "https://github.com/whleucka/mantis.nvim"
     },
+    "mini.files": {
+      "rev": "b4796e09eb103f9f2d1e00aa2dab3753b879b17b",
+      "src": "https://github.com/nvim-mini/mini.files"
+    },
+    "mini.icons": {
+      "rev": "5b9076dae1bfbe47ba4a14bc8b967cde0ab5d77e",
+      "src": "https://github.com/nvim-mini/mini.icons"
+    },
+    "mini.pick": {
+      "rev": "fe079c2bd894a5ee70b62f23d819620ef40c4949",
+      "src": "https://github.com/nvim-mini/mini.pick"
+    },
     "neogit": {
-      "rev": "d3890fc3cdf0859845a86b2be306bba01458df1a",
+      "rev": "64b1a01a9fc3d3ee8b2368230563bedf3eb66e54",
       "src": "https://github.com/NeogitOrg/neogit"
     },
     "nui-components.nvim": {
@@ -68,10 +76,6 @@
       "rev": "6620ae1c44dfa8623b22d0cbf873a9e8d073b849",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
-    },
-    "nvim-web-devicons": {
-      "rev": "d7462543c9e366c0d196c7f67a945eaaf5d99414",
-      "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "oil.nvim": {
       "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
@@ -94,7 +98,7 @@
       "src": "https://github.com/akinsho/toggleterm.nvim"
     },
     "tokyonight.nvim": {
-      "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
+      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim"
     },
     "treesitter-modules.nvim": {

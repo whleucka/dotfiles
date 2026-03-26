@@ -4,7 +4,7 @@ return {
   opts = {
     auto_save = true,
     auto_restore = true,
-    suppress_dirs = { "~/", "~/Downloads", "/tmp", "~/.mount", "~/.mount/**" },
+    suppress_dirs = { "~/", "~/Downloads", "/tmp", "~/.mount/**" },
     pre_save_cmds = {
       -- Close any SSHFS buffers before saving the session
       function()
