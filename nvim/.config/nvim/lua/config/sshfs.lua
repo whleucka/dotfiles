@@ -21,12 +21,12 @@ return {
   },
   ui = {
     local_picker = {
-      preferred_picker = "mini",  -- one of: "auto", "snacks", "fzf-lua", "mini", "telescope", "oil", "neo-tree", "nvim-tree", "yazi", "lf", "nnn", "ranger", "netrw"
-      fallback_to_netrw = true,   -- fallback to netrw if no picker is available
-      netrw_command = "Explore",  -- netrw command: "Explore", "Lexplore", "Sexplore", "Vexplore", "Texplore"
+      preferred_picker = "mini",
+      fallback_to_netrw = true,
+      netrw_command = "Explore",
     },
     remote_picker = {
-      preferred_picker = "mini",  -- one of: "auto", "snacks", "fzf-lua", "telescope", "mini"
+      preferred_picker = "mini",
     },
   },
   host_paths = {
