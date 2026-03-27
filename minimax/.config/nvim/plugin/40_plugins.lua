@@ -85,6 +85,20 @@ now_if_args(function()
   end
   local ts_start = function(ev) vim.treesitter.start(ev.buf) end
   Config.new_autocmd('FileType', filetypes, ts_start, 'Start tree-sitter')
+
+  -- Incremental selection: <CR> to expand, <BS> to shrink
+  add({ 'https://github.com/MeanderingProgrammer/treesitter-modules.nvim' })
+  require('treesitter-modules').setup({
+    incremental_selection = {
+      enable = true,
+      keymaps = {
+        init_selection = '<CR>',
+        node_incremental = '<CR>',
+        node_decremental = '<BS>',
+        scope_incremental = false,
+      },
+    },
+  })
 end)
 
 -- Language servers ===========================================================
