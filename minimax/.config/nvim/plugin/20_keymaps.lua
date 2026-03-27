@@ -23,6 +23,14 @@ nmap(']p', '<Cmd>exe "iput "  . v:register<CR>', 'Paste Below')
 vim.keymap.set('i', 'jk', '<Esc>')
 vim.keymap.set('i', 'kj', '<Esc>')
 
+-- Reverse repeat for mini.jump (native ',' equivalent)
+vim.keymap.set({ 'n', 'x', 'o' }, ',', function()
+  local state = MiniJump.state
+  state.backward = not state.backward
+  MiniJump.jump()
+  state.backward = not state.backward
+end, { desc = 'Repeat f/t reverse' })
+
 -- Buffer navigation with H/L
 nmap('H', '<Cmd>bprevious<CR>', 'Previous buffer')
 nmap('L', '<Cmd>bnext<CR>',     'Next buffer')

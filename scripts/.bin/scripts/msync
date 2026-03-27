@@ -14,11 +14,10 @@
 #   msync remove <name>      Remove a project from config
 #   msync edit               Open config in $EDITOR
 #
-# Config: ~/.config/msync/config
-# Format: name|host|remote_dir|local_dir (one per line)
+# Config: ~/.config/msync/config.yml (YAML)
 
 CONFIG_DIR="$HOME/.config/msync"
-CONFIG_FILE="$CONFIG_DIR/config"
+CONFIG_FILE="$CONFIG_DIR/config.yml"
 
 # Colors
 RED='\033[0;31m'
@@ -43,12 +42,25 @@ ensure_config() {
     if [ ! -f "$CONFIG_FILE" ]; then
         cat > "$CONFIG_FILE" << 'EOF'
 # msync project config
-# Format: name|host|remote_dir|local_dir
+# Each project needs: name, host, remote_dir, local_dir
+
+projects: []
 # Example:
-# myapp|prod-server|/var/www/myapp|~/projects/myapp
+# projects:
+#   - name: myapp
+#     host: prod-server
+#     remote_dir: /var/www/myapp
+#     local_dir: ~/projects/myapp
 EOF
         info "Created config at $CONFIG_FILE"
         info "Add projects with 'msync add' or edit directly."
+    fi
+}
+
+check_yq() {
+    if ! command -v yq &>/dev/null; then
+        err "yq not found. Install with: pip install yq"
+        exit 1
     fi
 }
 
@@ -61,9 +73,9 @@ check_mutagen() {
 
 # ── Config Helpers ───────────────────────────────────────────────────────────
 
-# Read config entries (skip comments and blank lines)
+# Read config entries as pipe-delimited lines: name|host|remote_dir|local_dir
 read_config() {
-    grep -v '^\s*#' "$CONFIG_FILE" | grep -v '^\s*$'
+    yq -r '.projects[]? | "\(.name)|\(.host)|\(.remote_dir)|\(.local_dir)"' "$CONFIG_FILE" 2>/dev/null
 }
 
 get_project() {
@@ -72,7 +84,7 @@ get_project() {
 }
 
 list_project_names() {
-    read_config | cut -d'|' -f1
+    yq -r '.projects[]?.name' "$CONFIG_FILE" 2>/dev/null
 }
 
 # ── Session Helpers ──────────────────────────────────────────────────────────
@@ -213,7 +225,9 @@ cmd_add() {
     read -r local_dir
     [ -z "$local_dir" ] && local_dir="~/sync/$name"
 
-    echo "${name}|${host}|${remote_dir}|${local_dir}" >> "$CONFIG_FILE"
+    local tmp
+    tmp=$(mktemp)
+    yq -y ".projects += [{name: \"$name\", host: \"$host\", remote_dir: \"$remote_dir\", local_dir: \"$local_dir\"}]" "$CONFIG_FILE" > "$tmp" && mv "$tmp" "$CONFIG_FILE"
     ok "Added '$name' ($host:$remote_dir -> $local_dir)"
 }
 
@@ -240,8 +254,7 @@ cmd_remove() {
         [yY]*)
             local tmp
             tmp=$(mktemp)
-            grep -v "^${name}|" "$CONFIG_FILE" > "$tmp"
-            mv "$tmp" "$CONFIG_FILE"
+            yq -y ".projects |= map(select(.name != \"$name\"))" "$CONFIG_FILE" > "$tmp" && mv "$tmp" "$CONFIG_FILE"
             ok "Removed '$name'"
             ;;
         *) info "Cancelled." ;;
@@ -322,6 +335,7 @@ interactive() {
 # ── Main ─────────────────────────────────────────────────────────────────────
 
 check_mutagen
+check_yq
 ensure_config
 
 case "${1:-}" in
@@ -367,8 +381,7 @@ Interactive keybindings (fzf):
   Ctrl-E   Edit config file
   Esc      Exit
 
-Config: ~/.config/msync/config
-Format: name|host|remote_dir|local_dir
+Config: ~/.config/msync/config.yml (YAML)
 EOF
         ;;
     *)
