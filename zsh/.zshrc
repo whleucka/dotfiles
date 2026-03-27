@@ -43,7 +43,7 @@ if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
 elif command -v kitty &>/dev/null && [[ "$TERM" == "xterm-kitty" ]]; then
     export TERM="xterm-kitty"
 else
-    export TERM="xterm-256color"
+    export TERM="tmux-256color"
 fi
 
 # Editor (prefer nvim > vim > vi > nano)
