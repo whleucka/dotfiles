@@ -123,7 +123,19 @@ now_if_args(function()
   -- the rules provided by 'nvim-lspconfig'.
   -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
   -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
-  vim.lsp.enable({ 'intelephense' })
+  vim.lsp.enable({
+    'bashls',
+    'clangd',
+    'cssls',
+    'html',
+    'htmx',
+    'intelephense',
+    'lua_ls',
+    'ruff',
+    'rust_analyzer',
+    'sqls',
+    'ts_ls',
+  })
 end)
 
 -- Formatting =================================================================

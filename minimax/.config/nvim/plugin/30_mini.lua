@@ -535,8 +535,9 @@ later(function() require('mini.jump').setup() end)
 -- - `:h MiniJump2d.gen_spotter` - list of available spotters
 later(function()
   require('mini.jump2d').setup({
-    mappings = { start_jumping = '<Leader>j' },
+    mappings = { start_jumping = '' },
   })
+  vim.keymap.set('n', '<Leader>j', '<Cmd>lua MiniJump2d.start()<CR>', { desc = '+Jump' })
 end)
 
 -- Special key mappings. Provides helpers to map:
