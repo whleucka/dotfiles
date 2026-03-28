@@ -4,8 +4,7 @@ return {
     project = {
       enable = true,
       action = function(path)
-        -- use fzf-lua instead of telescope
-        require("fzf-lua").files({ cwd = path })
+        MiniFiles.open(path)
       end,
     },
     week_header = {
@@ -55,9 +54,7 @@ return {
         desc = "Config",
         group = "Label",
         action = function()
-          require("fzf-lua").files({
-            cwd = vim.fn.stdpath("config"),
-          })
+          MiniFiles.open(vim.fn.stdpath("config"))
         end,
         key = "c",
       },
