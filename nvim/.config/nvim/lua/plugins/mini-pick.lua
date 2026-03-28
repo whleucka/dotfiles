@@ -9,7 +9,7 @@ return {
         {
           "<leader>fc",
           function()
-            MiniPick.builtin.files()
+            MiniPick.builtin.files(nil, { source = { cwd = vim.fn.stdpath("config")}})
           end,
           desc = "Config"
         },

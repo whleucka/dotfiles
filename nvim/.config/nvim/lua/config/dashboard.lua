@@ -56,7 +56,7 @@ return {
         desc = "Config",
         group = "Label",
         action = function()
-          MiniFiles.open(vim.fn.stdpath("config"))
+          MiniPick.builtin.files(nil, { source = { cwd = vim.fn.stdpath("config")}})
         end,
         key = "c",
       },
