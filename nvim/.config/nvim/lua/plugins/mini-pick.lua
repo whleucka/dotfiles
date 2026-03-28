@@ -7,6 +7,15 @@ return {
       group = "Find",
       {
         {
+          "<leader>fc",
+          function()
+            MiniPick.builtin.files()
+          end,
+          desc = "Config"
+        },
+      },
+      {
+        {
           "<leader>ff",
           function()
             MiniPick.builtin.files({ tool = 'git' })
@@ -29,7 +38,14 @@ return {
           function()
             MiniPick.builtin.grep_live()
           end,
-          desc = "Grep (live)"
+          desc = "Grep live"
+        },
+      },
+      {
+        {
+          "<leader>fG",
+          ':Pick grep pattern="<cword>"<CR>',
+          desc = "Grep word"
         },
       },
       {

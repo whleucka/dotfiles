@@ -55,6 +55,7 @@ return {
     'fugitive',
     'fzf',
     'man',
-    'quickfix'
+    'mini',
+    'quickfix',
   }
 }

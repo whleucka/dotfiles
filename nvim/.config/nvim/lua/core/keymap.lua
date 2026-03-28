@@ -8,7 +8,7 @@ end
 
 local transparent_enabled = is_transparent()
 
-return {
+local keys = {
   {
     "<leader>?",
     function()
@@ -224,3 +224,5 @@ return {
     { "K", ":m '<-2<CR>gv=gv", desc = "Move selected line up" },
   },
 }
+
+require("which-key").add(keys)

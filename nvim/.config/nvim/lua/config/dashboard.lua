@@ -13,12 +13,6 @@ return {
     packages = { enable = false },
     shortcut = {
       {
-        desc = "Mount",
-        group = "Label",
-        action = ":SSHConnect",
-        key = "m",
-      },
-      {
         desc = "New",
         group = "Label",
         action = ":enew",
@@ -31,10 +25,10 @@ return {
         key = "g",
       },
       {
-        desc = "Files",
+        desc = "Find Files",
         group = "Label",
         action = function()
-            MiniPick.builtin.files({ tool = 'git' })
+            MiniPick.builtin.files()
         end,
         key = "f",
       },

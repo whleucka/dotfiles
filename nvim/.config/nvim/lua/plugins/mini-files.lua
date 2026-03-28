@@ -1,3 +1,10 @@
+local explore_quickfix = function()
+  vim.cmd(vim.fn.getqflist({ winid = true }).winid ~= 0 and 'cclose' or 'copen')
+end
+local explore_locations = function()
+  vim.cmd(vim.fn.getloclist(0, { winid = true }).winid ~= 0 and 'lclose' or 'lopen')
+end
+
 return {
   'nvim-mini/mini.files',
   event = "VeryLazy",
@@ -21,5 +28,31 @@ return {
       end,
       desc = "Open file explorer"
     },
+    {
+      "<leader>e",
+      group = "Explore",
+      {
+        {
+          "<leader>ed",
+          ":lua MiniFiles.open()<CR>",
+          desc = "Files (git)"
+        },
+        {
+          "<leader>ef",
+          ":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>",
+          desc = "Files (git)"
+        },
+        {
+          "<leader>eq",
+          explore_quickfix,
+          desc = "Quickfix list"
+        },
+        {
+          "<leader>el",
+          explore_locations,
+          desc = "Location list"
+        },
+      }
+    }
   }
 }
