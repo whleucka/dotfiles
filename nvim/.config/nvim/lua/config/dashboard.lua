@@ -13,6 +13,14 @@ return {
     packages = { enable = false },
     shortcut = {
       {
+        desc = "Explore",
+        group = "Label",
+        action = function()
+          MiniFiles.open()
+        end,
+        key = "e",
+      },
+      {
         desc = "New",
         group = "Label",
         action = ":enew",
