@@ -18,18 +18,18 @@ return {
         {
           "<leader>ff",
           function()
-            MiniPick.builtin.files({ tool = 'git' })
+            MiniPick.builtin.files()
           end,
-          desc = "Files (git)"
+          desc = "Files"
         },
       },
       {
         {
           "<leader>fF",
           function()
-            MiniPick.builtin.files()
+            MiniPick.builtin.files({ tool = 'git' })
           end,
-          desc = "Files"
+          desc = "Files (git)"
         },
       },
       {
