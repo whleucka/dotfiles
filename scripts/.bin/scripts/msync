@@ -221,9 +221,9 @@ cmd_add() {
     read -r remote_dir
     [ -z "$remote_dir" ] && { err "No remote dir provided."; return 1; }
 
-    printf "Local directory [~/sync/%s]: " "$name"
+    printf "Local directory [~/.mount/%s]: " "$name"
     read -r local_dir
-    [ -z "$local_dir" ] && local_dir="~/sync/$name"
+    [ -z "$local_dir" ] && local_dir="~/.mount/$name"
 
     local tmp
     tmp=$(mktemp)
