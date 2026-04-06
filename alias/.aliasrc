@@ -148,9 +148,11 @@ elif command -v apt >/dev/null; then
   alias upd='sudo apt update'
 fi
 
-# nvim (MiniMax)
+# nvim
 if command -v nvim >/dev/null; then
   alias v="nvim"
+elif command -v vim >/dev/null; then
+  alias v="vim"
 fi
 
 # transf files / folders
