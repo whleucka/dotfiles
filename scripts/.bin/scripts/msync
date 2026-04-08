@@ -1,367 +1,352 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 
 # msync - Mutagen Sync Manager
 #
-# Manage mutagen sync sessions with fzf, backed by a simple config file.
+# Manage mutagen sync sessions with fzf, backed by a TOML config file.
 #
 # Usage:
 #   msync                    Interactive project picker (fzf)
 #   msync list               List active sync sessions
 #   msync start <name>       Start syncing a project
 #   msync stop <name>        Stop syncing a project
-#   msync status <name>      Show detailed sync status
+#   msync status [name]      Show detailed sync status
 #   msync add                Add a new project to config
 #   msync remove <name>      Remove a project from config
 #   msync edit               Open config in $EDITOR
 #
-# Config: ~/.config/msync/config.yml (YAML)
+# Config: ~/.config/msync/config.toml
 
-CONFIG_DIR="$HOME/.config/msync"
-CONFIG_FILE="$CONFIG_DIR/config.yml"
+import os
+import sys
+import shutil
+import subprocess
+import tomllib
+from pathlib import Path
+
+CONFIG_DIR = Path.home() / ".config" / "msync"
+CONFIG_FILE = CONFIG_DIR / "config.toml"
 
 # Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-DIM='\033[2m'
-NC='\033[0m'
+RED = "\033[0;31m"
+GREEN = "\033[0;32m"
+YELLOW = "\033[0;33m"
+BLUE = "\033[0;34m"
+CYAN = "\033[0;36m"
+DIM = "\033[2m"
+NC = "\033[0m"
 
-info()  { printf "${BLUE}:: ${NC}%s\n" "$*"; }
-ok()    { printf "${GREEN}:: ${NC}%s\n" "$*"; }
-warn()  { printf "${YELLOW}:: ${NC}%s\n" "$*"; }
-err()   { printf "${RED}:: ${NC}%s\n" "$*" >&2; }
 
-# ── Setup ────────────────────────────────────────────────────────────────────
+def info(msg):
+    print(f"{BLUE}::{NC} {msg}")
 
-ensure_config() {
-    if [ ! -d "$CONFIG_DIR" ]; then
-        mkdir -p "$CONFIG_DIR"
-    fi
-    if [ ! -f "$CONFIG_FILE" ]; then
-        cat > "$CONFIG_FILE" << 'EOF'
-# msync project config
-# Each project needs: name, host, remote_dir, local_dir
 
-projects: []
-# Example:
-# projects:
-#   - name: myapp
-#     host: prod-server
-#     remote_dir: /var/www/myapp
-#     local_dir: ~/projects/myapp
-EOF
-        info "Created config at $CONFIG_FILE"
-        info "Add projects with 'msync add' or edit directly."
-    fi
-}
+def ok(msg):
+    print(f"{GREEN}::{NC} {msg}")
 
-check_yq() {
-    if ! command -v yq &>/dev/null; then
-        err "yq not found. Install with: pip install yq"
-        exit 1
-    fi
-}
 
-check_mutagen() {
-    if ! command -v mutagen &>/dev/null; then
-        err "mutagen not found. Install with: yay -S mutagen.io-bin"
-        exit 1
-    fi
-}
+def warn(msg):
+    print(f"{YELLOW}::{NC} {msg}")
 
-# ── Config Helpers ───────────────────────────────────────────────────────────
 
-# Read config entries as pipe-delimited lines: name|host|remote_dir|local_dir
-read_config() {
-    yq -r '.projects[]? | "\(.name)|\(.host)|\(.remote_dir)|\(.local_dir)"' "$CONFIG_FILE" 2>/dev/null
-}
+def err(msg):
+    print(f"{RED}::{NC} {msg}", file=sys.stderr)
 
-get_project() {
-    local name="$1"
-    read_config | grep "^${name}|"
-}
 
-list_project_names() {
-    yq -r '.projects[]?.name' "$CONFIG_FILE" 2>/dev/null
-}
+# ── Config ──────────────────────────────────────────────────────────────────
 
-# ── Session Helpers ──────────────────────────────────────────────────────────
 
-is_session_active() {
-    local name="$1"
-    mutagen sync list --label-selector="msync=${name}" 2>/dev/null | grep -q "Status:"
-}
+def read_config():
+    if not CONFIG_FILE.exists():
+        return {"projects": {}}
+    with open(CONFIG_FILE, "rb") as f:
+        return tomllib.load(f)
 
-# ── Commands ─────────────────────────────────────────────────────────────────
 
-cmd_start() {
-    local name="$1"
-    if [ -z "$name" ]; then
-        err "No project specified."
+def write_config(config):
+    lines = ["# msync project config\n"]
+    for name, proj in config.get("projects", {}).items():
+        lines.append(f"[projects.{name}]")
+        for key in ("host", "remote_dir", "local_dir"):
+            if key in proj:
+                lines.append(f'{key} = "{proj[key]}"')
+        lines.append("")
+    CONFIG_FILE.write_text("\n".join(lines))
+
+
+def ensure_config():
+    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+    if not CONFIG_FILE.exists():
+        CONFIG_FILE.write_text(
+            "# msync project config\n"
+            "# Add projects with 'msync add' or edit directly.\n"
+            "#\n"
+            "# [projects.example]\n"
+            '# host = "my-server"\n'
+            '# remote_dir = "/var/www/app"\n'
+            '# local_dir = "~/projects/app"\n'
+        )
+        info(f"Created config at {CONFIG_FILE}")
+        info("Add projects with 'msync add' or edit directly.")
+
+
+def get_projects():
+    return read_config().get("projects", {})
+
+
+# ── Session Helpers ─────────────────────────────────────────────────────────
+
+
+def is_session_active(name):
+    result = subprocess.run(
+        ["mutagen", "sync", "list", f"--label-selector=msync={name}"],
+        capture_output=True,
+        text=True,
+    )
+    return "Status:" in result.stdout
+
+
+# ── Commands ────────────────────────────────────────────────────────────────
+
+
+def cmd_start(name):
+    if not name:
+        err("No project specified.")
         return 1
-    fi
 
-    local entry
-    entry=$(get_project "$name")
-    if [ -z "$entry" ]; then
-        err "Project '$name' not found in config."
+    projects = get_projects()
+    if name not in projects:
+        err(f"Project '{name}' not found in config.")
         return 1
-    fi
 
-    if is_session_active "$name"; then
-        warn "Session '$name' is already active."
+    if is_session_active(name):
+        warn(f"Session '{name}' is already active.")
         return 0
-    fi
 
-    local host remote_dir local_dir
-    IFS='|' read -r _ host remote_dir local_dir <<< "$entry"
-    local_dir="${local_dir/#\~/$HOME}"
+    proj = projects[name]
+    host = proj["host"]
+    remote_dir = proj["remote_dir"]
+    local_dir = str(Path(proj["local_dir"]).expanduser())
 
-    if [ ! -d "$local_dir" ]; then
-        printf "Local dir '${CYAN}%s${NC}' doesn't exist. Create it? [Y/n]: " "$local_dir"
-        read -r yn
-        case "$yn" in
-            [nN]*) return 1 ;;
-            *) mkdir -p "$local_dir" && ok "Created $local_dir" ;;
-        esac
-    fi
+    if not Path(local_dir).is_dir():
+        yn = input(
+            f"Local dir '{CYAN}{local_dir}{NC}' doesn't exist. Create it? [Y/n]: "
+        )
+        if yn.lower().startswith("n"):
+            return 1
+        Path(local_dir).mkdir(parents=True)
+        ok(f"Created {local_dir}")
 
-    info "Starting sync: ${CYAN}$local_dir${NC} <-> ${CYAN}$host:$remote_dir${NC}"
-    mutagen sync create "$local_dir" "${host}:${remote_dir}" \
-        --name="msync-${name}" \
-        --label="msync=${name}" \
-        --ignore-vcs \
-        --default-file-mode=0644 \
-        --default-directory-mode=0755
+    info(f"Starting sync: {CYAN}{local_dir}{NC} <-> {CYAN}{host}:{remote_dir}{NC}")
+    result = subprocess.run(
+        [
+            "mutagen", "sync", "create", local_dir, f"{host}:{remote_dir}",
+            f"--name=msync-{name}",
+            f"--label=msync={name}",
+            "--ignore-vcs",
+            "--default-file-mode=0644",
+            "--default-directory-mode=0755",
+        ]
+    )
 
-    if [ $? -eq 0 ]; then
-        ok "Syncing '$name'"
-    else
-        err "Failed to start sync for '$name'"
-        return 1
-    fi
-}
-
-cmd_stop() {
-    local name="$1"
-    if [ -z "$name" ]; then
-        err "No project specified."
-        return 1
-    fi
-
-    if ! is_session_active "$name"; then
-        warn "No active session for '$name'."
+    if result.returncode == 0:
+        ok(f"Syncing '{name}'")
         return 0
-    fi
-
-    mutagen sync terminate --label-selector="msync=${name}"
-    if [ $? -eq 0 ]; then
-        ok "Stopped '$name'"
-    else
-        err "Failed to stop '$name'"
+    else:
+        err(f"Failed to start sync for '{name}'")
         return 1
-    fi
-}
 
-cmd_status() {
-    local name="$1"
-    if [ -z "$name" ]; then
-        mutagen sync list
-    else
-        mutagen sync list --label-selector="msync=${name}"
-    fi
-}
 
-cmd_list() {
-    local entries
-    entries=$(read_config)
-    if [ -z "$entries" ]; then
-        warn "No projects configured. Run 'msync add' to add one."
+def cmd_stop(name):
+    if not name:
+        err("No project specified.")
+        return 1
+
+    if not is_session_active(name):
+        warn(f"No active session for '{name}'.")
         return 0
-    fi
 
-    while IFS='|' read -r name host remote_dir local_dir; do
-        if is_session_active "$name"; then
-            state="${GREEN}syncing${NC}"
-        else
-            state="${DIM}stopped${NC}"
-        fi
-        printf "%-20s %b%-25s${NC} %s:%s  %b\n" "$name" "$CYAN" "$local_dir" "$host" "$remote_dir" "$state"
-    done <<< "$entries"
-}
+    result = subprocess.run(
+        ["mutagen", "sync", "terminate", f"--label-selector=msync={name}"]
+    )
 
-cmd_add() {
-    local name host remote_dir local_dir
-
-    printf "Project name: "
-    read -r name
-    [ -z "$name" ] && { err "No name provided."; return 1; }
-
-    if get_project "$name" &>/dev/null; then
-        err "Project '$name' already exists."
+    if result.returncode == 0:
+        ok(f"Stopped '{name}'")
+        return 0
+    else:
+        err(f"Failed to stop '{name}'")
         return 1
-    fi
+
+
+def cmd_status(name=None):
+    cmd = ["mutagen", "sync", "list"]
+    if name:
+        cmd.append(f"--label-selector=msync={name}")
+    subprocess.run(cmd)
+
+
+def cmd_list():
+    projects = get_projects()
+    if not projects:
+        warn("No projects configured. Run 'msync add' to add one.")
+        return
+
+    for name, proj in projects.items():
+        if is_session_active(name):
+            state = f"{GREEN}syncing{NC}"
+        else:
+            state = f"{DIM}stopped{NC}"
+        print(
+            f"{name:<20} {CYAN}{proj['local_dir']:<25}{NC} "
+            f"{proj['host']}:{proj['remote_dir']}  {state}"
+        )
+
+
+def cmd_add():
+    name = input("Project name: ").strip()
+    if not name:
+        err("No name provided.")
+        return 1
+
+    projects = get_projects()
+    if name in projects:
+        err(f"Project '{name}' already exists.")
+        return 1
 
     # Pick host from ssh config via fzf
-    local hosts
-    hosts=$(grep ^Host "$HOME/.ssh/config" 2>/dev/null | awk '{ print $2 }' | tail -n+2 | sort)
-    if [ -n "$hosts" ]; then
-        info "Select SSH host (or Esc to type manually):"
-        host=$(printf '%s\n' "$hosts" | fzf --height=10 --prompt="Host: ")
-    fi
-    if [ -z "$host" ]; then
-        printf "SSH host: "
-        read -r host
-        [ -z "$host" ] && { err "No host provided."; return 1; }
-    fi
+    host = None
+    ssh_config = Path.home() / ".ssh" / "config"
+    if ssh_config.exists():
+        hosts = sorted(
+            h
+            for line in ssh_config.read_text().splitlines()
+            if line.startswith("Host ")
+            for h in line.split()[1:]
+            if "*" not in h
+        )
+        if hosts:
+            info("Select SSH host (or Esc to type manually):")
+            result = subprocess.run(
+                ["fzf", "--height=10", "--prompt=Host: "],
+                input="\n".join(hosts),
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0:
+                host = result.stdout.strip()
 
-    printf "Remote directory: "
-    read -r remote_dir
-    [ -z "$remote_dir" ] && { err "No remote dir provided."; return 1; }
+    if not host:
+        host = input("SSH host: ").strip()
+        if not host:
+            err("No host provided.")
+            return 1
 
-    printf "Local directory [~/.mount/%s]: " "$name"
-    read -r local_dir
-    [ -z "$local_dir" ] && local_dir="~/.mount/$name"
-
-    local tmp
-    tmp=$(mktemp)
-    yq -y ".projects += [{name: \"$name\", host: \"$host\", remote_dir: \"$remote_dir\", local_dir: \"$local_dir\"}]" "$CONFIG_FILE" > "$tmp" && mv "$tmp" "$CONFIG_FILE"
-    ok "Added '$name' ($host:$remote_dir -> $local_dir)"
-}
-
-cmd_remove() {
-    local name="$1"
-    if [ -z "$name" ]; then
-        err "No project specified."
+    remote_dir = input("Remote directory: ").strip()
+    if not remote_dir:
+        err("No remote dir provided.")
         return 1
-    fi
 
-    if [ -z "$(get_project "$name")" ]; then
-        err "Project '$name' not found."
+    local_dir = input(f"Local directory [~/.mount/{name}]: ").strip()
+    if not local_dir:
+        local_dir = f"~/.mount/{name}"
+
+    config = read_config()
+    config.setdefault("projects", {})[name] = {
+        "host": host,
+        "remote_dir": remote_dir,
+        "local_dir": local_dir,
+    }
+    write_config(config)
+    ok(f"Added '{name}' ({host}:{remote_dir} -> {local_dir})")
+    return 0
+
+
+def cmd_remove(name):
+    if not name:
+        err("No project specified.")
         return 1
-    fi
 
-    # Stop if active
-    if is_session_active "$name"; then
-        cmd_stop "$name"
-    fi
+    config = read_config()
+    projects = config.get("projects", {})
+    if name not in projects:
+        err(f"Project '{name}' not found.")
+        return 1
 
-    printf "Remove '${RED}%s${NC}' from config? [y/N]: " "$name"
-    read -r yn
-    case "$yn" in
-        [yY]*)
-            local tmp
-            tmp=$(mktemp)
-            yq -y ".projects |= map(select(.name != \"$name\"))" "$CONFIG_FILE" > "$tmp" && mv "$tmp" "$CONFIG_FILE"
-            ok "Removed '$name'"
-            ;;
-        *) info "Cancelled." ;;
-    esac
-}
+    if is_session_active(name):
+        cmd_stop(name)
 
-cmd_edit() {
-    ${EDITOR:-nvim} "$CONFIG_FILE"
-}
+    yn = input(f"Remove '{RED}{name}{NC}' from config? [y/N]: ")
+    if yn.lower().startswith("y"):
+        del projects[name]
+        write_config(config)
+        ok(f"Removed '{name}'")
+    else:
+        info("Cancelled.")
 
-# ── Interactive Mode ─────────────────────────────────────────────────────────
 
-interactive() {
-    local entries
-    entries=$(read_config)
+def cmd_edit():
+    editor = os.environ.get("EDITOR", "nvim")
+    subprocess.run([editor, str(CONFIG_FILE)])
 
-    if [ -z "$entries" ]; then
-        warn "No projects configured."
-        printf "Add one now? [Y/n]: "
-        read -r yn
-        case "$yn" in
-            [nN]*) return 0 ;;
-            *) cmd_add; return $? ;;
-        esac
-    fi
 
-    # Build display with status
-    local display=""
-    while IFS='|' read -r name host remote_dir local_dir; do
-        if is_session_active "$name"; then
-            state="[syncing]"
-        else
-            state="[stopped]"
-        fi
-        display+=$(printf "%-18s %-10s %s:%s  %s" "$name" "$state" "$host" "$remote_dir" "$local_dir")
-        display+=$'\n'
-    done <<< "$entries"
-    display=$(echo "$display" | sed '/^\s*$/d')
+# ── Interactive Mode ────────────────────────────────────────────────────────
 
-    local result
-    result=$(printf '%s' "$display" | fzf \
-        --header "Enter:toggle | Del:remove | ^A:add | ^E:edit config | Esc:quit" \
-        --expect=del,ctrl-a,ctrl-e \
-        --ansi)
 
-    if [ -z "$result" ]; then
-        return 0
-    fi
+def interactive():
+    projects = get_projects()
 
-    local key selection name
-    key=$(echo "$result" | sed -n '1p')
-    selection=$(echo "$result" | sed -n '2p')
-    name=$(echo "$selection" | awk '{print $1}')
+    if not projects:
+        warn("No projects configured.")
+        yn = input("Add one now? [Y/n]: ")
+        if yn.lower().startswith("n"):
+            return
+        return cmd_add()
 
-    case "$key" in
-        del)
-            [ -n "$name" ] && cmd_remove "$name"
-            ;;
-        ctrl-a)
-            cmd_add
-            ;;
-        ctrl-e)
-            cmd_edit
-            ;;
-        *)
-            # Enter — toggle sync on/off
-            if [ -n "$name" ]; then
-                if is_session_active "$name"; then
-                    cmd_stop "$name"
-                else
-                    cmd_start "$name"
-                fi
-            fi
-            ;;
-    esac
-}
+    lines = []
+    for name, proj in projects.items():
+        state = "[syncing]" if is_session_active(name) else "[stopped]"
+        lines.append(
+            f"{name:<18} {state:<10} "
+            f"{proj['host']}:{proj['remote_dir']}  {proj['local_dir']}"
+        )
 
-# ── Main ─────────────────────────────────────────────────────────────────────
+    result = subprocess.run(
+        [
+            "fzf",
+            "--header",
+            "Enter:toggle | Del:remove | ^A:add | ^E:edit config | Esc:quit",
+            "--expect=del,ctrl-a,ctrl-e",
+            "--ansi",
+        ],
+        input="\n".join(lines),
+        capture_output=True,
+        text=True,
+    )
 
-check_mutagen
-check_yq
-ensure_config
+    if result.returncode != 0:
+        return
 
-case "${1:-}" in
-    start)
-        cmd_start "$2"
-        ;;
-    stop)
-        cmd_stop "$2"
-        ;;
-    status|st)
-        cmd_status "$2"
-        ;;
-    list|ls)
-        cmd_list
-        ;;
-    add)
-        cmd_add
-        ;;
-    remove|rm)
-        cmd_remove "$2"
-        ;;
-    edit)
-        cmd_edit
-        ;;
-    help|-h|--help)
-        cat << 'EOF'
+    parts = result.stdout.strip().split("\n", 1)
+    key = parts[0]
+    selection = parts[1] if len(parts) > 1 else ""
+    name = selection.split()[0] if selection else ""
+
+    if key == "del":
+        if name:
+            cmd_remove(name)
+    elif key == "ctrl-a":
+        cmd_add()
+    elif key == "ctrl-e":
+        cmd_edit()
+    elif name:
+        if is_session_active(name):
+            cmd_stop(name)
+        else:
+            cmd_start(name)
+
+
+# ── Main ────────────────────────────────────────────────────────────────────
+
+HELP = """\
 msync - Mutagen Sync Manager
 
 Usage:
@@ -381,10 +366,40 @@ Interactive keybindings (fzf):
   Ctrl-E   Edit config file
   Esc      Exit
 
-Config: ~/.config/msync/config.yml (YAML)
-EOF
-        ;;
-    *)
-        interactive
-        ;;
-esac
+Config: ~/.config/msync/config.toml"""
+
+
+def main():
+    if not shutil.which("mutagen"):
+        err("mutagen not found. Install with: yay -S mutagen.io-bin")
+        sys.exit(1)
+
+    ensure_config()
+
+    args = sys.argv[1:]
+    cmd = args[0] if args else None
+    arg = args[1] if len(args) > 1 else None
+
+    match cmd:
+        case "start":
+            sys.exit(cmd_start(arg) or 0)
+        case "stop":
+            sys.exit(cmd_stop(arg) or 0)
+        case "status" | "st":
+            cmd_status(arg)
+        case "list" | "ls":
+            cmd_list()
+        case "add":
+            sys.exit(cmd_add() or 0)
+        case "remove" | "rm":
+            sys.exit(cmd_remove(arg) or 0)
+        case "edit":
+            cmd_edit()
+        case "help" | "-h" | "--help":
+            print(HELP)
+        case _:
+            interactive()
+
+
+if __name__ == "__main__":
+    main()
