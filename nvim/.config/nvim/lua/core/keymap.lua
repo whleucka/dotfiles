@@ -29,16 +29,28 @@ local keys = {
         vim.lsp.buf.rename()
       end,
       desc = "Rename symbol"
-    }
-  },
-  {
-    "<leader>w",
-    group = "Window",
-    { "<leader>wc", ":new<CR>",    desc = "Create New" },
-    { "<leader>wq", ":q<CR>",      desc = "Close" },
-    { "<leader>wQ", ":qall<CR>",   desc = "Close all" },
-    { "<leader>ws", ":split<CR>",  desc = "Split" },
-    { "<leader>wv", ":vsplit<CR>", desc = "Vertical split" },
+    },
+    {
+      "<leader>cd",
+      function()
+        vim.diagnostic.open_float()
+      end,
+      desc = "Line diagnostics"
+    },
+    {
+      "<leader>cs",
+      function()
+        vim.lsp.buf.signature_help()
+      end,
+      desc = "Signature help"
+    },
+    {
+      "<leader>cl",
+      function()
+        vim.diagnostic.setloclist()
+      end,
+      desc = "Diagnostics to loclist"
+    },
   },
   {
     "<leader>t",
@@ -51,6 +63,14 @@ local keys = {
     { "<leader>tl", ":tablast<CR>",  desc = "Last" },
   },
   {
+    "<leader>s",
+    group = "Split",
+    { "<leader>sv", ":vsplit<CR>", desc = "Vertical" },
+    { "<leader>sh", ":split<CR>",  desc = "Horizontal" },
+    { "<leader>se", "<C-w>=",      desc = "Equalize" },
+    { "<leader>sq", ":close<CR>",  desc = "Close" },
+  },
+  {
     "<leader>b",
     group = "Buffer",
     { "<leader>bc", ":enew<CR>",   desc = "Create New" },
@@ -61,22 +81,27 @@ local keys = {
     { "<leader>bl", ":blast<CR>",  desc = "Last" },
   },
   {
-    { "q",          "<nop>" },
-    { "<esc><esc>", ":noh<CR>" },
-    { "<leader>Q",  ":qa<CR>",                           desc = "Close Neovim" },
-    { "<leader>w",  ":w!<CR>",                           desc = "Save" },
-    { "H",          ":bprev<CR>",                        desc = "Previous Buffer" },
-    { "L",          ":bnext<CR>",                        desc = "Previous Buffer" },
-    { "<BS>",       ":b#<CR>",                           desc = "Last Buffer" },
-    { "<F5>",       ":update<CR> :source<CR>",           desc = "Source file", },
-    { "gd",         ":lua vim.lsp.buf.definition()<cr>", desc = "Go to definition" },
-    { "<F5>",       ":restart<CR>",                      desc = "Restart" },
+    { "q",                "<nop>" },
+    { "<esc><esc>",       ":noh<CR>" },
+    { "<leader>q",       ":q<CR>",                                 desc = "Close window" },
+    { "<leader>Q",        ":qa<CR>",                                desc = "Close Neovim" },
+    { "<leader>w",        ":w!<CR>",                                desc = "Save" },
+    { "H",                ":bprev<CR>",                             desc = "Previous Buffer" },
+    { "L",                ":bnext<CR>",                             desc = "Previous Buffer" },
+    { "<leader><leader>", ":b#<CR>",                                desc = "Last Buffer" },
+    { "<leader>so",       ":update<CR> :source<CR>",                desc = "Source file", },
+    { "gd",               ":lua vim.lsp.buf.definition()<cr>",      desc = "Go to definition" },
+    { "gD",               ":lua vim.lsp.buf.declaration()<cr>",     desc = "Go to declaration" },
+    { "gi",               ":lua vim.lsp.buf.implementation()<cr>",  desc = "Go to implementation" },
+    { "gr",               ":lua vim.lsp.buf.references()<cr>",      desc = "Go to references" },
+    { "gt",               ":lua vim.lsp.buf.type_definition()<cr>", desc = "Go to type definition" },
+    { "K",                ":lua vim.lsp.buf.hover()<cr>",           desc = "Hover documentation" },
+    { "<F5>",             ":restart<CR>",                           desc = "Restart" },
   },
   {
     mode = "i",
-    { "jk",    "<esc>" },
-    { "kj",    "<esc>" },
-    { "<C-s>", "<esc>:update<CR>a", desc = "Save" },
+    { "jk", "<esc>" },
+    { "kj", "<esc>" },
   },
   {
     mode = "v",

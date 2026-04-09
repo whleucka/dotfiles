@@ -33,7 +33,7 @@ return {
   },
   sections = {
     lualine_a = { 'mode' },
-    lualine_b = { 'diagnostics', 'buffers' },
+    lualine_b = { 'diagnostics' },
     lualine_c = {},
     lualine_x = { 'lsp_progress' },
     lualine_y = { 'branch', 'diff' },
