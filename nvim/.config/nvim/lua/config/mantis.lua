@@ -8,6 +8,11 @@ return {
       name = "chainlogic",
       url = "https://mantis.chainlogic.it",
       env = "MANTIS_CL",
+    },
+    {
+      name = "williamhleucka",
+      url = "https://mantis.williamhleucka.com",
+      env = "MANTIS_WH",
     }
   },
 }
