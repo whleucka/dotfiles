@@ -10,46 +10,22 @@ local keys = {
     "<leader>c",
     group = "Code",
     {
-      "<leader>ca",
-      function()
-        vim.lsp.buf.code_action()
-      end,
-      desc = "Action"
+      "<leader>ca", function() vim.lsp.buf.code_action() end, desc = "Action"
     },
     {
-      "<leader>cf",
-      function()
-        vim.lsp.buf.format({ async = true })
-      end,
-      desc = "Format"
+      "<leader>cf", function() vim.lsp.buf.format({ async = true }) end, desc = "Format"
     },
     {
-      "<leader>cr",
-      function()
-        vim.lsp.buf.rename()
-      end,
-      desc = "Rename symbol"
+      "<leader>cr", function() vim.lsp.buf.rename() end, desc = "Rename symbol"
     },
     {
-      "<leader>cd",
-      function()
-        vim.diagnostic.open_float()
-      end,
-      desc = "Line diagnostics"
+      "<leader>cd", function() vim.diagnostic.open_float() end, desc = "Line diagnostics"
     },
     {
-      "<leader>cs",
-      function()
-        vim.lsp.buf.signature_help()
-      end,
-      desc = "Signature help"
+      "<leader>cs", function() vim.lsp.buf.signature_help() end, desc = "Signature help"
     },
     {
-      "<leader>cl",
-      function()
-        vim.diagnostic.setloclist()
-      end,
-      desc = "Diagnostics to loclist"
+      "<leader>cl", function() vim.diagnostic.setloclist() end, desc = "Diagnostics to loclist"
     },
   },
   {
