@@ -35,6 +35,41 @@ function M.setup(stimpack)
     stimpack.clean()
   end, {})
 
+  -- cmd runs the build step for a single plugin
+  vim.api.nvim_create_user_command("StimBuild", function(args)
+    local spec_util = require("stimpack.spec")
+    local build = require("stimpack.build")
+    local name = args.fargs[1]
+    for _, spec in ipairs(stimpack.config.specs) do
+      local spec_name = type(spec) == "string" and spec_util.get_name(spec)
+        or spec.name
+        or spec_util.get_name(spec_util.get_source(spec))
+      if spec_name == name then
+        if type(spec) == "table" and not spec.build then
+          vim.notify("STIMPACK: No build step for " .. name, vim.log.levels.WARN)
+          return
+        end
+        pcall(vim.cmd.packadd, name)
+        build.run(spec, name)
+        return
+      end
+    end
+    vim.notify("STIMPACK: Plugin not found in specs: " .. name, vim.log.levels.WARN)
+  end, {
+    nargs = 1,
+    complete = function()
+      local spec_util = require("stimpack.spec")
+      local names = {}
+      for _, spec in ipairs(stimpack.config.specs) do
+        if type(spec) == "table" and spec.build then
+          local n = spec.name or spec_util.get_name(spec_util.get_source(spec))
+          table.insert(names, n)
+        end
+      end
+      return names
+    end,
+  })
+
   vim.api.nvim_create_user_command("StimProfile", function()
     local spec_util = require("stimpack.spec")
     local stats = stimpack.get_stats()
