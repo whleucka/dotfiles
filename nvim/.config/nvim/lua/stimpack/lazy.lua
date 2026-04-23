@@ -54,43 +54,35 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
     local cmds = type(spec.cmd) == "table" and spec.cmd or { spec.cmd }
     for _, cmd in ipairs(cmds) do
       vim.api.nvim_create_user_command(cmd, function(cmd_args)
-        -- Remove the self-destructing command to avoid infinite loop if the plugin doesn't define it
-        vim.api.nvim_del_user_command(cmd)
+        -- self-destruct to avoid recursion if the plugin doesn't (re)define this cmd
+        pcall(vim.api.nvim_del_user_command, cmd)
         load_handler()
-        -- Re-execute the command if the plugin defined it
-        pcall(function()
-          local args_str = ""
-          if cmd_args.fargs and #cmd_args.fargs > 0 then
-            local V = vim.fn
-            local largs = {}
-            for _, val in ipairs(cmd_args.fargs) do
-              table.insert(largs, V.string(val))
-            end
-            args_str = " " .. table.concat(largs, " ")
-          end
-
-          vim.cmd(string.format("%s%s%s", cmd, cmd_args.bang and "!" or "", args_str))
-        end)
-      end, { bang = true, nargs = "*", complete = "file" }) -- Generic params
+        -- re-execute the original invocation with all its args/mods intact
+        pcall(vim.api.nvim_cmd, {
+          cmd = cmd,
+          bang = cmd_args.bang,
+          args = cmd_args.fargs,
+          range = cmd_args.range > 0 and { cmd_args.line1, cmd_args.line2 } or nil,
+          count = cmd_args.count >= 0 and cmd_args.count or nil,
+          mods = cmd_args.smods,
+        }, {})
+      end, { bang = true, nargs = "*", range = true, complete = "file" })
     end
   end
 
   if spec.keys then
     local keys = type(spec.keys) == "function" and spec.keys() or spec.keys
 
-    -- Recursively extract actual keymaps from nested structure
+    -- Recursively extract actual keymaps from nested which-key-style groups
     local function extract_keymaps(tbl, result)
       result = result or {}
       for _, item in ipairs(tbl) do
         if type(item) == "table" then
           local lhs = item[1]
           local rhs = item[2]
-          -- It's an actual keymap if it has both lhs (string) and rhs (string or function)
           if type(lhs) == "string" and (type(rhs) == "string" or type(rhs) == "function") then
             table.insert(result, item)
           end
-          -- Check for nested keymaps (entries at numeric indices >= 2)
-          -- When item[2] is not a valid rhs (string/function), it may be a nested keymap
           for i = 2, #item do
             if type(item[i]) == "table" then
               extract_keymaps({ item[i] }, result)
@@ -109,11 +101,8 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
       local opts = { desc = keymap.desc }
 
       vim.keymap.set(mode, lhs, function()
-        -- Delete the temporary keymap
-        vim.keymap.del(mode, lhs)
-        -- Load the plugin
+        pcall(vim.keymap.del, mode, lhs)
         load_handler()
-        -- Execute the original mapping
         if type(rhs) == "function" then
           rhs()
         elseif type(rhs) == "string" then
