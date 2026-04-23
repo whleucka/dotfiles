@@ -1,27 +1,75 @@
 return {
-    -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-    -- 'super-tab' for mappings similar to vscode (tab to accept)
-    -- 'enter' for enter to accept
-    -- 'none' for no mappings
-    --
-    -- All presets have the following mappings:
-    -- C-space: Open menu or open docs if already open
-    -- C-n/C-p or Up/Down: Select next/previous item
-    -- C-e: Hide menu
-    -- C-k: Toggle signature help (if signature.enabled = true)
-    --
-    -- See :h blink-cmp-config-keymap for defining your own keymap
-    keymap = { preset = 'default' },
+  keymap = { preset = "super-tab" },
 
-    -- (Default) Only show the documentation popup when manually triggered
-    completion = { documentation = { auto_show = false } },
+  snippets = { preset = "luasnip" },
 
-    -- (Default) list of enabled providers defined so that you can extend it
-    -- elsewhere in your config, without redefining it, due to `opts_extend`
-    sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
+  appearance = {
+    nerd_font_variant = "mono",
+  },
 
-    -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-    -- You may use a lua implementation instead by using `implementation = "lua"`
-    -- See the fuzzy documentation for more information
-    fuzzy = { implementation = "rust" }
+  completion = {
+    keyword = { range = "full" },
+
+    trigger = {
+      show_on_backspace = true,
+      show_on_backspace_in_keyword = true,
+    },
+
+    list = {
+      selection = {
+        preselect = true,
+        auto_insert = false,
+      },
+    },
+
+    accept = {
+      auto_brackets = {
+        enabled = true,
+      },
+    },
+
+    menu = {
+      draw = {
+        columns = {
+          { "kind_icon" },
+          { "label", "label_description", gap = 1 },
+          { "kind" },
+        },
+      },
+    },
+
+    documentation = {
+      auto_show = true,
+      auto_show_delay_ms = 200,
+    },
+
+    ghost_text = {
+      enabled = true,
+      show_with_selection = true,
+      show_without_selection = false,
+      show_with_menu = true,
+      show_without_menu = false,
+    },
+  },
+
+  signature = {
+    enabled = true,
+  },
+
+  sources = {
+    default = { "lsp", "path", "snippets", "buffer" },
+    providers = {
+      lsp = { score_offset = 3 },
+      path = { score_offset = 2 },
+      snippets = { score_offset = 1 },
+      buffer = { score_offset = 0 },
+    },
+  },
+
+  fuzzy = {
+    implementation = "rust",
+    sorts = { "exact", "score", "sort_text" },
+    frecency = { enabled = true },
+    use_proximity = true,
+  },
 }
