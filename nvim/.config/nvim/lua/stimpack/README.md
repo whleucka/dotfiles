@@ -4,12 +4,13 @@ A simple Neovim plugin manager wrapper around `vim.pack`, providing a streamline
 
 ## Commands
 
-- `:StimSync`: Updates all installed plugins and runs their build commands if defined. This command internally calls `vim.pack.update()`, and now also automatically runs `:StimClean` first.
+- `:StimSync[!]`: Updates all installed plugins and runs their build commands if defined. This command internally calls `vim.pack.update()`, and also automatically runs `:StimClean` first. Use `:StimSync!` to skip confirmation prompts.
 - `:StimDelete <plugin-name>`: Deletes a specific plugin by its name. For example, `:StimDelete nvim-tree.lua`.
-- `:StimUpdate <plugin-name>`: Updates a specific plugin by its name and runs its build command if defined. This command internally calls `vim.pack.update()`.
+- `:StimUpdate[!] <plugin-name>`: Updates a specific plugin by its name and runs its build command if defined. This command internally calls `vim.pack.update()`. Use `:StimUpdate!` to skip confirmation prompts.
 - `:StimGet <plugin-name>`: Displays detailed information about a specific plugin, such as its path, active status, and revision.
+- `:StimBuild <plugin-name>`: Runs the `build` step for a specific plugin on demand (without updating it). Completion is restricted to plugins that define a `build`. Useful for re-running things like `:TSUpdate` or `make` without performing a sync.
 - `:StimNuke`: **WARNING:** This command will delete *all* Neovim plugins from your disk. Use with extreme caution.
-- `:StimClean`: Removes any installed plugins that are no longer defined in your `stimpack` plugin specifications (i.e., orphaned plugins). This command will prompt for confirmation before deleting.
+- `:StimClean[!]`: Removes any installed plugins that are no longer defined in your `stimpack` plugin specifications (i.e., orphaned plugins). Prompts for confirmation before deleting; use `:StimClean!` to skip the prompt.
 - `:StimProfile`: Displays a comprehensive performance profile of your Neovim setup. This includes:
     *   **Stimpack Configuration Time**: How long it took Stimpack to configure itself.
     *   **Total Plugin Load Time**: The sum of individual load times for all plugins managed by Stimpack.
@@ -24,13 +25,21 @@ require("stimpack").setup{}
 
 ## Default Config
 
-Configure paths.plugins to reference the directory containing your plugin specification files.
+Configure `paths.plugins` to reference the directory containing your plugin specification files.
 
 ```lua
 {
   paths = {
     plugins = vim.fn.stdpath("config") .. "/lua/plugins",
-  }
+  },
+
+  -- Optional list of functions that return additional spec tables.
+  -- Each function is called during setup and its returned specs are merged
+  -- in alongside the ones loaded from `paths.plugins`. Useful for injecting
+  -- specs from other modules without dropping a file in the plugins dir.
+  -- additional_specs = {
+  --   function() return require("my.extra.specs") end,
+  -- },
 }
 ```
 
@@ -117,6 +126,12 @@ return {
   -- Explicitly mark a plugin as lazy (optional).
   -- Useful if other mechanisms don't cover the lazy-loading needs.
   lazy = true,
+
+  -- Load priority (optional, defaults to 50).
+  -- Specs are sorted in descending order of priority before loading, so
+  -- higher numbers load earlier. Use this for things like colorschemes or
+  -- plugins other plugins depend on at startup.
+  priority = 100,
 
   -- Key mappings for which-key.nvim (optional).
   -- Can be a table or a function that returns a table.
