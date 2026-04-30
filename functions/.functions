@@ -105,6 +105,7 @@ EOF
 }
 
 portal() {
+    sudo resolvconf -u 
     wg-quick "$1" wg_client
 }
 
