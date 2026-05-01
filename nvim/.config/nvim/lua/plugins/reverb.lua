@@ -14,7 +14,7 @@ return {
       -- only package updates
       PackChanged = { path  = sound_dir .. "1up.mp3", volume = 65 , pattern = "update" },
       User = {
-        { path  = sound_dir .. "coin.mp3", volume = 65, pattern = "FugitiveChanged" },
+        { path  = sound_dir .. "coin.mp3", volume = 65, pattern = "NeogitCommitComplete" },
       }
     },
   },
