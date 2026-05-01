@@ -1,6 +1,9 @@
 return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPost", "VeryLazy" },
+  opts = {
+    current_line_blame = true
+  },
   keys = function()
     return {
       {
