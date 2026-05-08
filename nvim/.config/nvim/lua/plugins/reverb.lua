@@ -13,6 +13,7 @@ return {
       PackChanged = { path  = sound_dir .. "1up.mp3", volume = 65 , pattern = "update" },
       User = {
         { path  = sound_dir .. "flawless.mp3", volume = 65, pattern = "NeogitPushComplete" },
+        { path  = sound_dir .. "zelda.mp3", volume = 65, pattern = "NeogitPullComplete" },
       }
     },
   },
