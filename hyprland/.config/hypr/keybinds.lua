@@ -49,8 +49,9 @@ hl.bind(mod .. " + M",         hl.dsp.window.fullscreen({ mode = "maximized",  a
 hl.bind(mod .. " + T",         hl.dsp.window.float({ action = "toggle" }),                     { description = "Toggle floating" })
 hl.bind(mod .. " + SEMICOLON", hl.dsp.layout("togglesplit"),                                   { description = "Toggle split" })
 
--- Toggle layout (dwindle/monocle) — read current layout via hyprctl and swap
-hl.bind(mod .. " + O", hl.dsp.exec_cmd([[hyprctl keyword general:layout $([ "$(hyprctl getoption general:layout -j | jq -r '.str')" = "dwindle" ] && echo "monocle" || echo "dwindle")]]), { description = "Toggle layout (dwindle/monocle)" })
+-- Toggle layout (dwindle/monocle). `hyprctl keyword` is dead under the Lua
+-- parser in 0.55+ — the helper uses `hyprctl dispatch 'hl.config(...)'`.
+hl.bind(mod .. " + O", hl.dsp.exec_cmd("/home/whleucka/.config/hypr/scripts/toggle-layout.sh"), { description = "Toggle layout (dwindle/monocle)" })
 
 -- Focus (vim keys)
 hl.bind(mod .. " + H", hl.dsp.focus({ direction = "l" }), { description = "Focus left" })
