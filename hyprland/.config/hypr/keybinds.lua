@@ -1,6 +1,7 @@
 -- Keybindings
 -- Super (Windows key) as main modifier
 
+local home        = os.getenv("HOME")
 local mod         = "SUPER"
 local env_prefix  = "env EDITOR=nvim VISUAL=nvim"
 local terminal    = env_prefix .. " kitty"
@@ -16,7 +17,7 @@ end
 -- Help
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "slash"), hl.dsp.exec_cmd("/home/whleucka/.bin/scripts/keybinds"), { description = "Show keybinds" })
+hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(home .. "/.bin/scripts/keybinds"), { description = "Show keybinds" })
 
 -- -----------------------------------------------------------------------------
 -- Applications
@@ -55,7 +56,7 @@ hl.bind(key(mod, "SEMICOLON"), hl.dsp.layout("togglesplit"),                    
 
 -- Toggle layout (dwindle/monocle). `hyprctl keyword` is dead under the Lua
 -- parser in 0.55+ — the helper uses `hyprctl dispatch 'hl.config(...)'`.
-hl.bind(key(mod, "O"), hl.dsp.exec_cmd("/home/whleucka/.config/hypr/scripts/toggle-layout.sh"), { description = "Toggle layout (dwindle/monocle)" })
+hl.bind(key(mod, "O"), hl.dsp.exec_cmd(home .. "/.config/hypr/scripts/toggle-layout.sh"), { description = "Toggle layout (dwindle/monocle)" })
 
 -- Focus (vim keys)
 hl.bind(key(mod, "H"), hl.dsp.focus({ direction = "l" }), { description = "Focus left" })
@@ -137,8 +138,8 @@ hl.bind(key(mod, "C"), hl.dsp.exec_cmd("hyprpicker -r"),                        
 -- Screenshots
 -- -----------------------------------------------------------------------------
 
-hl.bind("Print",           hl.dsp.exec_cmd("/home/whleucka/.bin/scripts/screenshot-region"), { description = "Screenshot region" })
-hl.bind(key(mod, "Print"), hl.dsp.exec_cmd("/home/whleucka/.bin/scripts/screenshot"),        { description = "Screenshot full" })
+hl.bind("Print",           hl.dsp.exec_cmd(home .. "/.bin/scripts/screenshot-region"), { description = "Screenshot region" })
+hl.bind(key(mod, "Print"), hl.dsp.exec_cmd(home .. "/.bin/scripts/screenshot"),        { description = "Screenshot full" })
 
 -- -----------------------------------------------------------------------------
 -- Screen recording
