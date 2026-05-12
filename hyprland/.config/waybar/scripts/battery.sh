@@ -3,6 +3,11 @@
 BAT_PATH="/sys/class/power_supply/BAT0"
 AC_PATH="/sys/class/power_supply/AC"
 
+if [ ! -d "$BAT_PATH" ]; then
+    echo '{"text": "", "tooltip": "", "class": ""}'
+    exit 0
+fi
+
 capacity=$(cat "$BAT_PATH/capacity" 2>/dev/null || echo 0)
 status=$(cat "$BAT_PATH/status" 2>/dev/null || echo "Unknown")
 ac_online=$(cat "$AC_PATH/online" 2>/dev/null || echo 0)

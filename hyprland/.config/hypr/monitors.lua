@@ -15,6 +15,8 @@ hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 -- Mirror laptop display
 -- hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "0x0", scale = 1, mirror = "eDP-1" })
 
--- Desktop: dual LG ultrawides — DP-1 rotated portrait (left), HDMI-A-1 landscape (right)
-hl.monitor({ output = "HDMI-A-1", mode = "2560x1080@60", position = "0x0",    scale = 1 })
-hl.monitor({ output = "DP-1",     mode = "2560x1080@60", position = "2560x0", scale = 1, transform = 1 })
+-- Desktop: dual LG ultrawides — match by description so these rules only fire
+-- on the actual desktop monitors (not e.g. a BenQ on the laptop's HDMI port).
+-- HDMI-A-1 landscape (left), DP-1 rotated portrait (right).
+hl.monitor({ output = "desc:LG Electronics LG ULTRAWIDE 0x0001D52A", mode = "2560x1080@60", position = "0x0",    scale = 1 })
+hl.monitor({ output = "desc:LG Electronics LG ULTRAWIDE 0x0004F527", mode = "2560x1080@60", position = "2560x0", scale = 1, transform = 1 })
