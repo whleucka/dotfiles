@@ -1,2 +1,3 @@
 #!/bin/bash
+pgrep -x slurp >/dev/null && exit 0
 grim -g "$(slurp)" - | wl-copy && dunstify "Region copied to clipboard" -t 2000

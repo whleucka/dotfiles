@@ -2,6 +2,7 @@
 -- Super (Windows key) as main modifier
 
 local home        = os.getenv("HOME")
+local hypr_scripts = home .. "/.config/hypr/scripts"
 local mod         = "SUPER"
 local env_prefix  = "env EDITOR=nvim VISUAL=nvim"
 local terminal    = env_prefix .. " kitty"
@@ -17,7 +18,7 @@ end
 -- Help
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(home .. "/.bin/scripts/keybinds"), { description = "Show keybinds" })
+hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { description = "Show keybinds" })
 
 -- -----------------------------------------------------------------------------
 -- Applications
@@ -132,21 +133,21 @@ hl.bind(key(mod, "mouse:273"), hl.dsp.window.resize(), { mouse = true })
 -- -----------------------------------------------------------------------------
 
 hl.bind(key(mod, "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
-hl.bind(key(mod, "C"), hl.dsp.exec_cmd("hyprpicker -r"),                                              { description = "Color picker" })
+hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -r'"),     { description = "Color picker" })
 
 -- -----------------------------------------------------------------------------
 -- Screenshots
 -- -----------------------------------------------------------------------------
 
-hl.bind("Print",           hl.dsp.exec_cmd(home .. "/.bin/scripts/screenshot-region"), { description = "Screenshot region" })
-hl.bind(key(mod, "Print"), hl.dsp.exec_cmd(home .. "/.bin/scripts/screenshot"),        { description = "Screenshot full" })
+hl.bind("Print",           hl.dsp.exec_cmd(hypr_scripts .. "/screenshot-region"), { description = "Screenshot region" })
+hl.bind(key(mod, "Print"), hl.dsp.exec_cmd(hypr_scripts .. "/screenshot"),        { description = "Screenshot full" })
 
 -- -----------------------------------------------------------------------------
 -- Screen recording
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "ALT", "R"),  hl.dsp.exec_cmd([[sh -c 'wl-screenrec -g "$(slurp)" -f $HOME/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4']]), { description = "Record selected region" })
-hl.bind(key(mod, "CTRL", "R"), hl.dsp.exec_cmd("killall -s SIGINT wl-screenrec"),                                                            { description = "Stop recording" })
+hl.bind(key(mod, "ALT", "R"),  hl.dsp.exec_cmd(hypr_scripts .. "/screenrecord-region"),         { description = "Record selected region (toggle)" })
+hl.bind(key(mod, "CTRL", "R"), hl.dsp.exec_cmd("killall -s SIGINT wl-screenrec"),               { description = "Stop recording" })
 
 -- -----------------------------------------------------------------------------
 -- Media / Hardware keys
