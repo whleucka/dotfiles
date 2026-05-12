@@ -14,7 +14,7 @@ hl.env("XCURSOR_THEME",     "Adwaita")
 hl.env("XCURSOR_SIZE",      "24")
 hl.env("HYPRCURSOR_THEME",  "Adwaita")
 hl.env("HYPRCURSOR_SIZE",   "24")
-hl.env("GTK_THEME",         "Adwaita:Dark")
+hl.env("GTK_THEME",         "Adwaita-dark")
 hl.env("QT_STYLE_OVERRIDE", "Adwaita-Dark")
 
 -- -----------------------------------------------------------------------------
