@@ -1,0 +1,36 @@
+-- Autostart Applications
+
+hl.on("hyprland.start", function()
+    -- Core services
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+
+    -- Polkit agent (for GUI sudo prompts)
+    hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+
+    -- Wallpaper
+    hl.exec_cmd("awww-daemon")
+    hl.exec_cmd("sleep 1 && awww img ~/.dotfiles/hyprland/.config/wallpaper.jpg")
+
+    -- Status bar
+    hl.exec_cmd("waybar")
+
+    -- Notifications
+    hl.exec_cmd("mako")
+
+    -- Idle and lock
+    hl.exec_cmd("~/.config/hypr/scripts/hypridle-battery.sh")
+
+    -- Clipboard manager
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+
+    -- OSD
+    hl.exec_cmd("swayosd-server")
+
+    -- Network applet
+    hl.exec_cmd("nm-applet --indicator")
+
+    -- Bluetooth applet
+    hl.exec_cmd("blueman-applet")
+end)
