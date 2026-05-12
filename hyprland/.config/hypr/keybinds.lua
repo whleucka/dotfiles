@@ -39,7 +39,7 @@ hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"),           
 hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"),       { description = "Messages" })
 hl.bind(key(mod, "SHIFT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"),                                  { description = "Reddit" })
 hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd("spotify"),                                                               { description = "Spotify" })
-hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop"),                                                     { description = "System monitor (btop)" })
+hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
 hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -e yay -Syu | -y", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser),                                                                 { description = "Browser" })
 hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"),                                 { description = "YouTube" })
