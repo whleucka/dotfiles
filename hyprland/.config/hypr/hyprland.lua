@@ -117,6 +117,7 @@ hl.config({
         mouse_move_enables_dpms    = true,
         key_press_enables_dpms     = true,
         on_focus_under_fullscreen  = 1,
+        focus_on_activate          = true,
     },
 
     xwayland = {
