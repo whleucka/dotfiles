@@ -1,5 +1,8 @@
 return {
-  keymap = { preset = "super-tab" },
+  keymap = {
+    preset = "super-tab",
+    ["<C-e>"] = { "select_and_accept", "fallback" },
+  },
 
   snippets = { preset = "luasnip" },
 
