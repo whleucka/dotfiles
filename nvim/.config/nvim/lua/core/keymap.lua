@@ -55,6 +55,39 @@ local keys = {
     { "<leader>bp", ":bprev<CR>",  desc = "Prev" },
     { "<leader>bf", ":bfirst<CR>", desc = "First" },
     { "<leader>bl", ":blast<CR>",  desc = "Last" },
+    {
+      "<leader>bo",
+      function()
+        local cur = vim.api.nvim_get_current_buf()
+        for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+          if b.bufnr ~= cur then vim.cmd("bd " .. b.bufnr) end
+        end
+      end,
+      desc = "Close Others",
+    },
+    {
+      "<leader>bH",
+      function()
+        local cur = vim.api.nvim_get_current_buf()
+        for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+          if b.bufnr == cur then break end
+          vim.cmd("bd " .. b.bufnr)
+        end
+      end,
+      desc = "Close Left",
+    },
+    {
+      "<leader>bL",
+      function()
+        local cur = vim.api.nvim_get_current_buf()
+        local seen = false
+        for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+          if seen then vim.cmd("bd " .. b.bufnr) end
+          if b.bufnr == cur then seen = true end
+        end
+      end,
+      desc = "Close Right",
+    },
   },
   {
     { "q",          "<nop>" },
