@@ -8,7 +8,7 @@ hl.window_rule({ match = { class = "blueman-manager" }, float = true })
 hl.window_rule({ match = { class = "thunar", title = "File Operation Progress" }, float = true })
 hl.window_rule({ match = { class = "org.gnome.Calculator" }, float = true })
 hl.window_rule({ match = { class = "imv" }, float = true })
-hl.window_rule({ match = { title = "Picture-in-Picture" }, float = true })
+--hl.window_rule({ match = { title = "Picture-in-Picture" }, float = true })
 
 -- Apps with shared dialog/main class — float all, tile manually if needed
 hl.window_rule({ match = { class = "^[Gg]imp.*" }, float = true })
@@ -30,8 +30,8 @@ hl.window_rule({ match = { class = "tlpui" }, float = true })
 --hl.window_rule({ match = { class = "gcr-prompter" }, float = true })
 
 -- File dialogs (matches Open/Save/Export across GTK apps, GIMP, Inkscape, browsers)
---hl.window_rule({ match = { title = "^(Open|Save|Export|Import)( As)?( File| Image| Folder| Document)?\\.?\\.?\\.?$" }, float = true })
---hl.window_rule({ match = { title = "^(Select|Choose) (File|Folder|Image|Directory).*" }, float = true })
+hl.window_rule({ match = { title = "^(Open|Save|Export|Import)( As)?( File| Image| Folder| Document)?\\.?\\.?\\.?$" }, float = true })
+hl.window_rule({ match = { title = "^(Select|Choose) (File|Folder|Image|Directory).*" }, float = true })
 
 -- Polkit
 hl.window_rule({ match = { class = "polkit-gnome-authentication-agent-1" }, float = true })
