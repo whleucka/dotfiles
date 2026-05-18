@@ -19,20 +19,20 @@ return {
   },
   keys = {
     {
-      "<leader>o",
-      function()
-        if not MiniFiles.close() then
-          MiniFiles.open(vim.api.nvim_buf_get_name(0))
-        else
-          MiniFiles.close()
-        end
-      end,
-      desc = "Open file explorer"
-    },
-    {
       "<leader>e",
       group = "Explore",
       {
+        {
+          "<leader>eo",
+          function()
+            if not MiniFiles.close() then
+              MiniFiles.open(vim.api.nvim_buf_get_name(0))
+            else
+              MiniFiles.close()
+            end
+          end,
+          desc = "Open file explorer"
+        },
         {
           "<leader>ed",
           ":lua MiniFiles.open()<CR>",

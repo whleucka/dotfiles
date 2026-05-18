@@ -97,7 +97,6 @@ local keys = {
     { "<leader>w",  ":w!<CR>",                                desc = "Save" },
     { "H",          ":bprev<CR>",                             desc = "Previous Buffer" },
     { "L",          ":bnext<CR>",                             desc = "Previous Buffer" },
-    { "<leader>so", ":update<CR> :source<CR>",                desc = "Source file", },
     { "gd",         ":lua vim.lsp.buf.definition()<cr>",      desc = "Go to definition" },
     { "gD",         ":lua vim.lsp.buf.declaration()<cr>",     desc = "Go to declaration" },
     { "gi",         ":lua vim.lsp.buf.implementation()<cr>",  desc = "Go to implementation" },
