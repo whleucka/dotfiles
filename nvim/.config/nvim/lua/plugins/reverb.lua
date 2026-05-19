@@ -1,6 +1,7 @@
 local sound_dir = vim.fn.stdpath("config") .. "/sound_effects/"
 return {
   "https://github.com/whleucka/reverb.nvim",
+  enabled = false,
   event = "VeryLazy",
   opts = {
     player = "paplay",
