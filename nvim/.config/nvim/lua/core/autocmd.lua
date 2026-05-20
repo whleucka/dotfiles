@@ -44,22 +44,6 @@ vim.api.nvim_create_autocmd("CursorMoved", {
   end,
 })
 
--- Hide tmux status bar while neovim is open
-if vim.env.TMUX then
-  vim.api.nvim_create_autocmd("VimEnter", {
-    group = vim.api.nvim_create_augroup("tmux-status-hide", { clear = true }),
-    callback = function()
-      vim.system({ "tmux", "set", "status", "off" })
-    end,
-  })
-  vim.api.nvim_create_autocmd("VimLeave", {
-    group = vim.api.nvim_create_augroup("tmux-status-restore", { clear = true }),
-    callback = function()
-      vim.system({ "tmux", "set", "status", "on" })
-    end,
-  })
-end
-
 -- Close with q
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("close-with-q", { clear = true }),
