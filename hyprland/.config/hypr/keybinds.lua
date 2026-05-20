@@ -11,7 +11,7 @@ local filemanager = "thunar"
 local menu        = "fuzzel"
 
 local function key(...)
-    return table.concat({ ... }, " + ")
+  return table.concat({ ... }, " + ")
 end
 
 -- -----------------------------------------------------------------------------
@@ -25,24 +25,24 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 -- -----------------------------------------------------------------------------
 
 hl.bind(key(mod, "Return"),          hl.dsp.exec_cmd(terminal),                       { description = "Terminal" })
-hl.bind(key(mod, "SHIFT", "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"),  { description = "Terminal (ks home)" })
+hl.bind(key(mod, "SHIFT", "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"),  { description = "Terminal (tmux)" })
 hl.bind(key(mod, "Space"),           hl.dsp.exec_cmd(menu),                           { description = "App launcher" })
 
-hl.bind(key(mod, "SHIFT", "I"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"),                                    { description = "Banking" })
-hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"),                                    { description = "Bluesky" })
+hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"),                                    { description = "CIBC Banking" })
 hl.bind(key(mod, "SHIFT", "C"), hl.dsp.exec_cmd("gnome-calculator"),                                                      { description = "Calculator" })
 hl.bind(key(mod, "SHIFT", "D"), hl.dsp.exec_cmd(terminal .. " lazydocker"),                                               { description = "Lazydocker" })
 hl.bind(key(mod, "SHIFT", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"),                             { description = "Email" })
 hl.bind(key(mod, "SHIFT", "F"), hl.dsp.exec_cmd(filemanager),                                                             { description = "File manager" })
 hl.bind(key(mod, "SHIFT", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"),                                  { description = "GitHub" })
-hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"),                                                     { description = "Notes" })
-hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"),       { description = "Messages" })
+hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"),       { description = "Google Messages" })
+hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"),                                                     { description = "Neovim" })
 hl.bind(key(mod, "SHIFT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"),                                  { description = "Reddit" })
-hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd("spotify"),                                                               { description = "Spotify" })
+hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"),                                    { description = "Bluesky" })
 hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
 hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -e yay -Syu | -y", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser),                                                                 { description = "Browser" })
 hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"),                                 { description = "YouTube" })
+hl.bind(key(mod, "SHIFT", "Z"), hl.dsp.exec_cmd(browser .. " --app=https://mantis.chainlogic.it/my_view_page.php?refresh=true"),                                 { description = "Mantis" })
 
 -- -----------------------------------------------------------------------------
 -- Window Management
@@ -84,11 +84,11 @@ hl.bind(key(mod, "SHIFT", "code:21"), hl.dsp.window.resize({ x = 0,   y = 25,  r
 -- Resize submap
 hl.bind(key(mod, "R"), hl.dsp.submap("resize"), { description = "Resize mode" })
 hl.define_submap("resize", function()
-    hl.bind("H", hl.dsp.window.resize({ x = -25, y = 0,   relative = true }), { repeating = true })
-    hl.bind("L", hl.dsp.window.resize({ x = 25,  y = 0,   relative = true }), { repeating = true })
-    hl.bind("K", hl.dsp.window.resize({ x = 0,   y = -25, relative = true }), { repeating = true })
-    hl.bind("J", hl.dsp.window.resize({ x = 0,   y = 25,  relative = true }), { repeating = true })
-    hl.bind("Escape", hl.dsp.submap("reset"))
+  hl.bind("H", hl.dsp.window.resize({ x = -25, y = 0,   relative = true }), { repeating = true })
+  hl.bind("L", hl.dsp.window.resize({ x = 25,  y = 0,   relative = true }), { repeating = true })
+  hl.bind("K", hl.dsp.window.resize({ x = 0,   y = -25, relative = true }), { repeating = true })
+  hl.bind("J", hl.dsp.window.resize({ x = 0,   y = 25,  relative = true }), { repeating = true })
+  hl.bind("Escape", hl.dsp.submap("reset"))
 end)
 
 -- -----------------------------------------------------------------------------
@@ -96,8 +96,8 @@ end)
 -- -----------------------------------------------------------------------------
 
 for i = 1, 9 do
-    hl.bind(key(mod, i),          hl.dsp.focus({ workspace = i }),                       { description = "Workspace " .. i })
-    hl.bind(key(mod, "SHIFT", i), hl.dsp.window.move({ workspace = i, follow = false }), { description = "Move window to workspace " .. i })
+  hl.bind(key(mod, i),          hl.dsp.focus({ workspace = i }),                       { description = "Workspace " .. i })
+  hl.bind(key(mod, "SHIFT", i), hl.dsp.window.move({ workspace = i, follow = false }), { description = "Move window to workspace " .. i })
 end
 hl.bind(key(mod, 0),          hl.dsp.focus({ workspace = 10 }),                       { description = "Workspace 10" })
 hl.bind(key(mod, "SHIFT", 0), hl.dsp.window.move({ workspace = 10, follow = false }), { description = "Move window to workspace 10" })
