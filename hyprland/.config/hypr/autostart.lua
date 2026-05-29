@@ -22,6 +22,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("~/.config/hypr/scripts/hypridle-battery.sh")
 
     -- Clipboard manager
+    -- wl-clip-persist takes ownership of selection so cliphist's watchers
+    -- don't race kitty's clipboard write (broken-pipe -> empty primary).
+    hl.exec_cmd("wl-clip-persist --clipboard regular")
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
 
