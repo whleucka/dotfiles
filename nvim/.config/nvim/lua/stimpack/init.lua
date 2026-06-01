@@ -110,6 +110,20 @@ function M.update(name, opts)
   vim.pack.update({ name }, opts)
 end
 
+-- Revert plugins to the revisions pinned in nvim-pack-lock.json without
+-- fetching anything from the network. Pass a name to roll back a single
+-- plugin, or nil for all. Shows a confirmation buffer (:write to apply,
+-- :quit to discard) unless opts.force is set.
+function M.restore(name, opts)
+  opts = opts or {}
+  local names = name and { name } or nil
+  vim.pack.update(names, {
+    offline = true,
+    target = "lockfile",
+    force = opts.force,
+  })
+end
+
 function M.get(name)
   local info_list = vim.pack.get({ name }, { info = true })
   if not info_list or #info_list == 0 then

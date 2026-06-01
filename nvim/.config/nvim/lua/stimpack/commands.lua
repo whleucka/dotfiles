@@ -41,6 +41,14 @@ function M.setup(stimpack)
     complete = function() return _complete_spec_names(stimpack) end,
   })
 
+  vim.api.nvim_create_user_command("StimRestore", function(args)
+    stimpack.restore(args.fargs[1], { force = args.bang })
+  end, {
+    nargs = "?",
+    bang = true,
+    complete = function() return _complete_spec_names(stimpack) end,
+  })
+
   vim.api.nvim_create_user_command("StimGet", function(args)
     stimpack.get(args.fargs[1])
   end, {
