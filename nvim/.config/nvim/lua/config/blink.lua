@@ -70,7 +70,7 @@ return {
   },
 
   fuzzy = {
-    implementation = "rust",
+    implementation = "prefer_rust_with_warning",
     sorts = { "exact", "score", "sort_text" },
     frecency = { enabled = true },
     use_proximity = true,
