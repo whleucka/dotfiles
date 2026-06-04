@@ -39,7 +39,7 @@ hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"),           
 hl.bind(key(mod, "SHIFT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"),                                  { description = "Reddit" })
 hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"),                                    { description = "Bluesky" })
 hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
-hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -e yay -Syu | -y", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
+hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " yay -Syu", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser),                                                                 { description = "Browser" })
 hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"),                                 { description = "YouTube" })
 hl.bind(key(mod, "SHIFT", "Z"), hl.dsp.exec_cmd(browser .. " --app=https://mantis.chainlogic.it/my_view_page.php?refresh=true"),                                 { description = "Mantis" })
@@ -54,10 +54,7 @@ hl.bind(key(mod, "F"),         hl.dsp.window.fullscreen({ mode = "fullscreen", a
 hl.bind(key(mod, "M"),         hl.dsp.window.fullscreen({ mode = "maximized",  action = "toggle" }), { description = "Maximize" })
 hl.bind(key(mod, "T"),         hl.dsp.window.float({ action = "toggle" }),                           { description = "Toggle floating" })
 hl.bind(key(mod, "SEMICOLON"), hl.dsp.layout("togglesplit"),                                         { description = "Toggle split" })
-
--- Toggle layout (dwindle/monocle). `hyprctl keyword` is dead under the Lua
--- parser in 0.55+ — the helper uses `hyprctl dispatch 'hl.config(...)'`.
-hl.bind(key(mod, "O"), hl.dsp.exec_cmd(home .. "/.config/hypr/scripts/toggle-layout.sh"), { description = "Toggle layout (dwindle/monocle)" })
+hl.bind(key(mod, "B"),         hl.dsp.exec_cmd("killall -SIGUSR1 waybar"),                           { description = "Toggle waybar" })
 
 -- Focus (vim keys)
 hl.bind(key(mod, "H"), hl.dsp.focus({ direction = "l" }), { description = "Focus left" })
@@ -65,9 +62,8 @@ hl.bind(key(mod, "L"), hl.dsp.focus({ direction = "r" }), { description = "Focus
 hl.bind(key(mod, "K"), hl.dsp.focus({ direction = "u" }), { description = "Focus up" })
 hl.bind(key(mod, "J"), hl.dsp.focus({ direction = "d" }), { description = "Focus down" })
 
--- Monocle cycle (separate keys so cycleprev/cyclenext don't error in dwindle)
-hl.bind(key(mod, "Tab"),          hl.dsp.layout("cycleprev"), { description = "Previous window (monocle)" })
-hl.bind(key(mod, "SHIFT", "Tab"), hl.dsp.layout("cyclenext"), { description = "Next window (monocle)" })
+-- Focus last window (alt-tab between two windows)
+hl.bind(key(mod, "Tab"), hl.dsp.focus({ last = true }), { description = "Focus last window" })
 
 -- Move windows (vim keys)
 hl.bind(key(mod, "SHIFT", "H"), hl.dsp.window.move({ direction = "l" }), { description = "Move window left" })

@@ -1,7 +1,7 @@
 return {
   view_issues = {
     default_filter = "assigned",
-    limit = 250,
+    limit = 500,
   },
   hosts = {
     {
