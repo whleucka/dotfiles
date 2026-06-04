@@ -33,8 +33,11 @@ return {
   --    split(), -- utility function to split current Neovim pane in the current direction
   --    wrap(), -- utility function to wrap to opposite Neovim pane
   -- }
-  -- NOTE: `at_edge = 'wrap'` is not supported on Kitty terminal
-  -- multiplexer, as there is no way to determine layout via the CLI
+  -- NOTE: the README says 'wrap' is unsupported on the *Kitty* multiplexer —
+  -- that doesn't apply here since multiplexer_integration = 'tmux'.
+  -- At a true screen edge this wraps to the opposite-side tmux pane (tmux
+  -- wraps natively); with a single tmux pane (or zoomed) it wraps vim splits.
+  -- Known quirk: entering nvim from tmux lands on the last-active split.
   at_edge = 'stop',
   -- Desired behavior when the current window is floating:
   -- 'previous' => Focus previous Vim window and perform action
