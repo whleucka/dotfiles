@@ -1,5 +1,6 @@
 return {
   view_issues = {
+    layout = 'split',
     default_filter = "assigned",
     limit = 500,
   },

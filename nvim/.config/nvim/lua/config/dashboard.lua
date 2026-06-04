@@ -21,6 +21,12 @@ return {
         key = "e",
       },
       {
+        desc = "Mantis Issues",
+        group = "Label",
+        action = ":MantisIssues",
+        key = "m",
+      },
+      {
         desc = "New",
         group = "Label",
         action = ":enew",
