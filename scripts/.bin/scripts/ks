@@ -51,9 +51,23 @@ list_session_names() {
 
 attach_session() {
     local name="$1"
+
+    # If the tmux server isn't running yet (e.g., first launch after boot),
+    # start it via the __server keepalive session. Sourcing tmux.conf kicks
+    # off continuum's auto-restore, so wait briefly for the session to appear.
+    if ! tmux has-session 2>/dev/null; then
+        tmux new-session -d -s __server
+        local i
+        for i in $(seq 1 30); do
+            tmux has-session -t "$name" 2>/dev/null && break
+            sleep 0.1
+        done
+    fi
+
+    # Still missing (fresh machine, no saved state) — create instead of failing
     if ! tmux has-session -t "$name" 2>/dev/null; then
-        err "Session '$name' does not exist."
-        return 1
+        warn "Session '$name' not found — creating it."
+        tmux new-session -d -s "$name" -c "$HOME"
     fi
 
     if [ -n "$TMUX" ]; then
