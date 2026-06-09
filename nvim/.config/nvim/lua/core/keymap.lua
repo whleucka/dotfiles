@@ -50,7 +50,14 @@ local keys = {
     "<leader>b",
     group = "Buffer",
     { "<leader>bc", ":enew<CR>",   desc = "Create New" },
-    { "<leader>bq", ":bd<CR>",     desc = "Close" },
+    {
+      "<leader>bq",
+      -- Plain :bd closes the *window* when it isn't the last one (e.g. with a
+      -- docked split like mantis). mini.bufremove deletes the buffer while
+      -- keeping the window layout intact.
+      function() require("mini.bufremove").delete(0, false) end,
+      desc = "Close",
+    },
     { "<leader>bn", ":bnext<CR>",  desc = "Next" },
     { "<leader>bp", ":bprev<CR>",  desc = "Prev" },
     { "<leader>bf", ":bfirst<CR>", desc = "First" },

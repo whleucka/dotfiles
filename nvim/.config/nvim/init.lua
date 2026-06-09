@@ -10,3 +10,6 @@ require("core.options")
 require("core.autocmd")
 require("core.lsp")
 require("core.keymap")
+
+-- Local plugins
+require("radio").setup()

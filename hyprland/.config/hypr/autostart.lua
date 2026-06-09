@@ -24,9 +24,10 @@ hl.on("hyprland.start", function()
     -- Clipboard manager
     -- wl-clip-persist takes ownership of selection so cliphist's watchers
     -- don't race kitty's clipboard write (broken-pipe -> empty primary).
-    hl.exec_cmd("wl-clip-persist --clipboard regular")
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+    hl.exec_cmd("wl-clip-persist --clipboard both")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store -max-items 750")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store -max-items 100")
+    hl.exec_cmd("wl-paste --primary --type text --watch cliphist store -max-items 500")
 
     -- OSD
     hl.exec_cmd("swayosd-server")
