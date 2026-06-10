@@ -1,11 +1,10 @@
 return {
-  enusre_installed = {
+  ensure_installed = {
     'php',
     'bash',
     'c',
     'css',
     'html',
-    'htmx',
     'lua',
     'python',
     'rust',
