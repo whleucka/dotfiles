@@ -1,5 +1,6 @@
 return {
   "whleucka/mantis.nvim",
+  event = "VeryLazy",
   cmd = { "MantisIssues", "MantisSelectHost" },
   keys = {
     { "<leader>m", ":MantisIssues<cr>", desc = "Mantis Issues" },

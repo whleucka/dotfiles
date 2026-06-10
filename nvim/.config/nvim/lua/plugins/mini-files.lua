@@ -13,7 +13,8 @@ return {
       preview = true,
     },
     mappings = {
-      go_in_plus = "<CR>"
+      go_in = "<NOP>",
+      go_in_plus = "l"
     },
   },
   keys = {
