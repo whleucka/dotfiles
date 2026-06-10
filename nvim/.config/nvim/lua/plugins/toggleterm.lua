@@ -15,8 +15,11 @@ vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
 return {
   "akinsho/toggleterm.nvim",
   event = "VimEnter",
-  keys = {
-    { "<C-\\>", ":ToggleTerm direction=horizontal<cr>", desc = "Toggle terminal (split)" },
-    { "<leader>o", ":ToggleTerm direction=float<cr>", desc = "Toggle terminal (float)" },
+  opts = {
+    open_mapping = [[<leader>o]],
+    direction = "float",
+    float_opts = {
+      border = "rounded",
+    },
   }
 }
