@@ -16,6 +16,7 @@ return {
   "akinsho/toggleterm.nvim",
   event = "VimEnter",
   keys = {
-    { "<C-\\>", ":ToggleTerm<cr>", desc = "Toggle terminal" },
+    { "<C-\\>", ":ToggleTerm direction=horizontal<cr>", desc = "Toggle terminal (split)" },
+    { "<leader>o", ":ToggleTerm direction=float<cr>", desc = "Toggle terminal (float)" },
   }
 }
