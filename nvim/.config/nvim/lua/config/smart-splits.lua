@@ -38,7 +38,7 @@ return {
   -- At a true screen edge this wraps to the opposite-side tmux pane (tmux
   -- wraps natively); with a single tmux pane (or zoomed) it wraps vim splits.
   -- Known quirk: entering nvim from tmux lands on the last-active split.
-  at_edge = 'stop',
+  at_edge = 'split',
   -- Desired behavior when the current window is floating:
   -- 'previous' => Focus previous Vim window and perform action
   -- 'mux' => Always forward action to multiplexer
