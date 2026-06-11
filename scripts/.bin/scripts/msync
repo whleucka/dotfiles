@@ -65,7 +65,7 @@ def read_config():
 def write_config(config):
     lines = ["# msync project config\n"]
     for name, proj in config.get("projects", {}).items():
-        lines.append(f"[projects.{name}]")
+        lines.append(f'[projects."{name}"]')
         for key in ("host", "remote_dir", "local_dir"):
             if key in proj:
                 lines.append(f'{key} = "{proj[key]}"')

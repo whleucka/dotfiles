@@ -38,7 +38,9 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 [[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PNPM_HOME:$PATH"
 
 # Terminal
-if command -v kitty &>/dev/null && [[ "$TERM" == "xterm-kitty" ]]; then
+if [[ -n "$NVIM" ]]; then
+    : # inside nvim's terminal — keep the TERM nvim gave us (xterm-256color)
+elif command -v kitty &>/dev/null && [[ "$TERM" == "xterm-kitty" ]]; then
     export TERM="xterm-kitty"
 else
     export TERM="tmux-256color"
