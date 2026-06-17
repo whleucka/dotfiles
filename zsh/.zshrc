@@ -39,11 +39,13 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 
 # Terminal
 if [[ -n "$NVIM" ]]; then
-    : # inside nvim's terminal — keep the TERM nvim gave us (xterm-256color)
-elif command -v kitty &>/dev/null && [[ "$TERM" == "xterm-kitty" ]]; then
+    : # inside nvim's terminal — keep the TERM nvim gave us
+elif [[ -n "$TMUX" ]]; then
+    export TERM="tmux-256color"
+elif [[ "$TERM" == "xterm-kitty" ]]; then
     export TERM="xterm-kitty"
 else
-    export TERM="tmux-256color"
+    export TERM="xterm-256color"
 fi
 
 # Editor (prefer nvim > vim > vi > nano)
