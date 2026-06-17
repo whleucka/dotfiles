@@ -101,11 +101,11 @@ let mapleader = " "
 nnoremap <ESC><ESC> :noh<CR>
 
 " Save / Quit
-nnoremap <leader><Space> :w<CR>
+nnoremap <leader>w :w<CR>
 nnoremap <leader>Q :qa<CR>
 
-" Last buffer
-nnoremap <BS> :b#<CR>
+" Easy close buff
+nnoremap <leader>q :bd<CR>
 
 " Picker
 nnoremap <leader>ff :FZF<CR>
@@ -135,11 +135,10 @@ nnoremap <M-j> :resize -2<CR>
 nnoremap <M-k> :resize +2<CR>
 
 " Window group
-nnoremap <leader>wc :new<CR>
+nnoremap <leader>sh :split<CR>
+nnoremap <leader>sv :vsplit<CR>
 nnoremap <leader>wq :q<CR>
-nnoremap <leader>wQ :qall<CR>
-nnoremap <leader>ws :split<CR>
-nnoremap <leader>wv :vsplit<CR>
+nnoremap <leader>sq :q<CR>
 
 " Tab group
 nnoremap <leader>tc :tabnew<CR>
