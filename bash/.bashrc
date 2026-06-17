@@ -97,6 +97,9 @@ elif [[ -f /etc/bash_completion ]]; then
     . /etc/bash_completion
 fi
 
+# ── Plugins ───────────────────────────────────────────────────────────────────
+eval "$(zoxide init bash)"
+
 # ── Local overrides ───────────────────────────────────────────────────────────
 # Machine-specific config that shouldn't be in version control
 [[ -f ~/.bashrc.local ]] && . ~/.bashrc.local
