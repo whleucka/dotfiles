@@ -69,6 +69,9 @@ def write_config(config):
         for key in ("host", "remote_dir", "local_dir"):
             if key in proj:
                 lines.append(f'{key} = "{proj[key]}"')
+        if proj.get("ignore"):
+            patterns = ", ".join(f'"{p}"' for p in proj["ignore"])
+            lines.append(f"ignore = [{patterns}]")
         lines.append("")
     CONFIG_FILE.write_text("\n".join(lines))
 
@@ -137,16 +140,17 @@ def cmd_start(name):
         ok(f"Created {local_dir}")
 
     info(f"Starting sync: {CYAN}{local_dir}{NC} <-> {CYAN}{host}:{remote_dir}{NC}")
-    result = subprocess.run(
-        [
-            "mutagen", "sync", "create", local_dir, f"{host}:{remote_dir}",
-            f"--name=msync-{name}",
-            f"--label=msync={name}",
-            "--ignore-vcs",
-            "--default-file-mode=0644",
-            "--default-directory-mode=0755",
-        ]
-    )
+    cmd = [
+        "mutagen", "sync", "create", local_dir, f"{host}:{remote_dir}",
+        f"--name=msync-{name}",
+        f"--label=msync={name}",
+        "--ignore-vcs",
+        "--default-file-mode=0644",
+        "--default-directory-mode=0755",
+    ]
+    for pattern in proj.get("ignore", []):
+        cmd.append(f"--ignore={pattern}")
+    result = subprocess.run(cmd)
 
     if result.returncode == 0:
         ok(f"Syncing '{name}'")
