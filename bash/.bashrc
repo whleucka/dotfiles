@@ -26,6 +26,9 @@ shopt -s globstar             # ** recursive glob
 shopt -s autocd               # type a dir name to cd into it
 shopt -s cdspell              # minor typo correction for cd
 
+# ── Aliases ───────────────────────────────────────────────────────────────────
+[[ -f ~/.aliasrc ]] && . ~/.aliasrc
+
 # ── Prompt ────────────────────────────────────────────────────────────────────
 # Colors only when the terminal supports them
 if tput setaf 1 &>/dev/null; then
