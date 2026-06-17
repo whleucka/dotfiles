@@ -32,6 +32,7 @@ shopt -s cdspell              # minor typo correction for cd
 # ── Prompt ────────────────────────────────────────────────────────────────────
 # Colors only when the terminal supports them
 if tput setaf 1 &>/dev/null; then
+    # For use directly in PS1: \[ \] mark non-printing regions.
     _RESET='\[\e[0m\]'
     _BOLD='\[\e[1m\]'
     _RED='\[\e[31m\]'
@@ -39,14 +40,21 @@ if tput setaf 1 &>/dev/null; then
     _YELLOW='\[\e[33m\]'
     _BLUE='\[\e[34m\]'
     _CYAN='\[\e[36m\]'
+    # Raw-byte forms for use INSIDE $(...) prompt functions. Bash decodes
+    # \[ \e \] only once, before command substitution runs, so substituted
+    # output must carry real ESC (\033) and \001/\002 (the raw \[ \]) itself.
+    _r_reset=$'\001\033[0m\002'
+    _r_red=$'\001\033[31m\002'
+    _r_yellow=$'\001\033[33m\002'
 else
     _RESET='' _BOLD='' _RED='' _GREEN='' _YELLOW='' _BLUE='' _CYAN=''
+    _r_reset='' _r_red='' _r_yellow=''
 fi
 
 # Show exit code of last command if non-zero
 _prompt_status() {
     local code=$?
-    [[ $code -ne 0 ]] && echo -n " ${_RED}✗${code}${_RESET}"
+    [[ $code -ne 0 ]] && printf ' %s✗%s%s' "$_r_red" "$code" "$_r_reset"
 }
 
 # Git branch in prompt
@@ -55,7 +63,7 @@ _prompt_git() {
     branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || return
     local dirty=""
     git diff --quiet 2>/dev/null || dirty="*"
-    echo -n " ${_YELLOW}(${branch}${dirty})${_RESET}"
+    printf ' %s(%s%s)%s' "$_r_yellow" "$branch" "$dirty" "$_r_reset"
 }
 
 PS1="${_BOLD}${_GREEN}\u@\h${_RESET}:${_BOLD}${_BLUE}\w${_RESET}\$(_prompt_git)\$(_prompt_status)\n\$ "
