@@ -100,3 +100,7 @@ fi
 # ── Local overrides ───────────────────────────────────────────────────────────
 # Machine-specific config that shouldn't be in version control
 [[ -f ~/.bashrc.local ]] && . ~/.bashrc.local
+
+# Ensure .bashrc exits cleanly so the first prompt doesn't inherit a non-zero
+# $? from a failed test above (e.g. the missing ~/.bashrc.local check).
+true
