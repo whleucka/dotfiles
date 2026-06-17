@@ -51,10 +51,14 @@ else
     _r_reset='' _r_red='' _r_yellow=''
 fi
 
+# Capture the real exit status FIRST, before any prompt function runs and
+# clobbers $? (e.g. _prompt_git's failing git call in a non-repo dir).
+_save_status() { _LAST_STATUS=$?; }
+PROMPT_COMMAND="_save_status${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
+
 # Show exit code of last command if non-zero
 _prompt_status() {
-    local code=$?
-    [[ $code -ne 0 ]] && printf ' %s✗%s%s' "$_r_red" "$code" "$_r_reset"
+    [[ ${_LAST_STATUS:-0} -ne 0 ]] && printf ' %s✗%s%s' "$_r_red" "$_LAST_STATUS" "$_r_reset"
 }
 
 # Git branch in prompt
