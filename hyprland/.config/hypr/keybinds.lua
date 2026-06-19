@@ -66,11 +66,12 @@ hl.bind(key(mod, "T"), hl.dsp.window.float({ action = "toggle" }), { description
 hl.bind(key(mod, "O"), hl.dsp.layout("togglesplit"), { description = "Toggle split" })
 hl.bind(key(mod, "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
 
--- Focus (vim keys)
-hl.bind(key(mod, "H"), hl.dsp.focus({ direction = "l" }), { description = "Focus left" })
-hl.bind(key(mod, "L"), hl.dsp.focus({ direction = "r" }), { description = "Focus right" })
-hl.bind(key(mod, "K"), hl.dsp.focus({ direction = "u" }), { description = "Focus up" })
-hl.bind(key(mod, "J"), hl.dsp.focus({ direction = "d" }), { description = "Focus down" })
+-- Focus (vim keys) — unified nav: terminals get ctrl+hjkl injected (driving the
+-- neovim/tmux chain, escalating back out at the edge); other windows move focus.
+hl.bind(key(mod, "H"), hl.dsp.exec_cmd(hypr_scripts .. "/nav l h"), { description = "Focus/nav left" })
+hl.bind(key(mod, "L"), hl.dsp.exec_cmd(hypr_scripts .. "/nav r l"), { description = "Focus/nav right" })
+hl.bind(key(mod, "K"), hl.dsp.exec_cmd(hypr_scripts .. "/nav u k"), { description = "Focus/nav up" })
+hl.bind(key(mod, "J"), hl.dsp.exec_cmd(hypr_scripts .. "/nav d j"), { description = "Focus/nav down" })
 
 -- Focus last window (alt-tab between two windows)
 hl.bind(key(mod, "Tab"), hl.dsp.focus({ last = true }), { description = "Focus last window" })

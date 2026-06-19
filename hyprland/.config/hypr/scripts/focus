@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Hyprland window focus by direction: l | r | u | d
+#
+# This is the OUTER edge of the unified ctrl+hjkl navigation. Neovim splits
+# (smart-splits) and tmux panes both escalate here, calling this script only
+# once they're already at their own edge — so one keychain flows:
+#   neovim split -> tmux pane -> Hyprland window
+#
+# Hyprland 0.55+ uses a Lua config; hyprctl dispatch evaluates its arg as Lua,
+# so we pass an hl.dsp.* expression rather than a raw dispatcher name.
+exec hyprctl dispatch "hl.dsp.focus({ direction = \"$1\" })" >/dev/null 2>&1

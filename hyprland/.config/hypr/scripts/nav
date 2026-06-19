@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Unified directional navigation: one keychain across Hyprland / tmux / neovim.
+#
+# Bound to super+hjkl in Hyprland. Args:
+#   $1 = Hyprland focus direction (l|r|u|d)
+#   $2 = ctrl key to inject into a terminal (h|j|k|l)
+#
+# If the focused window is a terminal (kitty), inject ctrl+<key> into it via
+# kitty remote control. That drives the existing ctrl+hjkl chain — neovim
+# smart-splits -> tmux panes -> and, at the outermost edge, back out to the
+# Hyprland window (via scripts/focus). For any other window, just move Hyprland
+# focus directly, so super+hjkl never sends a ctrl key into apps like the
+# browser (no ctrl+h history / ctrl+l address-bar collisions).
+#
+# Hyprland 0.55+ Lua config: hyprctl dispatch evaluates its arg as Lua, so we
+# pass an hl.dsp.* expression rather than a raw dispatcher name.
+
+dir="$1"
+key="$2"
+
+info=$(hyprctl activewindow)
+class=$(awk '/^[[:space:]]*class:/{print $2; exit}' <<<"$info")
+pid=$(awk '/^[[:space:]]*pid:/{print $2; exit}'   <<<"$info")
+
+if [ "$class" = "kitty" ] && [ -S "/tmp/mykitty-$pid" ]; then
+  kitty @ --to "unix:/tmp/mykitty-$pid" send-key "ctrl+$key"
+else
+  hyprctl dispatch "hl.dsp.focus({ direction = \"$dir\" })"
+fi

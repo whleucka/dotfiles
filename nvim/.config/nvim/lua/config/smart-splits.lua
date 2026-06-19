@@ -33,12 +33,16 @@ return {
   --    split(), -- utility function to split current Neovim pane in the current direction
   --    wrap(), -- utility function to wrap to opposite Neovim pane
   -- }
-  -- NOTE: the README says 'wrap' is unsupported on the *Kitty* multiplexer —
-  -- that doesn't apply here since multiplexer_integration = 'tmux'.
-  -- At a true screen edge this wraps to the opposite-side tmux pane (tmux
-  -- wraps natively); with a single tmux pane (or zoomed) it wraps vim splits.
-  -- Known quirk: entering nvim from tmux lands on the last-active split.
-  at_edge = 'split',
+  -- Unified nvim <-> tmux <-> Hyprland navigation. This function fires only
+  -- when the nvim split is at its edge AND tmux reports its pane is also at the
+  -- edge (see smart-splits move.lua + mux/init.lua: move_pane returns false, so
+  -- at_edge runs). At that outermost edge we escalate to the Hyprland window in
+  -- the same direction via the shared focus helper — so one ctrl+hjkl keychain
+  -- walks nvim splits, then tmux panes, then Hyprland windows.
+  at_edge = function(ctx)
+    local dir = ({ left = 'l', right = 'r', up = 'u', down = 'd' })[ctx.direction]
+    vim.fn.system({ os.getenv('HOME') .. '/.config/hypr/scripts/focus', dir })
+  end,
   -- Desired behavior when the current window is floating:
   -- 'previous' => Focus previous Vim window and perform action
   -- 'mux' => Always forward action to multiplexer
