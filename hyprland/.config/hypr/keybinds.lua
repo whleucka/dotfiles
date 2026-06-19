@@ -25,7 +25,7 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 -- -----------------------------------------------------------------------------
 
 hl.bind(key(mod, "Return"),          hl.dsp.exec_cmd(terminal .. " ks attach home"),  { description = "Terminal (tmux home)" })
-hl.bind(key(mod, "SHIFT", "Return"), hl.dsp.exec_cmd(terminal .. " ks", { float = true, size = { 900, 600 }, center = true }), { description = "Session picker (ks)" })
+hl.bind(key(mod, "SHIFT", "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home", { float = true, size = { 900, 600 }, center = true }), { description = "Floating Terminal (tmux home)" })
 hl.bind(key(mod, "Space"),           hl.dsp.exec_cmd(menu),                           { description = "App launcher" })
 
 hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"),                                    { description = "CIBC Banking" })
