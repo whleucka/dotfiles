@@ -151,6 +151,11 @@ elif command -v vim >/dev/null; then
   alias v="vim"
 fi
 
+# yazi
+if command -v yazi >/dev/null; then
+  alias y="yazi"
+fi
+
 # transf files / folders
 if command -v rsync >/dev/null; then
   alias rs='rsync -rzvhP '
