@@ -25,9 +25,6 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 -- -----------------------------------------------------------------------------
 
 hl.bind(key(mod, "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { description = "Terminal (tmux home)" })
-hl.bind(key(mod, "SHIFT", "Return"),
-  hl.dsp.exec_cmd(terminal .. " ks attach home", { float = true, size = { 900, 600 }, center = true }),
-  { description = "Floating Terminal (tmux home)" })
 hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
 
 hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
@@ -36,22 +33,15 @@ hl.bind(key(mod, "SHIFT", "D"), hl.dsp.exec_cmd(terminal .. " lazydocker"), { de
 hl.bind(key(mod, "SHIFT", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"), { description = "Email" })
 hl.bind(key(mod, "SHIFT", "F"), hl.dsp.exec_cmd(filemanager), { description = "File manager" })
 hl.bind(key(mod, "SHIFT", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"), { description = "GitHub" })
-hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"),
-  { description = "Google Messages" })
+hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
 hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"), { description = "Neovim" })
 hl.bind(key(mod, "SHIFT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
 hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"), { description = "Bluesky" })
-hl.bind(key(mod, "SHIFT", "T"),
-  hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }),
-  { description = "System monitor (btop)" })
-hl.bind(key(mod, "SHIFT", "U"),
-  hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay -Syu", { float = true, size = { 900, 600 }, center = true }),
-  { description = "Update system" })
+hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
+hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay -Syu", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser), { description = "Browser" })
 hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
-hl.bind(key(mod, "SHIFT", "Z"),
-  hl.dsp.exec_cmd(browser .. " --app=https://mantis.chainlogic.it/my_view_page.php?refresh=true"),
-  { description = "Mantis" })
+hl.bind(key(mod, "SHIFT", "Z"), hl.dsp.exec_cmd(browser .. " --app=https://mantis.chainlogic.it/my_view_page.php?refresh=true"), { description = "Mantis" })
 
 -- -----------------------------------------------------------------------------
 -- Window Management
@@ -59,8 +49,7 @@ hl.bind(key(mod, "SHIFT", "Z"),
 
 hl.bind(key(mod, "Q"), hl.dsp.window.close(), { description = "Close window" })
 hl.bind(key(mod, "SHIFT", "Q"), hl.dsp.exit(), { description = "Exit Hyprland" })
-hl.bind(key(mod, "F"), hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }),
-  { description = "Fullscreen" })
+hl.bind(key(mod, "F"), hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }), { description = "Fullscreen" })
 hl.bind(key(mod, "M"), hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }), { description = "Maximize" })
 hl.bind(key(mod, "T"), hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
 hl.bind(key(mod, "O"), hl.dsp.layout("togglesplit"), { description = "Toggle split" })
@@ -104,12 +93,10 @@ end)
 
 for i = 1, 9 do
   hl.bind(key(mod, i), hl.dsp.focus({ workspace = i }), { description = "Workspace " .. i })
-  hl.bind(key(mod, "SHIFT", i), hl.dsp.window.move({ workspace = i, follow = false }),
-    { description = "Move window to workspace " .. i })
+  hl.bind(key(mod, "SHIFT", i), hl.dsp.window.move({ workspace = i, follow = false }), { description = "Move window to workspace " .. i })
 end
 hl.bind(key(mod, 0), hl.dsp.focus({ workspace = 10 }), { description = "Workspace 10" })
-hl.bind(key(mod, "SHIFT", 0), hl.dsp.window.move({ workspace = 10, follow = false }),
-  { description = "Move window to workspace 10" })
+hl.bind(key(mod, "SHIFT", 0), hl.dsp.window.move({ workspace = 10, follow = false }), { description = "Move window to workspace 10" })
 
 -- Special workspace (scratchpad)
 hl.bind(key(mod, "Home"), hl.dsp.workspace.toggle_special("magic"), { description = "Toggle scratchpad" })
@@ -141,10 +128,8 @@ hl.bind(key(mod, "mouse:273"), hl.dsp.window.resize(), { mouse = true })
 -- Clipboard / Color picker
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"),
-  { description = "Clipboard history" })
-hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -r'"),
-  { description = "Color picker" })
+hl.bind(key(mod, "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
+hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -r'"), { description = "Color picker" })
 
 -- -----------------------------------------------------------------------------
 -- Screenshots
@@ -157,8 +142,7 @@ hl.bind(key(mod, "Print"), hl.dsp.exec_cmd(hypr_scripts .. "/screenshot"), { des
 -- Screen recording
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "ALT", "R"), hl.dsp.exec_cmd(hypr_scripts .. "/screenrecord-region"),
-  { description = "Record selected region (toggle)" })
+hl.bind(key(mod, "ALT", "R"), hl.dsp.exec_cmd(hypr_scripts .. "/screenrecord-region"), { description = "Record selected region (toggle)" })
 hl.bind(key(mod, "CTRL", "R"), hl.dsp.exec_cmd("killall -s SIGINT wl-screenrec"), { description = "Stop recording" })
 
 -- -----------------------------------------------------------------------------
@@ -192,5 +176,4 @@ hl.bind(key("CTRL", "ALT", "L"), hl.dsp.exec_cmd("hyprlock"), { description = "L
 
 hl.bind(key(mod, "period"), hl.dsp.exec_cmd("makoctl restore"), { description = "Restore notification" })
 hl.bind(key(mod, "comma"), hl.dsp.exec_cmd("makoctl dismiss"), { description = "Dismiss notification" })
-hl.bind(key(mod, "SHIFT", "comma"), hl.dsp.exec_cmd("makoctl dismiss --all"),
-  { description = "Dismiss all notifications" })
+hl.bind(key(mod, "SHIFT", "comma"), hl.dsp.exec_cmd("makoctl dismiss --all"), { description = "Dismiss all notifications" })
