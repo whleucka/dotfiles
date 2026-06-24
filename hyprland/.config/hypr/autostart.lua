@@ -12,7 +12,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("awww-daemon")
     hl.exec_cmd("sleep 1 && awww img ~/.dotfiles/hyprland/.config/wallpaper.jpg")
 
-    -- Status bar
+    -- Status bar (workspace state listener feeds the ws buttons; start it first)
+    hl.exec_cmd("~/.config/waybar/scripts/ws-listener.sh")
     hl.exec_cmd("waybar")
 
     -- Notifications

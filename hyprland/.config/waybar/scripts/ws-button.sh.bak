@@ -4,36 +4,17 @@
 #   mode = "always" (default) -> always shown
 #   mode = "auto"             -> hidden (empty output) unless active or occupied
 # class is "active" when focused, "occupied" when it has windows, else "empty".
-#
-# State comes from the cache written by ws-listener.sh (event-driven, cheap).
-# If the cache is missing (listener not running), fall back to a live hyprctl
-# query so the bar still works.
 
 ws="$1"
 mode="${2:-always}"
 
-CACHE="${XDG_RUNTIME_DIR:-/tmp}/waybar-ws.state"
-
-active=""
-occupied=""
-
-if [ -r "$CACHE" ]; then
-    # Pure-builtin read: no subprocess per button.
-    while read -r key val; do
-        case "$key" in
-            active) active="$val" ;;
-            occupied) occupied="$val" ;;
-        esac
-    done <"$CACHE"
-else
-    # Live fallback (listener down / first run before seed).
-    active=$(hyprctl activeworkspace -j | jq -r '.id')
-    occupied=$(hyprctl workspaces -j | jq -r '.[] | select(.windows > 0 and .id > 0) | .id' | tr '\n' ' ')
-fi
+active=$(hyprctl activeworkspace -j | jq -r '.id')
+windows=$(hyprctl workspaces -j | jq -r --argjson id "$ws" '.[] | select(.id == $id) | .windows' 2>/dev/null)
+windows=${windows:-0}
 
 if [ "$active" = "$ws" ]; then
     class="active"
-elif [[ " $occupied " == *" $ws "* ]]; then
+elif [ "$windows" -gt 0 ]; then
     class="occupied"
 else
     class="empty"

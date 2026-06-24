@@ -11,71 +11,81 @@
     "custom/ws1": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 1",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 1"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws2": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 2",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 2"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws3": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 3",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 3"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws4": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 4",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 4"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws5": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 5",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 5"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws6": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 6 auto",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 6"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 6 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws7": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 7 auto",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 7"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 7 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws8": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 8 auto",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 8"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 8 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws9": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 9 auto",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 9"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 9 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "custom/ws10": {
         "exec": "~/.config/waybar/scripts/ws-button.sh 10 auto",
         "return-type": "json",
+        "interval": 1,
         "signal": 8,
-        "on-click": "~/.config/waybar/scripts/ws-click.sh 10"
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 10 })' >/dev/null 2>&1; pkill -RTMIN+8 waybar"
     },
 
     "clock": {
