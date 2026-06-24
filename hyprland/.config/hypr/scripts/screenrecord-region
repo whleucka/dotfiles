@@ -1,8 +1,0 @@
-#!/bin/bash
-if pgrep -x wl-screenrec >/dev/null; then
-    killall -s SIGINT wl-screenrec
-    exit 0
-fi
-pgrep -x slurp >/dev/null && exit 0
-REGION=$(slurp) || exit 0
-wl-screenrec -g "$REGION" -f "$HOME/Videos/recording_$(date +%Y%m%d_%H%M%S).mp4"

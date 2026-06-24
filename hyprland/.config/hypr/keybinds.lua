@@ -139,13 +139,6 @@ hl.bind("Print", hl.dsp.exec_cmd(hypr_scripts .. "/screenshot-region"), { descri
 hl.bind(key(mod, "Print"), hl.dsp.exec_cmd(hypr_scripts .. "/screenshot"), { description = "Screenshot full" })
 
 -- -----------------------------------------------------------------------------
--- Screen recording
--- -----------------------------------------------------------------------------
-
-hl.bind(key(mod, "ALT", "R"), hl.dsp.exec_cmd(hypr_scripts .. "/screenrecord-region"), { description = "Record selected region (toggle)" })
-hl.bind(key(mod, "CTRL", "R"), hl.dsp.exec_cmd("killall -s SIGINT wl-screenrec"), { description = "Stop recording" })
-
--- -----------------------------------------------------------------------------
 -- Media / Hardware keys
 -- -----------------------------------------------------------------------------
 
