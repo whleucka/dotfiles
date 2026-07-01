@@ -8,4 +8,15 @@
 #
 # Hyprland 0.55+ uses a Lua config; hyprctl dispatch evaluates its arg as Lua,
 # so we pass an hl.dsp.* expression rather than a raw dispatcher name.
+#
+# A stale HYPRLAND_INSTANCE_SIGNATURE (e.g. inherited by kitty/tmux/nvim across a
+# watchdog restart of Hyprland) points hyprctl at a dead socket and makes this
+# fail with exit 4. `hyprctl instances` lists only live instances regardless of
+# the inherited signature, so resolve the current one before dispatching.
+if [ -z "$HYPRLAND_INSTANCE_SIGNATURE" ] || \
+   [ ! -S "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket.sock" ]; then
+  HYPRLAND_INSTANCE_SIGNATURE=$(hyprctl instances -j | grep -m1 '"instance"' | cut -d'"' -f4)
+  export HYPRLAND_INSTANCE_SIGNATURE
+fi
+
 exec hyprctl dispatch "hl.dsp.focus({ direction = \"$1\" })" >/dev/null 2>&1
