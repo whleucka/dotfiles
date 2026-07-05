@@ -4,8 +4,14 @@
 -- Default: auto-detect and use preferred resolution for any unspecified monitor
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
--- ThinkPad T14s / P43s (14" 1920x1080)
--- hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "0x0", scale = 1 })
+-- ThinkPad T14s 
+hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "1920x0", scale = 1 })
+
+-- BENQ 27"
+hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@60", position = "3840x0", scale = 1 })
+
+-- ThinkPad P43s
+--hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "1920x0", scale = 1 })
 
 -- External monitor examples
 -- 27" 4K on the right
