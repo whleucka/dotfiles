@@ -46,10 +46,10 @@ hl.bind(key(mod, "SHIFT", "Z"), hl.dsp.exec_cmd(browser .. " --app=https://manti
 -- -----------------------------------------------------------------------------
 -- Window Management
 -- -----------------------------------------------------------------------------
-hl.bind(key(mod, "W"), hl.dsp.window.close(), { description = "Close window" })
-hl.bind(key(mod, "F"), hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }), { description = "Fullscreen" })
+hl.bind(key(mod, "Q"), hl.dsp.window.close(), { description = "Close window" })
+hl.bind(key(mod, "F11"), hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }), { description = "Fullscreen" })
 hl.bind(key(mod, "M"), hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }), { description = "Maximize" })
-hl.bind(key(mod, "T"), hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
+hl.bind(key(mod, "F"), hl.dsp.window.float({ action = "toggle" }), { description = "Toggle floating" })
 hl.bind(key(mod, "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
 hl.bind(key(mod, "SEMICOLON"), hl.dsp.layout("togglesplit"), { description = "Toggle split" })
 
