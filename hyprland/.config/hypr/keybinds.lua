@@ -60,8 +60,8 @@ hl.bind(key(mod, "L"), hl.dsp.exec_cmd(hypr_scripts .. "/nav r l"), { descriptio
 hl.bind(key(mod, "K"), hl.dsp.exec_cmd(hypr_scripts .. "/nav u k"), { description = "Focus/nav up" })
 hl.bind(key(mod, "J"), hl.dsp.exec_cmd(hypr_scripts .. "/nav d j"), { description = "Focus/nav down" })
 
--- Focus last window (alt-tab between two windows)
-hl.bind(key(mod, "Tab"), hl.dsp.focus({ last = true }), { description = "Focus last window" })
+-- Focus last window
+hl.bind(key(mod, "Backspace"), hl.dsp.focus({ last = true }), { description = "Focus last window" })
 
 -- Move windows (vim keys)
 hl.bind(key(mod, "SHIFT", "H"), hl.dsp.window.move({ direction = "l" }), { description = "Move window left" })
@@ -127,7 +127,7 @@ hl.bind(key(mod, "mouse:273"), hl.dsp.window.resize(), { mouse = true })
 -- -----------------------------------------------------------------------------
 
 hl.bind(key(mod, "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
-hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -r'"), { description = "Color picker" })
+hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -a -r'"), { description = "Color picker" })
 
 -- -----------------------------------------------------------------------------
 -- Screenshots
