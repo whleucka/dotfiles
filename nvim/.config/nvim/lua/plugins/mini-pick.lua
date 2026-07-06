@@ -3,6 +3,13 @@ return {
   event = "VeryLazy",
   keys = {
     {
+      "<leader>o",
+      function()
+        MiniPick.builtin.files({ tool = 'git' })
+      end,
+      desc = "Files (git)"
+    },
+    {
       "<leader>f",
       group = "Find",
       {
@@ -21,15 +28,6 @@ return {
             MiniPick.builtin.files()
           end,
           desc = "Files"
-        },
-      },
-      {
-        {
-          "<leader>fF",
-          function()
-            MiniPick.builtin.files({ tool = 'git' })
-          end,
-          desc = "Files (git)"
         },
       },
       {

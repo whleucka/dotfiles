@@ -17,7 +17,6 @@ return {
   event = "VimEnter",
   keys = {
     { '<C-\\>', ':ToggleTerm direction=horizontal size=20<cr>', desc = 'Toggle term (split)' },
-    { '<leader>o', ':ToggleTerm direction=float size=20<cr>', desc = 'Toggle term (float)' }
   },
   opts = {
     float_opts = {
