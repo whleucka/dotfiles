@@ -9,8 +9,8 @@
 -- Mirror laptop display
 -- hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "0x0", scale = 1, mirror = "eDP-1" })
 
--- Default: auto-detect and use preferred resolution for any unspecified monitor
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+-- ThinkPad T14s 
+hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "1920x0", scale = 1 })
 
 -- BENQ 27"
 hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@74.97", position = "3840x0", scale = 1 })
@@ -20,3 +20,6 @@ hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@74
 -- HDMI-A-1 landscape (left), DP-1 rotated portrait (right).
 hl.monitor({ output = "desc:LG Electronics LG ULTRAWIDE 0x0001D52A", mode = "2560x1080@60", position = "0x0",    scale = 1 })
 hl.monitor({ output = "desc:LG Electronics LG ULTRAWIDE 0x0004F527", mode = "2560x1080@60", position = "2560x0", scale = 1, transform = 1 })
+
+-- Default: auto-detect and use preferred resolution for any unspecified monitor
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
