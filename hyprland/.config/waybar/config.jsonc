@@ -80,6 +80,7 @@
 
     "clock": {
         "format": "{:%a %b %d  %H:%M}",
+        "timezone": "America/Edmonton",
         "on-click": "kitty calcurse",
         "tooltip-format": "<tt>{calendar}</tt>"
     },

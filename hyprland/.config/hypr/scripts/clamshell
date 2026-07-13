@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Clamshell mode: disable the laptop panel on lid close when an external
+# monitor is active (e.g. docked to the BenQ), re-enable it on lid open.
+#
+# Bound to switch:on/off:Lid Switch in Hyprland. Args:
+#   $1 = close|open
+#
+# `hyprctl keyword monitor` is dead under the Lua parser — use eval instead.
+
+panel="eDP-1"
+
+case "$1" in
+  close)
+    # Undocked lid close: leave the panel alone and let logind suspend.
+    if hyprctl monitors -j | jq -e --arg p "$panel" \
+        '[.[] | select(.name != $p and (.disabled | not))] | length > 0' >/dev/null; then
+      hyprctl eval "hl.monitor({ output = \"$panel\", disabled = true })"
+    fi
+    ;;
+  open)
+    # disabled = false must be explicit — omitting it leaves the panel disabled.
+    hyprctl eval "hl.monitor({ output = \"$panel\", mode = \"1920x1200@60\", position = \"1920x0\", scale = 1, disabled = false })"
+    ;;
+esac
