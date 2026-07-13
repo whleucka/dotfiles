@@ -8,9 +8,9 @@ hl.on("hyprland.start", function()
     -- Polkit agent (for GUI sudo prompts)
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
 
-    -- Wallpaper
+    -- Wallpaper (time-of-day Tahoe Beach cycler)
     hl.exec_cmd("awww-daemon")
-    hl.exec_cmd("sleep 1 && awww img ~/.dotfiles/hyprland/.config/wallpaper.jpg")
+    hl.exec_cmd("sleep 1 && ~/.config/hypr/scripts/tahoe-wallpaper.sh daemon")
 
     -- Status bar (workspace state listener feeds the ws buttons; start it first)
     hl.exec_cmd("~/.config/waybar/scripts/ws-listener.sh")
