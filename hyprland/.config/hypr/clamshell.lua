@@ -1,9 +1,9 @@
 -- Clamshell mode
 --
--- The laptop panel is disabled only while the lid is shut AND an external
--- monitor is present. Every other combination re-enables it, so Hyprland can
--- never be left with zero outputs -- undocking with the lid down used to strand
--- the session with eDP-1 disabled and nothing able to bring it back.
+-- The laptop panel is disabled only while the lid is shut AND a real external
+-- monitor is present. Every other combination re-enables it, so Hyprland is
+-- never left with zero outputs -- undocking with the lid down used to strand the
+-- session with eDP-1 disabled and nothing able to bring it back.
 --
 -- This runs in-process on purpose. Driving it from a shell script via
 -- `hyprctl eval 'hl.monitor(...)'` does not work: hl.monitor *accumulates*
@@ -25,25 +25,6 @@ local PANEL_RULE = {
     scale    = 1,
     disabled = false, -- explicit: omitting it leaves the panel disabled
 }
-
--- TEMPORARY: diagnostic trace, remove once the undock path is confirmed good.
-local function trace(what)
-    local f = io.open(os.getenv("HOME") .. "/.cache/clamshell.log", "a")
-    if not f then return end
-
-    local names = {}
-    for _, m in ipairs(hl.get_monitors()) do
-        names[#names + 1] = m.name
-    end
-
-    f:write(string.format(
-        "%s  %-22s monitors=[%s]  panel=%s\n",
-        os.date("%H:%M:%S"), what,
-        table.concat(names, ", "),
-        hl.get_monitor(PANEL) and "on" or "OFF"
-    ))
-    f:close()
-end
 
 local function lid_closed()
     local f = io.open("/proc/acpi/button/lid/LID/state", "r")
@@ -75,7 +56,7 @@ end
 -- until then a full config reload is the only way out, since it re-applies
 -- monitors.lua from scratch instead of diffing against the stuck state.
 --
--- Drop this, and the reload branch below, once we are on Hyprland 0.56+.
+-- Drop stuck_at_zero_monitors, and its branch below, once we are on 0.56+.
 local last_reload = 0
 
 local function stuck_at_zero_monitors(skip)
@@ -87,54 +68,42 @@ end
 local function sync(closed, skip)
     if closed == nil then closed = lid_closed() end
 
-    local want_off = closed and external_present(skip)
-    trace(string.format("sync closed=%s -> %s", tostring(closed), want_off and "disable" or "enable"))
-
-    if want_off then
+    if closed and external_present(skip) then
         hl.monitor({ output = PANEL, disabled = true })
     elseif stuck_at_zero_monitors(skip) then
-        -- Debounced: if a reload somehow does not bring the panel back, do not
+        -- Debounced: if a reload somehow does not bring the panel back, don't
         -- sit in a reload loop.
         if os.time() - last_reload > 5 then
             last_reload = os.time()
-            trace("zero monitors -> hyprctl reload")
             hl.exec_cmd("hyprctl reload")
         end
     else
         hl.monitor(PANEL_RULE)
     end
+end
 
-    trace("sync done")
+-- Undocking with the lid shut means "packing up": suspend. Wait until the panel
+-- is genuinely back first, or the machine goes down mid modeset and resume is
+-- black. Decide from live state, not a saved flag: the reload in sync() re-runs
+-- this whole file, which would reset any module-local flag.
+local function suspend_if_packing_up(skip)
+    if lid_closed() and not external_present(skip) and hl.get_monitor(PANEL) then
+        hl.exec_cmd("systemctl suspend")
+    end
 end
 
 -- logind's lid handling is inhibited (see autostart.lua), so closing the lid
--- with no external monitor is ours to act on: that is a plain "shut the laptop"
--- and should suspend.
+-- with no external monitor is ours to act on: a plain "shut the laptop" -> sleep.
 hl.bind("switch:on:Lid Switch", function()
     sync(true)
     if not external_present() then
-        trace("lid shut, no external -> suspending")
         hl.exec_cmd("systemctl suspend")
     end
 end, { locked = true })
 
 hl.bind("switch:off:Lid Switch", function() sync(false) end, { locked = true })
 
--- Undocking with the lid shut means "packing up": suspend. Wait until the panel
--- is genuinely back before doing so, or the machine goes down mid modeset and
--- resume is black. The panel coming back while the lid is shut and nothing is
--- docked *is* that situation, so decide from state rather than a flag set in
--- monitor.removed: the reload above re-executes this file, which would reset it.
-local function suspend_if_packing_up(skip)
-    if lid_closed() and not external_present(skip) and hl.get_monitor(PANEL) then
-        trace("lid shut, undocked, panel on -> suspending")
-        hl.exec_cmd("systemctl suspend")
-    end
-end
-
 hl.on("monitor.added", function(m)
-    trace("event added " .. m.name)
-
     -- The panel coming back on its own means we just recovered from an undock.
     if m.name == PANEL then
         suspend_if_packing_up()
@@ -144,7 +113,6 @@ hl.on("monitor.added", function(m)
 end)
 
 hl.on("monitor.removed", function(m)
-    trace("event removed " .. m.name)
     if m.name == PANEL then return end
 
     -- Bring the panel back, so we are never left with no usable output.
@@ -156,7 +124,4 @@ end)
 
 -- A reload re-applies monitors.lua, which switches the panel back on regardless
 -- of the lid. Reconcile, or a reload while docked and shut leaves it lit.
-hl.on("config.reloaded", function()
-    trace("event config.reloaded")
-    sync()
-end)
+hl.on("config.reloaded", function() sync() end)
