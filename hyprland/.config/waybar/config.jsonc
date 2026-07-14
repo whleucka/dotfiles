@@ -80,7 +80,10 @@
 
     "clock": {
         "format": "{:%a %b %d  %H:%M}",
-        "timezone": "America/Edmonton",
+        // Denver, not Edmonton: libstdc++'s std::chrono tzdb (which waybar uses)
+        // mis-parses the America/Edmonton zone and drops its DST rule, losing an
+        // hour. Denver has identical Mountain-time rules and parses correctly.
+        "timezone": "America/Denver",
         "on-click": "kitty calcurse",
         "tooltip-format": "<tt>{calendar}</tt>"
     },
