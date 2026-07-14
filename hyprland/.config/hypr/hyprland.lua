@@ -5,6 +5,7 @@ require("monitors")
 require("autostart")
 require("keybinds")
 require("windowrules")
+require("clamshell")
 
 -- -----------------------------------------------------------------------------
 -- Environment

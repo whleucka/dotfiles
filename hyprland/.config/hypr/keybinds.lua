@@ -155,12 +155,7 @@ hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
 hl.bind("XF86AudioStop", hl.dsp.exec_cmd("playerctl stop"))
 
--- -----------------------------------------------------------------------------
--- Lid switch (clamshell mode when docked)
--- -----------------------------------------------------------------------------
-
-hl.bind("switch:on:Lid Switch", hl.dsp.exec_cmd(hypr_scripts .. "/clamshell close"), { locked = true })
-hl.bind("switch:off:Lid Switch", hl.dsp.exec_cmd(hypr_scripts .. "/clamshell open"), { locked = true })
+-- Lid switch binds live in clamshell.lua, next to the state they drive.
 
 -- -----------------------------------------------------------------------------
 -- Lock

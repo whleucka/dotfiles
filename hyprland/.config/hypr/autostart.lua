@@ -22,6 +22,13 @@ hl.on("hyprland.start", function()
     -- Idle and lock
     hl.exec_cmd("~/.config/hypr/scripts/hypridle-battery.sh")
 
+    -- Clamshell owns the lid: logind must not suspend on lid close. It reacts to
+    -- an undock (lid shut, dock pulled) within the same second, freezing us mid
+    -- modeset while the panel is coming back -- so the panel never lights up and
+    -- resume is black. clamshell.lua suspends instead, once the panel is really on.
+    hl.exec_cmd("systemd-inhibit --what=handle-lid-switch --who=hyprland "
+        .. "--why='clamshell.lua owns lid handling' --mode=block sleep infinity")
+
     -- Clipboard manager
     -- wl-clip-persist takes ownership of selection so cliphist's watchers
     -- don't race kitty's clipboard write (broken-pipe -> empty primary).
