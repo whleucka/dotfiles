@@ -13,7 +13,7 @@
 hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "1920x0", scale = 1 })
 
 -- BENQ 27"
-hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@74.97", position = "3840x0", scale = 1 })
+hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@74.97", position = "0x0", scale = 1 })
 
 -- Desktop: dual LG ultrawides — match by description so these rules only fire
 -- on the actual desktop monitors (not e.g. a BenQ on the laptop's HDMI port).

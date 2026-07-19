@@ -27,6 +27,7 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 hl.bind(key(mod, "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { description = "Terminal (tmux home)" })
 hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
 
+hl.bind(key(mod, "SHIFT", "A"), hl.dsp.exec_cmd(browser .. " --app=https://amazon.ca"), { description = "Amazon" })
 hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
 hl.bind(key(mod, "SHIFT", "C"), hl.dsp.exec_cmd("gnome-calculator"), { description = "Calculator" })
 hl.bind(key(mod, "SHIFT", "D"), hl.dsp.exec_cmd(terminal .. " lazydocker"), { description = "Lazydocker" })
