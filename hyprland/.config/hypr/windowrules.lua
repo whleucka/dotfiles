@@ -48,10 +48,11 @@ hl.window_rule({ match = { class = "chromium" }, idle_inhibit = "fullscreen" })
 hl.window_rule({ match = { class = "^[Gg]oogle-chrome.*" }, idle_inhibit = "fullscreen" })
 hl.window_rule({ match = { class = "mpv" }, idle_inhibit = "fullscreen" })
 
--- Single window — no gaps, border, or rounding
-hl.workspace_rule({ workspace = "w[t1]", gaps_out = 0, gaps_in = 0 })
-hl.window_rule({ match = { workspace = "w[t1]" }, border_size = 0 })
-hl.window_rule({ match = { workspace = "w[t1]" }, rounding = 0 })
+-- NOTE: no "smart gaps" rule. A w[t1]/w[tv1] single-window-no-gaps rule counts
+-- a whole group as one tile, so a lone group goes edge-to-edge and its groupbar
+-- jams against the waybar. It also makes mod+M maximize look like a no-op and
+-- makes float/unfloat snap the remaining window. Consistent gaps everywhere
+-- avoids all three. There is no selector/match that excludes groups from it.
 
 -- XWayland
 hl.window_rule({ match = { xwayland = true }, no_anim = true })

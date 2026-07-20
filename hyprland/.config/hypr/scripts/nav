@@ -3,14 +3,19 @@
 #
 # Bound to super+hjkl in Hyprland. Args:
 #   $1 = Hyprland focus direction (l|r|u|d)
-#   $2 = ctrl key to inject into a terminal (h|j|k|l)
+#   $2 = nav key to inject into a terminal (h|j|k|l)
 #
-# If the focused window is a terminal (kitty), inject ctrl+<key> into it via
-# kitty remote control. That drives the existing ctrl+hjkl chain — neovim
-# smart-splits -> tmux panes -> and, at the outermost edge, back out to the
-# Hyprland window (via scripts/focus). For any other window, just move Hyprland
-# focus directly, so super+hjkl never sends a ctrl key into apps like the
-# browser (no ctrl+h history / ctrl+l address-bar collisions).
+# If the focused window is a terminal (kitty), inject ctrl+alt+<key> into it via
+# kitty remote control. That drives the nav chain — tmux (bind -n C-M-hjkl) ->
+# neovim smart-splits -> and, at the outermost edge, back out to the Hyprland
+# window (via scripts/focus). For any other window, just move Hyprland focus
+# directly.
+#
+# ctrl+alt+hjkl (not plain ctrl+hjkl) is the plumbing key so that bare ctrl+hjkl
+# stays free for the shell/readline (backspace, kill-line, clear, newline). The
+# user never presses ctrl+alt+hjkl directly — it's injection-only, and kitty
+# remote control writes it straight to the pty, bypassing Hyprland (so it never
+# collides with the ctrl+alt+l lock keybind).
 #
 # Hyprland 0.55+ Lua config: hyprctl dispatch evaluates its arg as Lua, so we
 # pass an hl.dsp.* expression rather than a raw dispatcher name.
@@ -23,7 +28,7 @@ class=$(awk '/^[[:space:]]*class:/{print $2; exit}' <<<"$info")
 pid=$(awk '/^[[:space:]]*pid:/{print $2; exit}'   <<<"$info")
 
 if [ "$class" = "kitty" ] && [ -S "/tmp/mykitty-$pid" ]; then
-  kitty @ --to "unix:/tmp/mykitty-$pid" send-key "ctrl+$key"
+  kitty @ --to "unix:/tmp/mykitty-$pid" send-key "ctrl+alt+$key"
 else
   hyprctl dispatch "hl.dsp.focus({ direction = \"$dir\" })"
 fi
