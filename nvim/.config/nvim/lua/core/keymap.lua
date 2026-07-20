@@ -41,8 +41,8 @@ local keys = {
   {
     "<leader>s",
     group = "Split",
-    { "<leader>sd", ":vsplit<CR>", desc = "Vertical" },
-    { "<leader>ss", ":split<CR>",  desc = "Horizontal" },
+    { "<leader>sv", ":vsplit<CR>", desc = "Vertical" },
+    { "<leader>sh", ":split<CR>",  desc = "Horizontal" },
     { "<leader>se", "<C-w>=",      desc = "Equalize" },
     { "<leader>sq", ":close<CR>",  desc = "Close" },
   },
