@@ -24,25 +24,33 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 -- Applications
 -- -----------------------------------------------------------------------------
 
+-- Tmux
 hl.bind(key(mod, "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { description = "Terminal (tmux home)" })
-hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
 
-hl.bind(key(mod, "SHIFT", "A"), hl.dsp.exec_cmd(browser .. " --app=https://amazon.ca"), { description = "Amazon" })
-hl.bind(key(mod, "SHIFT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
+-- Launcher
+hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
+hl.bind(key(mod, "D"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
+
+-- Tools/Apps
 hl.bind(key(mod, "SHIFT", "C"), hl.dsp.exec_cmd("gnome-calculator"), { description = "Calculator" })
 hl.bind(key(mod, "SHIFT", "D"), hl.dsp.exec_cmd(terminal .. " lazydocker"), { description = "Lazydocker" })
-hl.bind(key(mod, "SHIFT", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"), { description = "Email" })
 hl.bind(key(mod, "SHIFT", "F"), hl.dsp.exec_cmd(filemanager), { description = "File manager" })
-hl.bind(key(mod, "SHIFT", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"), { description = "GitHub" })
-hl.bind(key(mod, "SHIFT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
 hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"), { description = "Neovim" })
-hl.bind(key(mod, "SHIFT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
-hl.bind(key(mod, "SHIFT", "S"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"), { description = "Bluesky" })
-hl.bind(key(mod, "SHIFT", "T"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
+hl.bind(key(mod, "SHIFT", "O"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
 hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay -Syu", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser), { description = "Browser" })
-hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
-hl.bind(key(mod, "SHIFT", "Z"), hl.dsp.exec_cmd(browser .. " --app=https://mantis.chainlogic.it/my_view_page.php?refresh=true"), { description = "Mantis" })
+
+-- Websites
+hl.bind(key(mod, "TAB", "A"), hl.dsp.exec_cmd(browser .. " --app=https://amazon.ca"), { description = "Amazon" })
+hl.bind(key(mod, "TAB", "B"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"), { description = "Bluesky" })
+hl.bind(key(mod, "TAB", "C"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
+hl.bind(key(mod, "TAB", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"), { description = "Email" })
+hl.bind(key(mod, "TAB", "F"), hl.dsp.exec_cmd(browser .. " --app=https://facebook.com"), { description = "Facebook" })
+hl.bind(key(mod, "TAB", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"), { description = "GitHub" })
+hl.bind(key(mod, "TAB", "I"), hl.dsp.exec_cmd(browser .. " --app=https://instagram.com"), { description = "Instagram" })
+hl.bind(key(mod, "TAB", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
+hl.bind(key(mod, "TAB", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
+hl.bind(key(mod, "TAB", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
 
 -- -----------------------------------------------------------------------------
 -- Window Management
