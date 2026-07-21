@@ -29,7 +29,6 @@ hl.bind(key(mod, "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { de
 
 -- Launcher
 hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
-hl.bind(key(mod, "D"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
 
 -- Tools/Apps
 hl.bind(key(mod, "SHIFT", "C"), hl.dsp.exec_cmd("gnome-calculator"), { description = "Calculator" })
@@ -41,16 +40,16 @@ hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser), { description = "Browser" })
 
 -- Websites
-hl.bind(key(mod, "TAB", "A"), hl.dsp.exec_cmd(browser .. " --app=https://amazon.ca"), { description = "Amazon" })
-hl.bind(key(mod, "TAB", "B"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"), { description = "Bluesky" })
-hl.bind(key(mod, "TAB", "C"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
-hl.bind(key(mod, "TAB", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"), { description = "Email" })
-hl.bind(key(mod, "TAB", "F"), hl.dsp.exec_cmd(browser .. " --app=https://facebook.com"), { description = "Facebook" })
-hl.bind(key(mod, "TAB", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"), { description = "GitHub" })
-hl.bind(key(mod, "TAB", "I"), hl.dsp.exec_cmd(browser .. " --app=https://instagram.com"), { description = "Instagram" })
-hl.bind(key(mod, "TAB", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
-hl.bind(key(mod, "TAB", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
-hl.bind(key(mod, "TAB", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
+hl.bind(key(mod, "ALT", "A"), hl.dsp.exec_cmd(browser .. " --app=https://amazon.ca"), { description = "Amazon" })
+hl.bind(key(mod, "ALT", "B"), hl.dsp.exec_cmd(browser .. " --app=https://bsky.app"), { description = "Bluesky" })
+hl.bind(key(mod, "ALT", "C"), hl.dsp.exec_cmd(browser .. " --app=https://cibc.com"), { description = "CIBC Banking" })
+hl.bind(key(mod, "ALT", "E"), hl.dsp.exec_cmd(browser .. " --app=https://mail.google.com"), { description = "Email" })
+hl.bind(key(mod, "ALT", "F"), hl.dsp.exec_cmd(browser .. " --app=https://facebook.com"), { description = "Facebook" })
+hl.bind(key(mod, "ALT", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.com"), { description = "GitHub" })
+hl.bind(key(mod, "ALT", "I"), hl.dsp.exec_cmd(browser .. " --app=https://instagram.com"), { description = "Instagram" })
+hl.bind(key(mod, "ALT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
+hl.bind(key(mod, "ALT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
+hl.bind(key(mod, "ALT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
 
 
 -- -----------------------------------------------------------------------------
@@ -127,7 +126,7 @@ hl.bind(key(mod, "CTRL", "H"), hl.dsp.window.move({ into_group = "l" }), { descr
 hl.bind(key(mod, "CTRL", "L"), hl.dsp.window.move({ into_group = "r" }), { description = "Group right" })
 hl.bind(key(mod, "CTRL", "K"), hl.dsp.window.move({ into_group = "u" }), { description = "Group up" })
 hl.bind(key(mod, "CTRL", "J"), hl.dsp.window.move({ into_group = "d" }), { description = "Group down" })
-hl.bind(key(mod, "ALT", "G"), hl.dsp.group.lock_active({ action = "toggle" }), { description = "Lock group" })
+hl.bind(key(mod, "CTRL", "G"), hl.dsp.group.lock_active({ action = "toggle" }), { description = "Lock group" })
 
 -- -----------------------------------------------------------------------------
 -- Mouse bindings
