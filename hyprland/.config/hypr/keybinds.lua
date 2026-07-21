@@ -52,10 +52,15 @@ hl.bind(key(mod, "TAB", "M"), hl.dsp.exec_cmd(browser .. " --app=https://message
 hl.bind(key(mod, "TAB", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
 hl.bind(key(mod, "TAB", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
 
+
+-- -----------------------------------------------------------------------------
+-- Bar
+-- -----------------------------------------------------------------------------
+hl.bind(key(mod, "CTRL", "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
+
 -- -----------------------------------------------------------------------------
 -- Window Management
 -- -----------------------------------------------------------------------------
-hl.bind(key(mod, "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
 hl.bind(key(mod, "F"), hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }), { description = "Fullscreen" })
 hl.bind(key(mod, "M"), hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }), { description = "Maximize" })
 hl.bind(key(mod, "O"), hl.dsp.layout("togglesplit"), { description = "Toggle split" })
