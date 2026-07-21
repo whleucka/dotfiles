@@ -36,7 +36,9 @@ hl.bind(key(mod, "SHIFT", "D"), hl.dsp.exec_cmd(terminal .. " lazydocker"), { de
 hl.bind(key(mod, "SHIFT", "F"), hl.dsp.exec_cmd(filemanager), { description = "File manager" })
 hl.bind(key(mod, "SHIFT", "N"), hl.dsp.exec_cmd(terminal .. " nvim"), { description = "Neovim" })
 hl.bind(key(mod, "SHIFT", "O"), hl.dsp.exec_cmd(terminal .. " btop", { float = true, size = { 1200, 800 }, center = true }), { description = "System monitor (btop)" })
+hl.bind(key(mod, "SHIFT", "P"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -a -r'"), { description = "Color picker" })
 hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay -Syu", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
+hl.bind(key(mod, "SHIFT", "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser), { description = "Browser" })
 
 -- Websites
@@ -139,8 +141,6 @@ hl.bind(key(mod, "mouse:273"), hl.dsp.window.resize(), { mouse = true })
 -- Clipboard / Color picker
 -- -----------------------------------------------------------------------------
 
-hl.bind(key(mod, "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
-hl.bind(key(mod, "C"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -a -r'"), { description = "Color picker" })
 
 -- -----------------------------------------------------------------------------
 -- Screenshots
