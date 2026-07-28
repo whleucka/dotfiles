@@ -21,18 +21,22 @@ prefix = "ctrl+a"
 
 # Tabs
 new_tab = "prefix+t"           # (default was prefix+c)
-rename_tab = "prefix+alt+t"    # (default was prefix+shift+t)
+rename_tab = "prefix+shift+t"  # herdr default
 previous_tab = "prefix+["      # tab nav prev (default was prefix+p)
 next_tab = "prefix+]"          # tab nav next (default was prefix+n)
 
 # Panes
-close_pane = "prefix+x"        # herdr default (bumped off prefix+w, now workspace_picker)
+close_pane = "prefix+w"        # close pane (moved off prefix+x)
 # Pane focus stays on the default prefix+h/j/k/l (left/down/up/right).
 
+# Session
+detach = "prefix+shift+q"      # detach (default was prefix+q, now close_workspace)
+
 # Workspaces
-workspace_picker = "prefix+w"
-new_workspace = "prefix+shift+w"
-rename_workspace = "prefix+alt+w"  # (default was prefix+shift+w)
+workspace_picker = "prefix+a"      # ws fuzzy picker
+close_workspace = "prefix+q"       # close workspace (default was prefix+shift+d)
+new_workspace = "prefix+shift+n"   # herdr default (shift+n pairs with next_workspace on prefix+n)
+rename_workspace = "prefix+shift+w"  # herdr default
 previous_workspace = "prefix+p"    # ws nav prev (default unset; took over old previous_tab key)
 next_workspace = "prefix+n"        # ws nav next (default unset; took over old next_tab key)
 goto = "prefix+g"              # quick jump  (herdr default)
