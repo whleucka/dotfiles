@@ -22,8 +22,8 @@ prefix = "ctrl+a"
 # Tabs
 new_tab = "prefix+t"           # (default was prefix+c)
 rename_tab = "prefix+alt+t"    # (default was prefix+shift+t)
-previous_tab = "prefix+p"      # tab nav prev (herdr default)
-next_tab = "prefix+n"          # tab nav next (herdr default)
+previous_tab = "prefix+["      # tab nav prev (default was prefix+p)
+next_tab = "prefix+]"          # tab nav next (default was prefix+n)
 
 # Panes
 close_pane = "prefix+x"        # herdr default (bumped off prefix+w, now workspace_picker)
@@ -33,6 +33,8 @@ close_pane = "prefix+x"        # herdr default (bumped off prefix+w, now workspa
 workspace_picker = "prefix+w"
 new_workspace = "prefix+shift+w"
 rename_workspace = "prefix+alt+w"  # (default was prefix+shift+w)
+previous_workspace = "prefix+p"    # ws nav prev (default unset; took over old previous_tab key)
+next_workspace = "prefix+n"        # ws nav next (default unset; took over old next_tab key)
 goto = "prefix+g"              # quick jump  (herdr default)
 
 # Agents
