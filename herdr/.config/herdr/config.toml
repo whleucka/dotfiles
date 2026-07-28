@@ -16,8 +16,27 @@ name = "tokyo-night"
 default_shell = "zsh"
 
 [keys]
-# Match the tmux prefix (C-Space) so muscle memory carries over.
-prefix = "ctrl+space"
+# Prefix: ctrl+a (screen-style). Tap it, release, then the action key.
+prefix = "ctrl+a"
+
+# Tabs
+new_tab = "prefix+t"           # (default was prefix+c)
+rename_tab = "prefix+alt+t"    # (default was prefix+shift+t)
+previous_tab = "prefix+p"      # tab nav prev (herdr default)
+next_tab = "prefix+n"          # tab nav next (herdr default)
+
+# Panes
+close_pane = "prefix+x"        # herdr default (bumped off prefix+w, now workspace_picker)
+# Pane focus stays on the default prefix+h/j/k/l (left/down/up/right).
+
+# Workspaces
+new_workspace = "prefix+w"
+workspace_picker = "prefix+shift+w"
+rename_workspace = "prefix+alt+w"  # (default was prefix+shift+w)
+goto = "prefix+g"              # quick jump  (herdr default)
+
+# Agents
+open_notification_target = "prefix+o"  # herdr default
 
 [ui]
 # Draw borders + gaps around split panes so focus is obvious.

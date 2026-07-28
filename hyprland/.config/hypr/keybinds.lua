@@ -25,7 +25,12 @@ hl.bind(key(mod, "slash"), hl.dsp.exec_cmd(hypr_scripts .. "/keybinds"), { descr
 -- -----------------------------------------------------------------------------
 
 -- Tmux
-hl.bind(key(mod, "Return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { description = "Terminal (tmux home)" })
+--hl.bind(key(mod, "return"), hl.dsp.exec_cmd(terminal .. " ks attach home"), { description = "terminal (tmux home)" })
+
+-- Herdr
+hl.bind(key(mod, "return"), hl.dsp.exec_cmd(terminal .. " herdr"), { description = "terminal (herdr)" })
+
+
 
 -- Launcher
 hl.bind(key(mod, "Space"), hl.dsp.exec_cmd(menu), { description = "App launcher" })
@@ -57,7 +62,7 @@ hl.bind(key(mod, "ALT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube
 -- -----------------------------------------------------------------------------
 -- Bar
 -- -----------------------------------------------------------------------------
-hl.bind(key(mod, "CTRL", "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
+hl.bind(key(mod, "B"), hl.dsp.exec_cmd("killall -SIGUSR1 waybar"), { description = "Toggle waybar" })
 
 -- -----------------------------------------------------------------------------
 -- Window Management
