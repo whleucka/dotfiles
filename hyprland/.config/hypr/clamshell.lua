@@ -21,7 +21,7 @@ local PANEL = "eDP-1"
 local PANEL_RULE = {
     output   = PANEL,
     mode     = "1920x1200@60",
-    position = "1920x0",
+    position = "0x1080",
     scale    = 1,
     disabled = false, -- explicit: omitting it leaves the panel disabled
 }
@@ -53,8 +53,10 @@ end
 -- Hyprland <= 0.55.x cannot enable a monitor when no active monitor remains:
 -- hl.monitor() is accepted and silently ignored, leaving FALLBACK as the only
 -- output and the panel dark forever. Upstream fix (PR #14547) landed for 0.56;
--- until then a full config reload is the only way out, since it re-applies
--- monitors.lua from scratch instead of diffing against the stuck state.
+-- until then a full config reload is the only way out. A plain `hyprctl reload`
+-- is not enough: Lua caches required submodules, so it re-reads hyprland.lua
+-- but does NOT re-execute monitors.lua's hl.monitor(...) calls. Force that with
+-- package.loaded[...] = nil before requiring it again.
 --
 -- Drop stuck_at_zero_monitors, and its branch below, once we are on 0.56+.
 local last_reload = 0
@@ -75,7 +77,7 @@ local function sync(closed, skip)
         -- sit in a reload loop.
         if os.time() - last_reload > 5 then
             last_reload = os.time()
-            hl.exec_cmd("hyprctl reload")
+            hl.exec_cmd('hyprctl eval \'package.loaded["monitors"] = nil; require("monitors")\'')
         end
     else
         hl.monitor(PANEL_RULE)
@@ -122,6 +124,7 @@ hl.on("monitor.removed", function(m)
     suspend_if_packing_up(m.name)
 end)
 
--- A reload re-applies monitors.lua, which switches the panel back on regardless
+-- A reload only re-runs monitors.lua on the very first load (require() caches
+-- it after that), but if it does run it switches the panel back on regardless
 -- of the lid. Reconcile, or a reload while docked and shut leaves it lit.
 hl.on("config.reloaded", function() sync() end)
