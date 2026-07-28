@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# herdr-nav: directional navigation router for herdr — replaces tmux's role in
+# the unified super+hjkl chain. One keychain walks:
+#     nvim splits -> herdr panes -> Hyprland windows
+#
+# Invoked two ways:
+#   herdr-nav key  <h|j|k|l> <l|r|u|d>   from herdr's ctrl+alt+hjkl binding
+#   herdr-nav edge <l|r|u|d>             from neovim smart-splits at_edge
+#
+# "key" mode: if the focused herdr pane runs (n)vim/fzf, forward ctrl+alt+<key>
+#   into it so smart-splits handles the move; otherwise escalate (below).
+# "edge" mode: skip the vim check (we're already past nvim) and escalate.
+#
+# escalate: move to the herdr pane in that direction; if none (herdr's outer
+#   edge) hand off to the Hyprland window via the shared focus helper.
+#
+# The focused pane is resolved from `herdr pane layout` (focused=true) — the
+# authoritative source — and passed explicitly as --pane, rather than relying
+# on --current, whose resolution in the keybind's shell context is ambiguous.
+
+scripts_dir="$HOME/.config/hypr/scripts"
+
+hd() { herdr pane "$@" 2>/dev/null; }
+
+dir_word() { case "$1" in l) echo left;; r) echo right;; u) echo up;; d) echo down;; esac; }
+
+# The truly-focused pane in the current tab (authoritative).
+focused_pane() {
+  hd layout | jq -r '.result.layout.panes[] | select(.focused).pane_id' | head -1
+}
+
+# $1 = l|r|u|d — focus the herdr neighbor, else escalate to the Hyprland window.
+# `herdr pane focus` is authoritative: changed=true means it moved; changed=false
+# (reason "no_neighbor") means we're at herdr's edge, so hand off to Hyprland.
+# (The `neighbor` query is NOT reliable for edge detection — it can report the
+# reference pane itself even when a spatial neighbor exists.)
+escalate() {
+  local word cur changed
+  word=$(dir_word "$1")
+  cur=$(focused_pane)
+  if [ -n "$cur" ]; then
+    changed=$(hd focus --direction "$word" --pane "$cur" | jq -r '.result.focus.changed')
+    [ "$changed" = "true" ] && return
+  fi
+  exec "$scripts_dir/focus" "$1"
+}
+
+case "${1:-}" in
+  edge)
+    escalate "$2"
+    ;;
+  key)
+    key="$2"; dir="$3"
+    cur=$(focused_pane)
+    if [ -n "$cur" ] && hd process-info --pane "$cur" \
+         | jq -r '.result.process_info.foreground_processes[].name' 2>/dev/null \
+         | grep -qiE '^(n?vim|view|fzf)(diff)?$'; then
+      hd send-keys "$cur" "ctrl+alt+$key" >/dev/null
+    else
+      escalate "$dir"
+    fi
+    ;;
+  *)
+    echo "usage: herdr-nav key <h|j|k|l> <l|r|u|d> | edge <l|r|u|d>" >&2
+    exit 2
+    ;;
+esac

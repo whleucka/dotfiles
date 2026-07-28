@@ -30,13 +30,36 @@ close_pane = "prefix+x"        # herdr default (bumped off prefix+w, now workspa
 # Pane focus stays on the default prefix+h/j/k/l (left/down/up/right).
 
 # Workspaces
-new_workspace = "prefix+w"
-workspace_picker = "prefix+shift+w"
+workspace_picker = "prefix+w"
+new_workspace = "prefix+shift+w"
 rename_workspace = "prefix+alt+w"  # (default was prefix+shift+w)
 goto = "prefix+g"              # quick jump  (herdr default)
 
 # Agents
 open_notification_target = "prefix+o"  # herdr default
+
+# Unified super+hjkl navigation (nvim splits -> herdr panes -> Hyprland windows).
+# Hyprland's super+hjkl injects ctrl+alt+hjkl into this pty (see ~/.config/hypr/
+# scripts/nav); the router decides forward-to-nvim vs move-pane vs escalate.
+[[keys.command]]
+key = "ctrl+alt+h"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-nav key h l"
+
+[[keys.command]]
+key = "ctrl+alt+j"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-nav key j d"
+
+[[keys.command]]
+key = "ctrl+alt+k"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-nav key k u"
+
+[[keys.command]]
+key = "ctrl+alt+l"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
 
 [ui]
 # Draw borders + gaps around split panes so focus is obvious.
@@ -50,7 +73,10 @@ delivery = "system"
 
 [ui.sound]
 # Audible ping when a background agent changes state.
+# Custom mp3s (relative to this config's dir). Swap the two to taste.
 enabled = true
+request_path = "mgs.mp3"   # agent needs attention (MGS "!" alert)
+done_path = "ding.mp3"     # agent finished
 
 [session]
 # Restore AI-agent panes into their sessions after a server restart.

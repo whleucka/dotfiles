@@ -1,3 +1,7 @@
+-- Inside a herdr pane, herdr (not tmux) is the multiplexer layer: nvim hands off
+-- at its edge to the herdr router, which walks herdr panes then Hyprland windows.
+local in_herdr = os.getenv('HERDR_ENV') ~= nil
+
 return {
   -- Ignored buffer types (only while resizing)
   ignored_buftypes = {
@@ -33,15 +37,19 @@ return {
   --    split(), -- utility function to split current Neovim pane in the current direction
   --    wrap(), -- utility function to wrap to opposite Neovim pane
   -- }
-  -- Unified nvim <-> tmux <-> Hyprland navigation. This function fires only
-  -- when the nvim split is at its edge AND tmux reports its pane is also at the
-  -- edge (see smart-splits move.lua + mux/init.lua: move_pane returns false, so
-  -- at_edge runs). At that outermost edge we escalate to the Hyprland window in
-  -- the same direction via the shared focus helper — so one ctrl+hjkl keychain
-  -- walks nvim splits, then tmux panes, then Hyprland windows.
+  -- Unified directional navigation. This fires when the nvim split is at its
+  -- edge. Under herdr (mux disabled below) that's nvim's own edge, so we hand
+  -- off to the herdr router (herdr panes -> Hyprland windows). Outside herdr it
+  -- fires once tmux also reports its pane at the edge, and we go straight to the
+  -- Hyprland window. Either way one ctrl+hjkl keychain walks every layer.
   at_edge = function(ctx)
     local dir = ({ left = 'l', right = 'r', up = 'u', down = 'd' })[ctx.direction]
-    vim.fn.system({ os.getenv('HOME') .. '/.config/hypr/scripts/focus', dir })
+    local scripts = os.getenv('HOME') .. '/.config/hypr/scripts/'
+    if in_herdr then
+      vim.fn.system({ scripts .. 'herdr-nav', 'edge', dir })
+    else
+      vim.fn.system({ scripts .. 'focus', dir })
+    end
   end,
   -- Desired behavior when the current window is floating:
   -- 'previous' => Focus previous Vim window and perform action
@@ -72,7 +80,9 @@ return {
   -- and the $KITTY_LISTEN_ON environment variable for Kitty.
   -- You can also set this value by setting `vim.g.smart_splits_multiplexer_integration`
   -- before the plugin is loaded (e.g. for lazy environments).
-  multiplexer_integration = 'tmux',
+  -- Under herdr, disable the built-in mux (smart-splits has no herdr backend);
+  -- edge handoff to herdr happens in at_edge above. Outside herdr, keep tmux.
+  multiplexer_integration = in_herdr and false or 'tmux',
   -- disable multiplexer navigation if current multiplexer pane is zoomed
   -- NOTE: This does not work on Zellij as there is no way to determine the
   -- pane zoom state outside of the Zellij Plugin API, which does not apply here
