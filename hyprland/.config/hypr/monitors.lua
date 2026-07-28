@@ -9,8 +9,8 @@
 -- Mirror laptop display
 -- hl.monitor({ output = "HDMI-A-1", mode = "1920x1080@60", position = "0x0", scale = 1, mirror = "eDP-1" })
 
--- ThinkPad T14s 
-hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "1920x0", scale = 1 })
+-- ThinkPad T14s (below the BenQ)
+hl.monitor({ output = "eDP-1", mode = "1920x1200@60", position = "0x1080", scale = 1 })
 
 -- BENQ 27"
 hl.monitor({ output = "desc:BNQ BenQ GL2780 ETN7L07855SL0", mode = "1920x1080@74.97", position = "0x0", scale = 1 })
