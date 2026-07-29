@@ -55,7 +55,6 @@ switch_workspace = "ctrl+alt+1..9"   # jump to workspace N (no shift: ctrl+shift
 goto = "ctrl+backtick"         # quick jump (direct chord, ctrl+`)
 
 # Agents
-open_notification_target = "ctrl+shift+b"  # jump to last agent notification (b=bell; ctrl+shift+n is next_workspace)
 previous_agent = "ctrl+shift+k"   # prev agent (up in the vertical agent list)
 next_agent = "ctrl+shift+j"       # next agent (down in the list; pairs with h/l tab nav)
 focus_agent = "alt+1..9"          # jump straight to agent N (alt chords are terminal-dependent)
@@ -82,6 +81,42 @@ command = "$HOME/.config/hypr/scripts/herdr-nav key k u"
 key = "ctrl+alt+l"
 type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
+
+# Move the focused pane forward/backward through the tab's pane order (tmux
+# swap-pane -D/-U). herdr's native swap is directional only; herdr-swap walks
+# the linear pane list. (ctrl+shift+b reclaimed from open_notification_target.)
+[[keys.command]]
+key = "ctrl+shift+f"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-swap f"
+
+[[keys.command]]
+key = "ctrl+shift+b"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-swap b"
+
+# Resize the focused pane's split directly (no resize_mode): alt+h/j/k/l move
+# the divider left/down/up/right by 5%. Direct chords, so they win over the
+# pane program's own alt+hjkl (e.g. zsh word bindings) while herdr is focused.
+[[keys.command]]
+key = "alt+h"
+type = "shell"
+command = "herdr pane resize --current --direction left --amount 0.05"
+
+[[keys.command]]
+key = "alt+j"
+type = "shell"
+command = "herdr pane resize --current --direction down --amount 0.05"
+
+[[keys.command]]
+key = "alt+k"
+type = "shell"
+command = "herdr pane resize --current --direction up --amount 0.05"
+
+[[keys.command]]
+key = "alt+l"
+type = "shell"
+command = "herdr pane resize --current --direction right --amount 0.05"
 
 [ui]
 # Draw borders + gaps around split panes so focus is obvious.
