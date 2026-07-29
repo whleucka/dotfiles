@@ -19,30 +19,46 @@ default_shell = "zsh"
 # Prefix: ctrl+a (screen-style). Tap it, release, then the action key.
 prefix = "ctrl+a"
 
+# --- Direct terminal-mode chords (no prefix) -------------------------------
+# These are global within herdr (they win over the focused pane's program),
+# so kitty must NOT eat them first — see the `map ... ` unbinds in
+# ~/.dotfiles/kitty/.config/kitty/kitty.conf.
+
 # Tabs
-new_tab = "prefix+t"           # (default was prefix+c)
-rename_tab = "prefix+shift+t"  # herdr default
-previous_tab = "prefix+["      # tab nav prev (default was prefix+p)
-next_tab = "prefix+]"          # tab nav next (default was prefix+n)
+new_tab = "ctrl+shift+t"        # new tab
+rename_tab = "ctrl+shift+alt+t" # rename tab
+close_tab = "ctrl+shift+q"      # close tab (default was prefix+shift+x)
+previous_tab = "ctrl+shift+h"   # tab nav prev
+next_tab = "ctrl+shift+l"       # tab nav next
+switch_tab = "ctrl+1..9"        # jump straight to tab N
 
 # Panes
-close_pane = "prefix+w"        # close pane (moved off prefix+x)
-# Pane focus stays on the default prefix+h/j/k/l (left/down/up/right).
+close_pane = "ctrl+shift+x"     # close pane
+split_horizontal = "ctrl+shift+s" # split (default was prefix+minus)
+split_vertical = "ctrl+shift+d"   # vertical split (default was prefix+v)
+zoom = "ctrl+shift+m"           # toggle pane zoom / fullscreen (default was prefix+z)
+resize_mode = "ctrl+shift+r"    # enter resize mode, then hjkl to adjust divider (default was prefix+r)
+edit_scrollback = "ctrl+shift+g" # scrollback in editor -> copy to clipboard (default was prefix+e)
+# Pane focus is super+h/j/k/l via the Hyprland ctrl+alt+hjkl injection below.
 
 # Session
 detach = "prefix+shift+q"      # detach (default was prefix+q, now close_workspace)
 
 # Workspaces
-workspace_picker = "prefix+a"      # ws fuzzy picker
+workspace_picker = "ctrl+shift+w" # session/workspace navigator (direct chord)
 close_workspace = "prefix+q"       # close workspace (default was prefix+shift+d)
 new_workspace = "prefix+shift+n"   # herdr default (shift+n pairs with next_workspace on prefix+n)
 rename_workspace = "prefix+shift+w"  # herdr default
-previous_workspace = "prefix+p"    # ws nav prev (default unset; took over old previous_tab key)
-next_workspace = "prefix+n"        # ws nav next (default unset; took over old next_tab key)
-goto = "prefix+g"              # quick jump  (herdr default)
+previous_workspace = "ctrl+shift+p"  # ws nav prev (direct chord; p = previous)
+next_workspace = "ctrl+shift+n"      # ws nav next (direct chord; n = next; was kitty new-os-window)
+switch_workspace = "ctrl+alt+1..9"   # jump to workspace N (no shift: ctrl+shift+digit = ctrl+symbol, doesn't match)
+goto = "ctrl+backtick"         # quick jump (direct chord, ctrl+`)
 
 # Agents
-open_notification_target = "prefix+o"  # herdr default
+open_notification_target = "ctrl+shift+b"  # jump to last agent notification (b=bell; ctrl+shift+n is next_workspace)
+previous_agent = "ctrl+shift+k"   # prev agent (up in the vertical agent list)
+next_agent = "ctrl+shift+j"       # next agent (down in the list; pairs with h/l tab nav)
+focus_agent = "alt+1..9"          # jump straight to agent N (alt chords are terminal-dependent)
 
 # Unified super+hjkl navigation (nvim splits -> herdr panes -> Hyprland windows).
 # Hyprland's super+hjkl injects ctrl+alt+hjkl into this pty (see ~/.config/hypr/
