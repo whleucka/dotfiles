@@ -18,6 +18,15 @@
 # authoritative source — and passed explicitly as --pane, rather than relying
 # on --current, whose resolution in the keybind's shell context is ambiguous.
 
+# herdr's server is a lazy daemon spawned by the first `kitty herdr` client from
+# Hyprland, so it captures Hyprland's session PATH — which does NOT include
+# ~/.local/bin (where the herdr binary lives). Shell-command keybinds inherit
+# that PATH, so `herdr` here would be "command not found" and every pane query
+# would silently fail (→ fall through to a Hyprland escalation that does
+# nothing). Make this script PATH-independent rather than depend on how the
+# daemon happened to be started.
+export PATH="$HOME/.local/bin:$PATH"
+
 scripts_dir="$HOME/.config/hypr/scripts"
 
 hd() { herdr pane "$@" 2>/dev/null; }

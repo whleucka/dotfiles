@@ -12,6 +12,11 @@
 # Panes are ordered by the numeric suffix of their pane_id (creation order),
 # matching tmux's pane-index ordering rather than spatial position.
 
+# herdr's server (a lazy daemon spawned by the first client under Hyprland)
+# inherits a PATH without ~/.local/bin, where the herdr binary lives. Shell
+# keybinds inherit that PATH, so make this script PATH-independent.
+export PATH="$HOME/.local/bin:$PATH"
+
 dir="${1:-}"
 case "$dir" in f|b) ;; *) echo "usage: herdr-swap <f|b>" >&2; exit 2;; esac
 

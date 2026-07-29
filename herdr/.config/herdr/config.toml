@@ -98,25 +98,28 @@ command = "$HOME/.config/hypr/scripts/herdr-swap b"
 # Resize the focused pane's split directly (no resize_mode): alt+h/j/k/l move
 # the divider left/down/up/right by 5%. Direct chords, so they win over the
 # pane program's own alt+hjkl (e.g. zsh word bindings) while herdr is focused.
+# Use an absolute path to the herdr binary: the server (a lazy daemon started by
+# the first client under Hyprland) inherits a PATH without ~/.local/bin, so a
+# bare `herdr` here is "command not found" and the resize silently no-ops.
 [[keys.command]]
 key = "alt+h"
 type = "shell"
-command = "herdr pane resize --current --direction left --amount 0.05"
+command = "$HOME/.local/bin/herdr pane resize --current --direction left --amount 0.05"
 
 [[keys.command]]
 key = "alt+j"
 type = "shell"
-command = "herdr pane resize --current --direction down --amount 0.05"
+command = "$HOME/.local/bin/herdr pane resize --current --direction down --amount 0.05"
 
 [[keys.command]]
 key = "alt+k"
 type = "shell"
-command = "herdr pane resize --current --direction up --amount 0.05"
+command = "$HOME/.local/bin/herdr pane resize --current --direction up --amount 0.05"
 
 [[keys.command]]
 key = "alt+l"
 type = "shell"
-command = "herdr pane resize --current --direction right --amount 0.05"
+command = "$HOME/.local/bin/herdr pane resize --current --direction right --amount 0.05"
 
 [ui]
 # Draw borders + gaps around split panes so focus is obvious.
