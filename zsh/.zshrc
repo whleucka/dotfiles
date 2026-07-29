@@ -5,14 +5,6 @@
 # Source environment variables first
 [[ -f ~/.zshenv ]] && source ~/.zshenv
 
-# Auto-start tmux and restore sessions after reboot
-if command -v tmux &>/dev/null && [[ -z "$TMUX" ]]; then
-    if ! tmux has-session -t __server 2>/dev/null; then
-        # Creates __server session which loads plugins, triggering continuum auto-restore
-        tmux new-session -d -s __server
-    fi
-fi
-
 # ----------------------------------------------------------------------------
 # Powerlevel10k Instant Prompt (must be near top)
 # ----------------------------------------------------------------------------
@@ -40,8 +32,8 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 # Terminal
 if [[ -n "$NVIM" ]]; then
     : # inside nvim's terminal — keep the TERM nvim gave us
-elif [[ -n "$TMUX" ]]; then
-    export TERM="tmux-256color"
+elif [[ -n "$HERDR_ENV" ]]; then
+    export TERM="xterm-256color"   # herdr's emulator; keep the TERM it set
 elif [[ "$TERM" == "xterm-kitty" ]]; then
     export TERM="xterm-kitty"
 else
@@ -62,8 +54,6 @@ export EDITOR="$VISUAL"
 # FZF Configuration
 # ----------------------------------------------------------------------------
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/fzfrc"
-export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p 80%,40%"
 
 # File search with ripgrep
 if command -v rg &>/dev/null; then
