@@ -42,22 +42,22 @@ edit_scrollback = "ctrl+shift+g" # scrollback in editor -> copy to clipboard (de
 # Pane focus is super+h/j/k/l via the Hyprland ctrl+alt+hjkl injection below.
 
 # Session
-detach = "prefix+shift+q"      # detach (default was prefix+q, now close_workspace)
+detach = "prefix+shift+q"      # detach
 
 # Workspaces
 workspace_picker = "ctrl+shift+w" # session/workspace navigator (direct chord)
 close_workspace = "prefix+q"       # close workspace (default was prefix+shift+d)
 new_workspace = "prefix+shift+n"   # herdr default (shift+n pairs with next_workspace on prefix+n)
 rename_workspace = "prefix+shift+w"  # herdr default
-previous_workspace = "ctrl+shift+p"  # ws nav prev (direct chord; p = previous)
-next_workspace = "ctrl+shift+n"      # ws nav next (direct chord; n = next; was kitty new-os-window)
-switch_workspace = "ctrl+alt+1..9"   # jump to workspace N (no shift: ctrl+shift+digit = ctrl+symbol, doesn't match)
+previous_workspace = "ctrl+shift+k"  # ws nav prev (direct chord; p = previous)
+next_workspace = "ctrl+shift+j"      # ws nav next (direct chord; n = next; was kitty new-os-window)
+switch_workspace = "alt+1..9"   # jump to workspace N (no shift: ctrl+shift+digit = ctrl+symbol, doesn't match)
 goto = "ctrl+backtick"         # quick jump (direct chord, ctrl+`)
 
 # Agents
-previous_agent = "ctrl+shift+k"   # prev agent (up in the vertical agent list)
-next_agent = "ctrl+shift+j"       # next agent (down in the list; pairs with h/l tab nav)
-focus_agent = "alt+1..9"          # jump straight to agent N (alt chords are terminal-dependent)
+previous_agent = "ctrl+shift+p"   # prev agent (up in the vertical agent list)
+next_agent = "ctrl+shift+n"       # next agent (down in the list; pairs with h/l tab nav)
+focus_agent = "ctrl+alt+1..9"          # jump straight to agent N (alt chords are terminal-dependent)
 
 # Unified super+hjkl navigation (nvim splits -> herdr panes -> Hyprland windows).
 # Hyprland's super+hjkl injects ctrl+alt+hjkl into this pty (see ~/.config/hypr/
