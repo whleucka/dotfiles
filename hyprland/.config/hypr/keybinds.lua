@@ -56,6 +56,7 @@ hl.bind(key(mod, "ALT", "G"), hl.dsp.exec_cmd(browser .. " --app=https://github.
 hl.bind(key(mod, "ALT", "I"), hl.dsp.exec_cmd(browser .. " --app=https://instagram.com"), { description = "Instagram" })
 hl.bind(key(mod, "ALT", "M"), hl.dsp.exec_cmd(browser .. " --app=https://messages.google.com/web/conversations"), { description = "Google Messages" })
 hl.bind(key(mod, "ALT", "R"), hl.dsp.exec_cmd(browser .. " --app=https://reddit.com"), { description = "Reddit" })
+hl.bind(key(mod, "ALT", "S"), hl.dsp.exec_cmd(browser .. " --app=https://soprano.williamhleucka.com"), { description = "Soprano" })
 hl.bind(key(mod, "ALT", "Y"), hl.dsp.exec_cmd(browser .. " --app=https://youtube.com"), { description = "YouTube" })
 
 
