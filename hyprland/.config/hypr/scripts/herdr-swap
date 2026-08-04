@@ -9,8 +9,12 @@
 #   herdr-swap f   swap with next pane     (forward,  wraps to first)
 #   herdr-swap b   swap with previous pane (backward, wraps to last)
 #
-# Panes are ordered by the numeric suffix of their pane_id (creation order),
-# matching tmux's pane-index ordering rather than spatial position.
+# Panes are ordered SPATIALLY, in reading order (top-to-bottom, left-to-right),
+# which is what tmux pane indexes effectively track. Ordering by pane_id does
+# not work here: ids are base36-ish (p1 p2 pF pK), and more importantly a swap
+# moves panes between positions without changing their ids — since herdr keeps
+# focus on the pane that moved, an id-ordered list leaves the focused pane at
+# the same index and repeated presses just bounce it between two slots.
 
 # herdr's server (a lazy daemon spawned by the first client under Hyprland)
 # inherits a PATH without ~/.local/bin, where the herdr binary lives. Shell
@@ -25,9 +29,13 @@ layout=$(herdr pane layout 2>/dev/null) || exit 1
 cur=$(jq -r '.result.layout.focused_pane_id' <<<"$layout")
 [ -z "$cur" ] || [ "$cur" = "null" ] && exit 0
 
-# Pane ids in this tab, ordered by the number after ":p" (creation order).
-mapfile -t panes < <(jq -r '.result.layout.panes[].pane_id' <<<"$layout" \
-  | sort -t: -k2.2 -n)
+# Pane ids in this tab, in on-screen reading order: top row first, then left to
+# right within a row. Each pane's rect is its current position, so this list is
+# recomputed against the post-swap layout on every press.
+mapfile -t panes < <(jq -r '
+  .result.layout.panes
+  | sort_by(.rect.y, .rect.x)
+  | .[].pane_id' <<<"$layout")
 
 n=${#panes[@]}
 [ "$n" -lt 2 ] && exit 0   # nothing to swap with
