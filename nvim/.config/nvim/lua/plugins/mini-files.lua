@@ -23,7 +23,7 @@ return {
       group = "Explore",
       {
         {
-          "<leader>eo",
+          "<leader>o",
           function()
             if not MiniFiles.close() then
               MiniFiles.open(vim.api.nvim_buf_get_name(0))
@@ -36,12 +36,12 @@ return {
         {
           "<leader>ed",
           ":lua MiniFiles.open()<CR>",
-          desc = "Files (git)"
+          desc = "Files"
         },
         {
           "<leader>ef",
           ":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>",
-          desc = "Files (git)"
+          desc = "Files (project root)"
         },
         {
           "<leader>eq",
