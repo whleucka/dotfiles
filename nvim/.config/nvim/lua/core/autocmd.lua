@@ -64,3 +64,11 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.bo[ev.buf].buflisted = false
   end,
 })
+
+-- Captured terminal output (herdr scrollback dumps, CI logs) keeps its ANSI
+-- escape sequences; ftplugin/ansi.lua turns them into real highlights.
+vim.filetype.add({
+  extension = {
+    ansi = "ansi",
+  },
+})

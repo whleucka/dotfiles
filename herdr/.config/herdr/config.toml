@@ -38,7 +38,8 @@ split_horizontal = "ctrl+shift+s" # split (default was prefix+minus)
 split_vertical = "ctrl+shift+d"   # vertical split (default was prefix+v)
 zoom = "ctrl+shift+m"           # toggle pane zoom / fullscreen (default was prefix+z)
 resize_mode = "ctrl+shift+r"    # enter resize mode, then hjkl to adjust divider (default was prefix+r)
-edit_scrollback = "ctrl+shift+g" # scrollback in editor -> copy to clipboard (default was prefix+e)
+edit_scrollback = "prefix+e"    # herdr's built-in plain-text scrollback dump (kept as a fallback;
+                                # the colored pager on ctrl+shift+g below is the one to reach for)
 # Pane focus is super+h/j/k/l via the Hyprland ctrl+alt+hjkl injection below.
 
 # Session
@@ -81,6 +82,21 @@ command = "$HOME/.config/hypr/scripts/herdr-nav key k u"
 key = "ctrl+alt+l"
 type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
+
+# Colored scrollback pager — takes over ctrl+shift+g from the built-in
+# edit_scrollback (now on prefix+e), which dumps the pane as plain text with
+# every escape sequence stripped, so diffs, test output, and agent UIs land
+# colorless. This captures `herdr pane read --format ansi` instead and reads it
+# in neovim, where ftplugin/ansi.lua turns the SGR codes into real highlights
+# (baleia.nvim). A popup keeps the tab layout untouched; `q` closes.
+# --from-popup tells the script to ignore the popup's own terminal when it works
+# out which pane you were reading.
+[[keys.command]]
+key = "ctrl+shift+g"
+type = "popup"
+command = "$HOME/.config/herdr/scripts/scrollback --from-popup"
+width = "95%"
+height = "95%"
 
 # Move the focused pane forward/backward through the tab's pane order (tmux
 # swap-pane -D/-U). herdr's native swap is directional only; herdr-swap walks
@@ -141,3 +157,8 @@ done_path = "ding.mp3"     # agent finished
 [session]
 # Restore AI-agent panes into their sessions after a server restart.
 resume_agents_on_restore = true
+
+[experimental]
+# Pass kitty graphics protocol escapes through to the host terminal (images
+# in panes: image.nvim, chafa, timg, etc.).
+kitty_graphics = true
