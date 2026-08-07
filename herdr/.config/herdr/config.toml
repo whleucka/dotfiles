@@ -46,7 +46,8 @@ edit_scrollback = "prefix+e"    # herdr's built-in plain-text scrollback dump (k
 detach = "prefix+shift+q"      # detach
 
 # Workspaces
-workspace_picker = "ctrl+shift+w" # session/workspace navigator (direct chord)
+workspace_picker = "prefix+w"     # session/workspace navigator (herdr default;
+                                  # ctrl+shift+w went to the browser split)
 close_workspace = "prefix+q"       # close workspace (default was prefix+shift+d)
 new_workspace = "prefix+shift+n"   # herdr default (shift+n pairs with next_workspace on prefix+n)
 rename_workspace = "prefix+shift+w"  # herdr default
@@ -83,13 +84,28 @@ key = "ctrl+alt+l"
 type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
 
-
-# Browser
+# Browser. Moved off ctrl+shift+b, which it silently stole from herdr-swap b —
+# herdr keeps the first binding for a duplicated key and disables the later one,
+# so "move pane backward" had been dead. workspace_picker gave up ctrl+shift+w
+# for this and went back to its prefix+w default.
 [[keys.command]]
-key = "ctrl+shift+b"
+key = "ctrl+shift+w"
 type = "shell"
 command = '"${HERDR_BIN_PATH}" plugin pane open --plugin official.browser --entrypoint browser --placement split --direction down --focus'
 description = "open browser split"
+
+# Yazi in a split, opened along the focused pane's longer axis so both halves
+# stay usable. The built-in `type = "pane"` would also give a self-closing
+# split, but it offers no say in the direction (`direction` is not a valid
+# keys.command field — herdr logs "unknown config key ...; ignoring key"), so
+# herdr-split-run measures the pane and calls `pane split` itself. It runs the
+# command with `exec`, so quitting yazi (q) still disposes of the pane.
+# ctrl+shift+y is not a kitty default, so no kitty unbind is needed.
+[[keys.command]]
+key = "ctrl+shift+y"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-split-run -- yazi"
+description = "open yazi split"
 
 # Colored scrollback pager — takes over ctrl+shift+g from the built-in
 # edit_scrollback (now on prefix+e), which dumps the pane as plain text with
@@ -118,6 +134,19 @@ command = "$HOME/.config/hypr/scripts/herdr-swap f"
 key = "ctrl+shift+b"
 type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-swap b"
+
+# Flip the orientation of the split holding the focused pane (stacked <->
+# side-by-side) — tmux's `break-pane` + `join-pane -h`. herdr has no native
+# re-layout: the socket API's layout.apply CAN set an arbitrary tree but
+# respawns every pane in the tab (it ignores each node's pane_id), so it kills
+# running processes. herdr-flip instead bounces one pane through a scratch tab,
+# which preserves the pty. Direct chord, so kitty must not eat it first — see
+# the `map ctrl+shift+o` unbind in ~/.dotfiles/kitty/.config/kitty/kitty.conf.
+[[keys.command]]
+key = "ctrl+shift+o"
+type = "shell"
+command = "$HOME/.config/hypr/scripts/herdr-flip"
+description = "flip split orientation"
 
 # Resize the focused pane's split directly (no resize_mode): alt+h/j/k/l move
 # the divider left/down/up/right by 5%. Direct chords, so they win over the

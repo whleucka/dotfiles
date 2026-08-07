@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# herdr-split-run: split the focused pane along its LONGER axis and run a
+# command in the new pane, which disposes of itself when the command exits.
+#
+#   herdr-split-run yazi
+#   herdr-split-run --direction down -- lazygit
+#   herdr-split-run --ratio 0.3 -- btop
+#
+# Why not just `type = "pane"` in config.toml? That does open a self-closing
+# split, but it gives no say in the direction — `direction` is not a valid
+# keys.command field (herdr logs "unknown config key ...; ignoring key"), and
+# neither `herdr pane split` nor the pane.split API has an "auto" value, so the
+# choice is herdr's alone. This picks it from the pane's actual shape instead.
+#
+# The self-closing trick is `exec`: `herdr pane run` normally runs the command
+# as a child of the new pane's shell, so quitting it would strand an empty
+# shell. Prefixing with exec replaces the shell image (shell_pid stays, the
+# foreground process becomes the command), so when the command exits the pane
+# has nothing left to run and herdr closes it.
+
+set -u
+
+# The herdr server is a lazy daemon spawned by the first client under Hyprland,
+# so it inherits a PATH without ~/.local/bin where the herdr binary lives. Shell
+# keybinds inherit that PATH — keep this script PATH-independent, same as
+# herdr-swap / herdr-flip and the alt+hjkl resize binds in config.toml.
+export PATH="$HOME/.local/bin:$PATH"
+
+# Terminal cells are taller than they are wide, so raw cols-vs-rows is the wrong
+# comparison — a "square" pane has about twice as many columns as rows. This is
+# cell height / cell width; raise it if splits still favour the wrong axis.
+CELL_ASPECT=${HERDR_CELL_ASPECT:-2.0}
+
+direction=auto
+ratio=""
+
+note() { notify-send -a herdr "herdr-split-run" "$1" 2>/dev/null || true; }
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --direction) direction="${2:-}"; shift 2 ;;
+    --ratio)     ratio="${2:-}";     shift 2 ;;
+    --)          shift; break ;;
+    -*)          note "unknown option: $1"; exit 2 ;;
+    *)           break ;;
+  esac
+done
+
+[ $# -gt 0 ] || { note "usage: herdr-split-run [--direction auto|right|down] [--ratio F] <command...>"; exit 2; }
+
+case "$direction" in auto|right|down) ;; *) note "bad --direction: $direction"; exit 2 ;; esac
+
+command -v jq >/dev/null || { note "missing dependency: jq"; exit 1; }
+
+layout=$(herdr pane layout 2>/dev/null) || { note "could not read layout"; exit 1; }
+focused=$(jq -r '.result.layout.focused_pane_id // empty' <<<"$layout")
+[ -n "$focused" ] || exit 0
+
+if [ "$direction" = auto ]; then
+  # Compare the pane's visual proportions, not its cell counts. Splitting along
+  # the longer axis keeps both halves usable: a wide pane becomes two columns,
+  # a tall pane becomes two rows.
+  read -r cols rows < <(jq -r --arg p "$focused" \
+    '.result.layout.panes[] | select(.pane_id==$p) | "\(.rect.width) \(.rect.height)"' <<<"$layout")
+  [ -n "${cols:-}" ] || { note "could not find rect for $focused"; exit 1; }
+  if awk -v c="$cols" -v r="$rows" -v a="$CELL_ASPECT" 'BEGIN{exit !(c > r*a)}'; then
+    direction=right
+  else
+    direction=down
+  fi
+fi
+
+# Open where the pane actually is: foreground_cwd tracks cd's inside the shell,
+# which is more accurate than the pane's launch cwd that new_cwd="follow" uses.
+cwd=$(herdr pane current 2>/dev/null | jq -r '.result.pane.foreground_cwd // .result.pane.cwd // empty')
+
+split_args=(--direction "$direction" --focus)
+[ -n "$ratio" ] && split_args+=(--ratio "$ratio")
+[ -n "$cwd" ]   && split_args+=(--cwd "$cwd")
+
+new=$(herdr pane split "$focused" "${split_args[@]}" 2>/dev/null | jq -r '.result.pane.pane_id // empty')
+[ -n "$new" ] || { note "split failed"; exit 1; }
+
+# Give the new pane's shell a moment to come up before handing it a command.
+# The pty buffers early input, but zsh's startup (p10k) can reset the terminal
+# mid-init, so wait for the shell to be reported before sending anything.
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  herdr pane process-info --pane "$new" 2>/dev/null \
+    | jq -e '.result.process_info.shell_pid' >/dev/null 2>&1 && break
+  sleep 0.05
+done
+sleep 0.15
+
+if ! herdr pane run "$new" exec "$@" >/dev/null 2>&1; then
+  note "could not start: $*"
+  exit 1
+fi

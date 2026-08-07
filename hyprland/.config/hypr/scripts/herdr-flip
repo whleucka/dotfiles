@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+# herdr-flip: flip the orientation of the split holding the focused pane —
+# stacked <-> side-by-side. herdr's analog of tmux `break-pane` + `join-pane -h`.
+#
+# herdr has no native re-layout. The socket API's `layout.apply` can set an
+# arbitrary split tree, but it RESPAWNS every pane in the tab: the `pane_id` on
+# each node is ignored on apply (it is only meaningful in `layout.export`
+# output), so applying a flipped tree SIGKILLs whatever is running and hands
+# back fresh shells under a new tab id. Unusable on a live tab.
+#
+# `pane move`, by contrast, re-parents the real pty — pid and terminal_id come
+# through a move unchanged. Its one restriction is that it refuses a move whose
+# destination tab is the source tab (returns changed=false, reason="same_tab").
+# So we bounce: park the pane in a scratch tab, then immediately move it back
+# with the opposite split direction. The scratch tab auto-closes when its last
+# pane leaves, so there is nothing to clean up.
+#
+# Scope: this flips the split *immediately* containing the focused pane, and
+# only when both of that split's children are single panes. If the sibling is
+# itself a nested split there is no single pane to bounce and no unambiguous
+# meaning to "flip this split", so we bail with a notification rather than
+# mangle the layout. In a nested tree that still covers the common case — with
+# focus on B in root(down, A, split(right, B, C)), this flips the inner split
+# to (down, B, C) and leaves A where it is.
+
+set -u
+
+# The herdr server is a lazy daemon spawned by the first client under Hyprland,
+# so it inherits a PATH without ~/.local/bin where the herdr binary lives. Shell
+# keybinds inherit that PATH — make this script PATH-independent, same as
+# herdr-swap and the alt+hjkl resize binds in config.toml.
+export PATH="$HOME/.local/bin:$PATH"
+
+sock="${HERDR_SOCKET_PATH:-$HOME/.config/herdr/herdr.sock}"
+
+note() { notify-send -a herdr "herdr-flip" "$1" 2>/dev/null || true; }
+
+# layout.export and pane.focus (by id) have no CLI subcommand — `herdr pane
+# focus` always wants a --direction — so talk to the socket directly.
+api() { printf '%s\n' "$1" | timeout 5 socat -t2 - "UNIX-CONNECT:$sock" 2>/dev/null; }
+
+for bin in jq socat; do
+  command -v "$bin" >/dev/null || { note "missing dependency: $bin"; exit 1; }
+done
+
+focused=$(herdr pane layout 2>/dev/null | jq -r '.result.layout.focused_pane_id // empty')
+[ -n "$focused" ] || exit 0
+
+export_json=$(api "$(jq -cn --arg p "$focused" \
+  '{id:"flip-export", method:"layout.export", params:{pane_id:$p}}')")
+[ -n "$export_json" ] || { note "no response from herdr socket"; exit 1; }
+
+tab=$(jq -r '.result.layout.tab_id // empty' <<<"$export_json")
+[ -n "$tab" ] || { note "could not read layout"; exit 1; }
+
+# A zoomed pane is a view state layered over the tree; bouncing a pane while
+# it is in effect is not something this handles. Ask for an unzoom instead.
+if [ "$(jq -r '.result.layout.zoomed' <<<"$export_json")" = "true" ]; then
+  note "unzoom first (ctrl+shift+m)"
+  exit 0
+fi
+
+# Walk the exported tree for the split that directly contains the focused pane.
+# Leaves return null so the `//` chain falls through to the other subtree.
+read -r dir ratio first_type first_id second_type second_id < <(jq -r --arg p "$focused" '
+  def parent($id):
+    if type == "object" and .type == "split" then
+      if (.first.type  == "pane" and .first.pane_id  == $id)
+      or (.second.type == "pane" and .second.pane_id == $id)
+      then .
+      else (.first | parent($id)) // (.second | parent($id))
+      end
+    else null end;
+  (.result.layout.root | parent($p)) as $n
+  | if $n == null then empty
+    else [$n.direction, ($n.ratio // 0.5),
+          $n.first.type,  ($n.first.pane_id  // "-"),
+          $n.second.type, ($n.second.pane_id // "-")] | @tsv
+    end' <<<"$export_json")
+
+# No enclosing split: the focused pane is alone in its tab.
+[ -n "${dir:-}" ] || exit 0
+
+if [ "$first_type" != "pane" ] || [ "$second_type" != "pane" ]; then
+  note "sibling is a nested split — nothing unambiguous to flip"
+  exit 0
+fi
+
+case "$dir" in
+  down)  newdir=right ;;
+  right) newdir=down  ;;
+  *)     note "unexpected split direction: $dir"; exit 1 ;;
+esac
+
+# Always bounce the SECOND child and re-attach it to the first. Doing it in that
+# fixed order preserves left-to-right / top-to-bottom pane order no matter which
+# of the two happens to be focused — `pane move --target-pane X --split right`
+# places the moved pane after X.
+parked=$(herdr pane move "$second_id" --new-tab --no-focus 2>/dev/null \
+  | jq -r '.result.move_result.pane.tab_id // empty')
+[ -n "$parked" ] || { note "could not park pane $second_id"; exit 1; }
+
+if ! herdr pane move "$second_id" --tab "$tab" --target-pane "$first_id" \
+       --split "$newdir" --ratio "$ratio" --no-focus >/dev/null 2>&1; then
+  # The pane is live and safe, just sitting in the scratch tab — say where.
+  note "flip failed; pane $second_id left in tab $parked"
+  exit 1
+fi
+
+# Moves are --no-focus, but parking the focused pane can still shift focus.
+api "$(jq -cn --arg p "$focused" \
+  '{id:"flip-focus", method:"pane.focus", params:{pane_id:$p}}')" >/dev/null
