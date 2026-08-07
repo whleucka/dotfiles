@@ -83,6 +83,14 @@ key = "ctrl+alt+l"
 type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
 
+
+# Browser
+[[keys.command]]
+key = "ctrl+shift+b"
+type = "shell"
+command = '"${HERDR_BIN_PATH}" plugin pane open --plugin official.browser --entrypoint browser --placement split --direction down --focus'
+description = "open browser split"
+
 # Colored scrollback pager — takes over ctrl+shift+g from the built-in
 # edit_scrollback (now on prefix+e), which dumps the pane as plain text with
 # every escape sequence stripped, so diffs, test output, and agent UIs land
