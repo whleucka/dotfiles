@@ -51,6 +51,12 @@ fi
 export EDITOR="$VISUAL"
 
 # ----------------------------------------------------------------------------
+# Ripgrep
+# ----------------------------------------------------------------------------
+# Read by rg itself, so anything shelling out to it (mini.pick, fzf) inherits it.
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/rc"
+
+# ----------------------------------------------------------------------------
 # FZF Configuration
 # ----------------------------------------------------------------------------
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/fzfrc"
