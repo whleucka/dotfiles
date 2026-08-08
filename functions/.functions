@@ -1,4 +1,8 @@
 #!/usr/bin/env zsh
+cast() {
+    mkchromecast --video -i "$1" 
+}
+
 fg() {
     if [[ $# -eq 1 && $1 = - ]]; then
         builtin fg %-;
