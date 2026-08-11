@@ -44,6 +44,7 @@ hl.bind(key(mod, "SHIFT", "O"), hl.dsp.exec_cmd(terminal .. " btop", { float = t
 hl.bind(key(mod, "SHIFT", "P"), hl.dsp.exec_cmd("sh -c 'pgrep -x hyprpicker >/dev/null || hyprpicker -a -r'"), { description = "Color picker" })
 hl.bind(key(mod, "SHIFT", "U"), hl.dsp.exec_cmd(terminal .. " -o font_size=9 yay -Syu", { float = true, size = { 900, 600 }, center = true }), { description = "Update system" })
 hl.bind(key(mod, "SHIFT", "V"), hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"), { description = "Clipboard history" })
+hl.bind(key(mod, "SHIFT", "Y"), hl.dsp.exec_cmd(terminal .. " yazi"), { description = "Yazi File Manager" })
 hl.bind(key(mod, "SHIFT", "W"), hl.dsp.exec_cmd(browser), { description = "Browser" })
 
 -- Websites
