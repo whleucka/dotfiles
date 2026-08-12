@@ -1,3 +1,0 @@
-#!/bin/bash
-pgrep -x slurp >/dev/null && exit 0
-grim -g "$(slurp)" - | wl-copy && notify-send -t 2000 "Region copied to clipboard"
