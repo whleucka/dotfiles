@@ -64,25 +64,29 @@ focus_agent = "ctrl+alt+1..9"          # jump straight to agent N (alt chords ar
 # Unified super+hjkl navigation (nvim splits -> herdr panes -> Hyprland windows).
 # Hyprland's super+hjkl injects ctrl+alt+hjkl into this pty (see ~/.config/hypr/
 # scripts/nav); the router decides forward-to-nvim vs move-pane vs escalate.
+# In a (n)vim pane herdr-route forwards the chord and herdr-splits.nvim owns the
+# whole walk; elsewhere herdr-route moves the pane or escalates to Hyprland.
+# Rollback: point these four back at `herdr-nav key <h|j|k|l> <l|d|u|r>`, which
+# is still in place, and drop the nvim plugin (see plugins/herdr-splits.lua).
 [[keys.command]]
 key = "ctrl+alt+h"
 type = "shell"
-command = "$HOME/.config/hypr/scripts/herdr-nav key h l"
+command = "$HOME/.config/hypr/scripts/herdr-route nav h left"
 
 [[keys.command]]
 key = "ctrl+alt+j"
 type = "shell"
-command = "$HOME/.config/hypr/scripts/herdr-nav key j d"
+command = "$HOME/.config/hypr/scripts/herdr-route nav j down"
 
 [[keys.command]]
 key = "ctrl+alt+k"
 type = "shell"
-command = "$HOME/.config/hypr/scripts/herdr-nav key k u"
+command = "$HOME/.config/hypr/scripts/herdr-route nav k up"
 
 [[keys.command]]
 key = "ctrl+alt+l"
 type = "shell"
-command = "$HOME/.config/hypr/scripts/herdr-nav key l r"
+command = "$HOME/.config/hypr/scripts/herdr-route nav l right"
 
 # Browser. Moved off ctrl+shift+b, which it silently stole from herdr-swap b —
 # herdr keeps the first binding for a duplicated key and disables the later one,
@@ -148,31 +152,35 @@ type = "shell"
 command = "$HOME/.config/hypr/scripts/herdr-flip"
 description = "flip split orientation"
 
-# Resize the focused pane's split directly (no resize_mode): alt+h/j/k/l move
-# the divider left/down/up/right by 5%. Direct chords, so they win over the
-# pane program's own alt+hjkl (e.g. zsh word bindings) while herdr is focused.
-# Use an absolute path to the herdr binary: the server (a lazy daemon started by
-# the first client under Hyprland) inherits a PATH without ~/.local/bin, so a
-# bare `herdr` here is "command not found" and the resize silently no-ops.
+# Resize the focused pane's split (no resize_mode): alt+h/j/k/l move the divider
+# left/down/up/right by 5%. Direct chords, so they win over the pane program's
+# own alt+hjkl (e.g. zsh word bindings) while herdr is focused — which is why
+# these go through herdr-route rather than calling `pane resize` directly: in a
+# (n)vim pane the chord has to reach neovim, or herdr-splits.nvim could never
+# resize a neovim split (herdr would swallow every alt+hjkl first). herdr-route
+# forwards to nvim when the pane runs vim and resizes the divider otherwise.
+# (herdr-route also fixes the PATH: the server is a lazy daemon started by the
+# first client under Hyprland and inherits a PATH without ~/.local/bin, so a
+# bare `herdr` in a keybind is "command not found" and silently no-ops.)
 [[keys.command]]
 key = "alt+h"
 type = "shell"
-command = "$HOME/.local/bin/herdr pane resize --current --direction left --amount 0.05"
+command = "$HOME/.config/hypr/scripts/herdr-route resize h left"
 
 [[keys.command]]
 key = "alt+j"
 type = "shell"
-command = "$HOME/.local/bin/herdr pane resize --current --direction down --amount 0.05"
+command = "$HOME/.config/hypr/scripts/herdr-route resize j down"
 
 [[keys.command]]
 key = "alt+k"
 type = "shell"
-command = "$HOME/.local/bin/herdr pane resize --current --direction up --amount 0.05"
+command = "$HOME/.config/hypr/scripts/herdr-route resize k up"
 
 [[keys.command]]
 key = "alt+l"
 type = "shell"
-command = "$HOME/.local/bin/herdr pane resize --current --direction right --amount 0.05"
+command = "$HOME/.config/hypr/scripts/herdr-route resize l right"
 
 [ui]
 # Draw borders + gaps around split panes so focus is obvious.
