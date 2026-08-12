@@ -58,6 +58,24 @@ local keys = {
       function() require("mini.bufremove").delete(0, false) end,
       desc = "Close",
     },
+    {
+      "<leader>bQ",
+      function()
+        local bufremove = require('mini.bufremove')
+
+        -- Get a list of all currently open buffers
+        local buffers = vim.api.nvim_list_bufs()
+
+        for _, bufnr in ipairs(buffers) do
+          -- Only delete the buffer if it is listed/valid
+          if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted then
+            -- Change false to true if you want to force-delete unsaved buffers
+            bufremove.delete(bufnr, false) 
+          end
+        end
+      end,
+      desc = "Close",
+    },
     { "<leader>bn", ":bnext<CR>",  desc = "Next" },
     { "<leader>bp", ":bprev<CR>",  desc = "Prev" },
     { "<leader>bf", ":bfirst<CR>", desc = "First" },
