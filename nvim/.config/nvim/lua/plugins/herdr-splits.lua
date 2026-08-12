@@ -18,7 +18,9 @@
 -- hop. herdr-route covers plain panes instead.
 return {
   "lmilojevicc/herdr-splits.nvim",
-  cond = vim.env.HERDR_ENV == "1",
+  enabled = function()
+    return vim.env.HERDR_ENV == "1"
+  end,
   event = "VeryLazy",
   opts = {
     -- Match the chords herdr-route forwards, in neovim notation. setup()

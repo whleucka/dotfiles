@@ -1,7 +1,5 @@
--- Inside a herdr pane, herdr (not tmux) is the multiplexer layer: nvim hands off
--- at its edge to the herdr router, which walks herdr panes then Hyprland windows.
-local in_herdr = os.getenv('HERDR_ENV') ~= nil
-
+-- Nav/resize here apply only OUTSIDE herdr; inside a herdr pane herdr-splits.nvim
+-- owns those keys (see plugins/smart-splits.lua and plugins/herdr-splits.lua).
 return {
   -- Ignored buffer types (only while resizing)
   ignored_buftypes = {
@@ -22,34 +20,15 @@ return {
   -- NOTE: If using a function, the function will be called with
   -- a context object with the following fields:
   -- {
-  --    mux = {
-  --      type:'tmux'|'wezterm'|'kitty'|'zellij'
-  --      current_pane_id():number,
-  --      is_in_session(): boolean
-  --      current_pane_is_zoomed():boolean,
-  --      -- following methods return a boolean to indicate success or failure
-  --      current_pane_at_edge(direction:'left'|'right'|'up'|'down'):boolean
-  --      next_pane(direction:'left'|'right'|'up'|'down'):boolean
-  --      resize_pane(direction:'left'|'right'|'up'|'down'):boolean
-  --      split_pane(direction:'left'|'right'|'up'|'down',size:number|nil):boolean
-  --    },
   --    direction = 'left'|'right'|'up'|'down',
   --    split(), -- utility function to split current Neovim pane in the current direction
   --    wrap(), -- utility function to wrap to opposite Neovim pane
   -- }
-  -- Unified directional navigation. This fires when the nvim split is at its
-  -- edge. Under herdr (mux disabled below) that's nvim's own edge, so we hand
-  -- off to the herdr router (herdr panes -> Hyprland windows). Outside herdr it
-  -- fires once tmux also reports its pane at the edge, and we go straight to the
-  -- Hyprland window. Either way one ctrl+hjkl keychain walks every layer.
+  -- Unified directional navigation: at the nvim split's edge there is no
+  -- multiplexer left to walk, so hand off to the Hyprland window.
   at_edge = function(ctx)
     local dir = ({ left = 'l', right = 'r', up = 'u', down = 'd' })[ctx.direction]
-    local scripts = os.getenv('HOME') .. '/.config/hypr/scripts/'
-    if in_herdr then
-      vim.fn.system({ scripts .. 'herdr-nav', 'edge', dir })
-    else
-      vim.fn.system({ scripts .. 'focus', dir })
-    end
+    vim.fn.system({ os.getenv('HOME') .. '/.config/hypr/scripts/focus', dir })
   end,
   -- Desired behavior when the current window is floating:
   -- 'previous' => Focus previous Vim window and perform action
@@ -74,26 +53,9 @@ return {
     'BufEnter',
     'WinEnter',
   },
-  -- enable or disable a multiplexer integration;
-  -- automatically determined, unless explicitly disabled or set,
-  -- by checking the $TERM_PROGRAM environment variable,
-  -- and the $KITTY_LISTEN_ON environment variable for Kitty.
-  -- You can also set this value by setting `vim.g.smart_splits_multiplexer_integration`
-  -- before the plugin is loaded (e.g. for lazy environments).
-  -- Under herdr, disable the built-in mux (smart-splits has no herdr backend);
-  -- edge handoff to herdr happens in at_edge above. Outside herdr, keep tmux.
-  multiplexer_integration = in_herdr and false or 'tmux',
-  -- disable multiplexer navigation if current multiplexer pane is zoomed
-  -- NOTE: This does not work on Zellij as there is no way to determine the
-  -- pane zoom state outside of the Zellij Plugin API, which does not apply here
-  disable_multiplexer_nav_when_zoomed = true,
-  -- Supply a Kitty remote control password if needed,
-  -- or you can also set vim.g.smart_splits_kitty_password
-  -- see https://sw.kovidgoyal.net/kitty/conf/#opt-kitty.remote_control_password
-  kitty_password = nil,
-  -- In Zellij, set this to true if you would like to move to the next *tab*
-  -- when the current pane is at the edge of the zellij tab/window
-  zellij_move_focus_or_tab = false,
+  -- No multiplexer backend: herdr is the multiplexer and smart-splits has no
+  -- herdr support, so nav stops at the nvim edge and at_edge takes it from there.
+  multiplexer_integration = false,
   -- default logging level, one of: 'trace'|'debug'|'info'|'warn'|'error'|'fatal'
   log_level = 'info',
 }
