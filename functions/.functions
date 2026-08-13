@@ -3,6 +3,10 @@ cast() {
     mkchromecast --video -i "$1" 
 }
 
+installed-since() {
+    awk -F'[][]' '$2 >= "$1"' /var/log/pacman.log | grep '\] installed ' --color=never
+}
+
 fg() {
     if [[ $# -eq 1 && $1 = - ]]; then
         builtin fg %-;
