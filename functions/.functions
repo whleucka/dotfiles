@@ -132,68 +132,6 @@ killer() {
   fi
 }
 
-nvim-update() {
-    local build="${1:-nightly}"
-    local nvim_dir="$HOME/.neovim"
-    local cwd=$(pwd)
-    local directory=""
-    local filename=""
-    local target=""
-
-    echo "One moment..."
-
-    # Detect installed version
-    if command -v nvim >/dev/null; then
-        local current_version
-        current_version=$(nvim -v | awk 'NR==1{print $2}')
-        if [[ "$current_version" == "$build" ]]; then
-            echo "You already have Neovim $current_version"
-            return 0
-        fi
-        echo "Updating Neovim: $current_version → $build"
-        rm -rf "$nvim_dir"
-    else
-        echo "Installing Neovim $build"
-    fi
-
-    mkdir -p "$nvim_dir"
-    cd "$nvim_dir" || { echo "Failed to enter $nvim_dir"; return 1; }
-
-    # Try URLs in order
-    local URLs=(
-        "https://github.com/neovim/neovim/releases/download/$build/nvim-linux-x86_64.tar.gz"
-        "https://github.com/neovim/neovim/releases/download/$build/nvim-linux64.tar.gz"
-    )
-
-    for url in "${URLs[@]}"; do
-        if curl -Ifs "$url" >/dev/null; then
-            target="$url"
-            filename="${url##*/}"
-            directory="${filename%.tar.gz}"
-            echo "Download target: $filename"
-            break
-        fi
-    done
-
-    if [[ -z "$target" ]]; then
-        echo "Failed to find a working Neovim download URL."
-        return 1
-    fi
-
-    # Download if missing or older than 1 day
-    if [[ ! -f "$filename" || "$(find "$filename" -mtime +1 2>/dev/null)" ]]; then
-        echo "Fetching latest Neovim build..."
-        rm -rf "$directory" "$filename"
-        curl -LO "$target" || { echo "Download failed"; return 1; }
-        tar -xzf "$filename" || { echo "Extraction failed"; return 1; }
-    else
-        echo "Neovim tarball is less than 1 day old; skipping download."
-    fi
-
-    cd "$cwd" || return 1
-    echo "✔ Done!"
-}
-
 extract() {
     local file="$1"
 
@@ -327,14 +265,27 @@ bd() {
 }
 
 cc() {
-if [[ $# -lt 1 || $# -gt 2 ]]; then
+  local encrypt=0
+
+  # Parse flags
+  while [[ "$1" == -* ]]; do
+    case "$1" in
+      -e) encrypt=1; shift ;;
+      *)  printf "Error: Unknown option '%s'\n" "$1"; return 1 ;;
+    esac
+  done
+
+  if [[ $# -lt 1 || $# -gt 2 ]]; then
     printf "Compress Copy\n"
-    printf "Usage: cc <source> [target.tar.gz]\n"
+    printf "Usage: cc [-e] <source> [target.tar.gz]\n"
+    printf "  -e   encrypt with a passphrase (AES256); target must end in .tar.gz.gpg\n"
     return 1
   fi
 
   local source="$1"
   local target="$2"
+  local ext=".tar.gz"
+  (( encrypt )) && ext=".tar.gz.gpg"
 
   # Validate source
   if [[ ! -e "$source" ]]; then
@@ -346,27 +297,66 @@ if [[ $# -lt 1 || $# -gt 2 ]]; then
   if [[ -z "$target" ]]; then
     local name="$(basename "$source")"
     local stamp="$(date +%Y%m%d_%H%M%S)"
-    target="./${name}_${stamp}.tar.gz"
+    target="./${name}_${stamp}${ext}"
     printf "No target provided — using: %s\n" "$target"
   fi
 
   # Validate extension
-  if [[ "$target" != *.tar.gz ]]; then
-    printf "Error: Target must end with .tar.gz\n"
+  if [[ "$target" != *"$ext" ]]; then
+    printf "Error: Target must end with %s\n" "$ext"
     return 1
   fi
 
   # Temporary tarball
   local tmp="/tmp/$(basename "$source")_$(date +%Y%m%d_%H%M%S).tar.gz"
 
+  # Progress bars need pv and an interactive terminal
+  local progress=0
+  command -v pv >/dev/null 2>&1 && [[ -t 2 ]] && progress=1
+
   printf "→ Compressing '%s'...\n" "$source"
-  if ! tar -czf "$tmp" -C "$(dirname "$source")" "$(basename "$source")"; then
+  if (( progress )); then
+    local -a pvargs=(-N compress)
+    local bytes="$(du -sb "$source" 2>/dev/null | cut -f1)"
+    [[ -n "$bytes" ]] && pvargs+=(-s "$bytes")
+    if ! ( set -o pipefail
+           tar -cf - -C "$(dirname "$source")" "$(basename "$source")" \
+             | pv "${pvargs[@]}" \
+             | gzip > "$tmp" ); then
+      printf "Compression failed!\n"
+      rm -f "$tmp"
+      return 1
+    fi
+  elif ! tar -czf "$tmp" -C "$(dirname "$source")" "$(basename "$source")"; then
     printf "Compression failed!\n"
+    rm -f "$tmp"
     return 1
   fi
 
+  # Optional symmetric encryption
+  if (( encrypt )); then
+    printf "→ Encrypting (AES256, symmetric)...\n"
+    if (( progress )); then
+      if ! ( set -o pipefail
+             pv -N encrypt "$tmp" \
+               | gpg --symmetric --cipher-algo AES256 --yes --output "${tmp}.gpg" ); then
+        printf "Encryption failed!\n"
+        rm -f "$tmp" "${tmp}.gpg"
+        return 1
+      fi
+    elif ! gpg --symmetric --cipher-algo AES256 --yes --output "${tmp}.gpg" "$tmp"; then
+      printf "Encryption failed!\n"
+      rm -f "$tmp" "${tmp}.gpg"
+      return 1
+    fi
+    rm -f "$tmp"
+    tmp="${tmp}.gpg"
+  fi
+
   printf "→ Copying to '%s'...\n" "$target"
-  if ! rsync -ah "$tmp" "$target"; then
+  local -a rsyncargs=(-ah)
+  (( progress )) && rsyncargs+=(--info=progress2)
+  if ! rsync "${rsyncargs[@]}" "$tmp" "$target"; then
     printf "Copy failed!\n"
     rm -f "$tmp"
     return 1
