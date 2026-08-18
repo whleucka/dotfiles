@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-LIST=`grep ^Host $HOME/.ssh/config | awk '{ print $2 }' | tail -n+2 | sort -r` 
-SELECTED=`printf "$LIST" | fzf-tmux`
-if [ -z "$SELECTED" ]; then
-   printf "See ya\n" && exit 1
-fi
-/usr/bin/ssh $SELECTED
