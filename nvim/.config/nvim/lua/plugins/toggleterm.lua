@@ -14,7 +14,7 @@ vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
 
 return {
   "akinsho/toggleterm.nvim",
-  event = "VimEnter",
+  cmd = { "ToggleTerm", "ToggleTermToggleAll", "TermExec" },
   keys = {
     { '<C-\\>', ':ToggleTerm direction=horizontal size=20<cr>', desc = 'Toggle term (split)' },
   },

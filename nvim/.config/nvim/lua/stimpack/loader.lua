@@ -28,12 +28,70 @@ local function _register_key(spec)
   end
 end
 
-local function _add_pack(pack)
-  -- Relies on vim.pack.add's init-time default (load = false, i.e. `:packadd!`)
-  -- which puts lua/ on rtp but defers plugin/ and ftdetect/ sourcing. Full
-  -- `:packadd` is then triggered on the lazy event for lazy plugins, or
-  -- implicitly via VimEnter for eager plugins.
-  vim.pack.add({ pack })
+-- Registering a plugin with vim.pack's default init-time `load = false` runs
+-- `:packadd!` per plugin, which is the single most expensive part of startup
+-- (~0.5ms each). Lazy plugins only need their `lua/` visible so specs can
+-- `require` the plugin in `keys`/`opts` before it loads, so collect their paths
+-- and splice them into 'runtimepath' in one shot instead. The real `:packadd`
+-- (which sources `plugin/` and `ftdetect/`) still happens on the lazy trigger.
+local function _rtp_insert(paths)
+  if #paths == 0 then
+    return
+  end
+  -- Insert ahead of the first `after/` entry so user `after/` config keeps
+  -- overriding plugins, exactly like `:packadd!` would place them.
+  local rtp = vim.opt.rtp:get()
+  local at = #rtp + 1
+  for i, dir in ipairs(rtp) do
+    if dir:match("[/\\]after$") then
+      at = i
+      break
+    end
+  end
+  for i = #paths, 1, -1 do
+    table.insert(rtp, at, paths[i])
+  end
+  vim.opt.rtp = rtp
+end
+
+-- Collects packs for one batched registration per load mode. A plugin can be
+-- named more than once (top-level spec plus another plugin's dependency): the
+-- first spec wins (matching vim.pack's own "first one controls the spec" rule,
+-- and why specs are priority-sorted), but any eager mention makes it eager.
+local function _new_registry()
+  local reg = { order = {}, by_name = {} }
+
+  function reg.want(pack, is_lazy)
+    local seen = reg.by_name[pack.name]
+    if seen then
+      seen.is_lazy = seen.is_lazy and is_lazy
+      return
+    end
+    local entry = { pack = pack, is_lazy = is_lazy }
+    reg.by_name[pack.name] = entry
+    table.insert(reg.order, entry)
+  end
+
+  function reg.add_all()
+    local eager, lazy = {}, {}
+    for _, entry in ipairs(reg.order) do
+      table.insert(entry.is_lazy and lazy or eager, entry.pack)
+    end
+    if #eager > 0 then
+      vim.pack.add(eager)
+    end
+    if #lazy > 0 then
+      local paths = {}
+      vim.pack.add(lazy, {
+        load = function(data)
+          paths[#paths + 1] = data.path
+        end,
+      })
+      _rtp_insert(paths)
+    end
+  end
+
+  return reg
 end
 
 local function _auto_config(spec, pack)
@@ -67,6 +125,12 @@ end
 
 function M.load_plugins(stimpack, specs)
   local plugin_load_times = stimpack.config.plugin_load_times
+
+  -- Pass 1: resolve specs and collect packs so all of them can be registered
+  -- with vim.pack in one batched call per load mode.
+  local entries = {}
+  local registry = _new_registry()
+
   for _, spec in ipairs(specs) do
     local should_load = true
     if spec.enabled ~= nil then
@@ -100,18 +164,19 @@ function M.load_plugins(stimpack, specs)
         end
       else
         pack = spec_util.pack_spec(spec)
-        if spec.install ~= false then
-          _add_pack(pack)
-        end
       end
 
       if process_plugin then
-        local dep_names = {}
+        if not spec.dir and spec.install ~= false then
+          registry.want(pack, is_lazy)
+        end
 
+        local dep_names = {}
         if spec.dependencies then
           for _, dependency in ipairs(spec.dependencies) do
             local dep_pack = spec_util.pack_spec(dependency)
-            _add_pack(dep_pack)
+            -- Dependencies inherit the parent's load mode
+            registry.want(dep_pack, is_lazy)
             table.insert(dep_names, dep_pack.name)
           end
         end
@@ -120,49 +185,63 @@ function M.load_plugins(stimpack, specs)
           spec.config = _auto_config(spec, pack)
         end
 
-        if is_lazy then
-          local loaded = false
-          local load_handler = function(_args)
-            if loaded then
-              return
-            end
-            loaded = true
-            local start_time = vim.uv.hrtime()
-
-            for _, dep_name in ipairs(dep_names) do
-              pcall(vim.cmd.packadd, dep_name)
-            end
-
-            if not spec.dir then
-              pcall(vim.cmd.packadd, pack.name)
-            end
-
-            if spec.config then
-              _run_config(spec.config, pack.name)
-            end
-
-            if spec.keys then
-              _register_key(spec)
-            end
-            local end_time = vim.uv.hrtime()
-            plugin_load_times[pack.name] = (end_time - start_time) / 1e6
-          end
-
-          lazy.setup_loading(spec, pack, dep_names, load_handler)
-        else
-          -- eager load — vim.pack.add already handled packadd for parent
-          -- and deps, so we just run config + register keys
-          local start_time = vim.uv.hrtime()
-          if spec.config then
-            _run_config(spec.config, pack.name)
-          end
-          if spec.keys then
-            _register_key(spec)
-          end
-          local end_time = vim.uv.hrtime()
-          plugin_load_times[pack.name] = (end_time - start_time) / 1e6
-        end
+        table.insert(entries, {
+          spec = spec,
+          pack = pack,
+          is_lazy = is_lazy,
+          dep_names = dep_names,
+        })
       end
+    end
+  end
+
+  registry.add_all()
+
+  -- Pass 2: run configs for eager plugins, register triggers for lazy ones
+  for _, entry in ipairs(entries) do
+    local spec, pack, dep_names = entry.spec, entry.pack, entry.dep_names
+
+    if entry.is_lazy then
+      local loaded = false
+      local load_handler = function(_args)
+        if loaded then
+          return
+        end
+        loaded = true
+        local start_time = vim.uv.hrtime()
+
+        for _, dep_name in ipairs(dep_names) do
+          pcall(vim.cmd.packadd, dep_name)
+        end
+
+        if not spec.dir then
+          pcall(vim.cmd.packadd, pack.name)
+        end
+
+        if spec.config then
+          _run_config(spec.config, pack.name)
+        end
+
+        if spec.keys then
+          _register_key(spec)
+        end
+        local end_time = vim.uv.hrtime()
+        plugin_load_times[pack.name] = (end_time - start_time) / 1e6
+      end
+
+      lazy.setup_loading(spec, pack, dep_names, load_handler)
+    else
+      -- eager load — vim.pack.add already handled packadd for parent
+      -- and deps, so we just run config + register keys
+      local start_time = vim.uv.hrtime()
+      if spec.config then
+        _run_config(spec.config, pack.name)
+      end
+      if spec.keys then
+        _register_key(spec)
+      end
+      local end_time = vim.uv.hrtime()
+      plugin_load_times[pack.name] = (end_time - start_time) / 1e6
     end
   end
 end

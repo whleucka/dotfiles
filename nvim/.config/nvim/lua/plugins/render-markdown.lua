@@ -6,6 +6,7 @@ return {
     "nvim-mini/mini.icons",
   },
   opts = {
+    latex = { enabled = false },
     completions = { lsp = { enabled = true } },
   },
   keys = function()
