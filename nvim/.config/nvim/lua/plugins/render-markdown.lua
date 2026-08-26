@@ -7,6 +7,9 @@ return {
   },
   opts = {
     latex = { enabled = false },
+    -- yaml frontmatter rendering needs the yaml parser, which is not in
+    -- config.treesitter-modules' ensure_installed.
+    yaml = { enabled = false },
     completions = { lsp = { enabled = true } },
   },
   keys = function()
