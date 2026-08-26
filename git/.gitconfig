@@ -16,5 +16,10 @@
 [user]
 	name = William Hleucka
 	email = william.hleucka@gmail.com
+	signingkey = A92616B85E790701
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
 [color]
     ui = auto
