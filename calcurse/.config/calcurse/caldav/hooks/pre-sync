@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""calcurse-caldav pre-sync hook: drop malformed recurrence lines from apts.
+
+Google emits the odd recurring event whose UNTIL precedes its start date.
+calcurse writes it into apts, then rejects the whole file on every later
+import ("recurrence error: not on start day"), so one bad line stalls the
+rest of the sync. Strip those lines before syncing; a backup is kept.
+"""
+
+import os
+import re
+import shutil
+import sys
+from datetime import datetime
+
+data = os.environ.get("XDG_DATA_HOME") or os.path.expanduser("~/.local/share")
+apts = os.path.join(data, "calcurse", "apts")
+if not os.path.isfile(apts):
+    sys.exit(0)
+
+# start date ... { <recurrence> -> until } — only recurrences with an UNTIL.
+PATTERN = re.compile(r"(\d\d/\d\d/\d{4}) @ [\d:]+ -> .*?\{[^}]*?-> (\d\d/\d\d/\d{4})")
+
+
+def valid(line):
+    m = PATTERN.match(line)
+    if not m:
+        return True
+    fmt = "%m/%d/%Y"
+    try:
+        return datetime.strptime(m.group(2), fmt) >= datetime.strptime(m.group(1), fmt)
+    except ValueError:
+        return True
+
+
+with open(apts) as f:
+    lines = f.readlines()
+
+kept = [l for l in lines if valid(l)]
+dropped = len(lines) - len(kept)
+if not dropped:
+    sys.exit(0)
+
+shutil.copyfile(apts, apts + ".bak")
+with open(apts, "w") as f:
+    f.writelines(kept)
+
+print(f"pre-sync: dropped {dropped} malformed recurrence line(s) from apts "
+      f"(backup: {apts}.bak)", file=sys.stderr)

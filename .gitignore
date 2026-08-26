@@ -1,2 +1,3 @@
 .nvim-session.vim
 tmux/.config/tmux/plugins/
+calcurse/.config/calcurse/caldav/config
