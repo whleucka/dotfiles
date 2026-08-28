@@ -1,6 +1,2 @@
 .nvim-session.vim
 tmux/.config/tmux/plugins/
-calcurse/.config/calcurse/caldav/config
-calcurse/.config/calcurse/caldav/oauth2_cred
-calcurse/.config/calcurse/conf
-calcurse/.config/calcurse/keys
