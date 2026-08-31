@@ -60,14 +60,14 @@ return {
   config = function()
     local config = require("config.dashboard")
 
-    -- Precomputed here, not in the footer callback: stimpack.get_stats() calls
-    -- vim.pack.get(), which yields to the event loop, and the footer runs in the
-    -- middle of hyper's buffer write where a yield corrupts the render. Nothing
-    -- is drawing yet at this point, so yielding here is free. The elapsed time
-    -- is deliberately left to the footer -- stimpack registers its VimEnter
-    -- handler after this plugin loads, so ui_ready_time_ms is still nil here.
+    -- Read the count stimpack already computed in setup() rather than calling
+    -- get_stats(), which calls vim.pack.get() and walks every plugin repo -- it
+    -- costs ~300ms, and this runs on VimEnter, so it lands straight on startup.
+    -- The elapsed time is deliberately left to the footer: stimpack registers
+    -- its VimEnter handler after this plugin loads, so ui_ready_time_ms is nil
+    -- here, and reltime() in the footer costs nothing.
     pcall(function()
-      vim.g.dashboard_plugin_count = require("stimpack").get_stats().loaded_plugins or 0
+      vim.g.dashboard_plugin_count = require("stimpack").config.loaded_plugins or 0
     end)
 
     -- Register before setup(): setup() renders synchronously, so any event it
