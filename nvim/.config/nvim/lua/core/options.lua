@@ -20,6 +20,7 @@ vim.o.cursorline = true     -- Highlight current line
 vim.o.termguicolors = true  -- 24-bit color support
 vim.o.guicursor = "a:"
 vim.o.signcolumn = 'yes'    -- Always show signcolumn (gutter)
+vim.o.numberwidth = 4       -- Room for 3-digit relative numbers, no jitter on scroll
 vim.o.scrolloff = 8         -- Context lines above/below cursor
 vim.o.sidescrolloff = 8     -- Context on sides for horizontal movement
 vim.o.wrap = false          -- Don't wrap long lines
@@ -43,15 +44,29 @@ vim.o.confirm = true    -- Confirm to save before closing
 vim.o.updatetime = 200 -- Faster CursorHold, good for LSP
 vim.o.timeoutlen = 300 -- Shorter delay for mapped sequences
 
+-- Whitespace
+vim.o.list = true
+-- leadmultispace pattern is shiftwidth-wide, so indent guides land on tab stops
+vim.o.listchars = "tab:» ,leadmultispace:·   ,trail:·,nbsp:+,extends:›,precedes:‹"
+
 -- Aesthetics
 vim.o.showmode = false                -- Don’t show mode (use statusline plugin)
 vim.o.laststatus = 3                  -- Global statusline (Neovim 0.7+)
---vim.o.fillchars:append { eob = ' ' }  -- No ~ at end of buffers
+vim.opt.fillchars:append({              -- vim.o has no :append, must use vim.opt
+  eob = " ",                            -- No ~ past end of buffer
+  vert = "│",                            -- Thin split separator
+  horiz = "─",
+  fold = " ",
+  foldopen = "▾",
+  foldclose = "▸",
+  foldsep = " ",
+  diff = "╱",
+})
 
 -- Extra Ninja Options
 vim.o.lazyredraw = true           -- Faster macro execution
 vim.o.virtualedit = 'block'       -- Allow cursor beyond EOL in visual block
---vim.o.whichwrap:append('<,>,[,]') -- Left/right move across lines
+vim.opt.whichwrap:append('<,>,[,]') -- Left/right move across lines
 
 -- Folds
 vim.o.foldmethod = "expr"
@@ -65,5 +80,10 @@ vim.wo.winbar = ""
 vim.o.spelllang = 'en_ca'
 
 -- Neovim 0.12+
---vim.o.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
+-- linematch is on by default at 40; drop the default before raising the budget so
+-- diffopt doesn't carry two conflicting linematch entries
+vim.opt.diffopt = vim.tbl_filter(function(o)
+  return not vim.startswith(o, 'linematch:')
+end, vim.opt.diffopt:get())
+vim.opt.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
 vim.loader.enable()                    -- Fast startup via Lua module caching
