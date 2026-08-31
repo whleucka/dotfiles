@@ -29,9 +29,12 @@ local banner = {
 -- ready. Both are then frozen: they describe startup, so :Dashboard an hour
 -- later must not re-measure.
 local function footer()
+  -- A local literal, not an upvalue -- constants survive string.dump().
+  local quote = "With great power comes great responsibility"
+
   local count = vim.g.dashboard_plugin_count
   if type(count) ~= "number" then
-    return { "" }
+    return { "", quote, "" }
   end
 
   local ready = vim.g.dashboard_ready_ms
@@ -45,6 +48,8 @@ local function footer()
 
   local v = vim.version()
   return {
+    "",
+    quote,
     "",
     ("⚡ %d plugins  •  ready in %.0fms  •  nvim %d.%d.%d"):format(
       count,
