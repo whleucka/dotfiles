@@ -79,6 +79,9 @@ vim.wo.winbar = ""
 -- Spelling
 vim.o.spelllang = 'en_ca'
 
+-- Auto reload when file changes
+vim.o.autoread = true
+
 -- Neovim 0.12+
 -- linematch is on by default at 40; drop the default before raising the budget so
 -- diffopt doesn't carry two conflicting linematch entries
