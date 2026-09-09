@@ -71,7 +71,7 @@ local keys = {
           end
         end
       end,
-      desc = "Close",
+      desc = "Close All",
     },
     { "<leader>bn", ":bnext<CR>",  desc = "Next" },
     { "<leader>bp", ":bprev<CR>",  desc = "Prev" },
