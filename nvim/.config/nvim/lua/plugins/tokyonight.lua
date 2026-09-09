@@ -16,6 +16,10 @@ return {
         hl["@comment.documentation"] = { fg = comment, italic = true }
         -- Keep doc/note tags from falling back to the old dim value
         hl.SpecialComment = { fg = comment, italic = true }
+        -- Stock WinSeparator is c.border (#15161e), darker than the #1a1b26
+        -- background, so split boundaries vanish. blue0 reads as a deliberate
+        -- line without competing with the code.
+        hl.WinSeparator = { fg = c.blue0, bold = false }
       end,
     })
     vim.cmd([[colorscheme tokyonight-night]])
