@@ -16,6 +16,13 @@ vim.o.autoindent = true  -- Copy indent from current line
 
 -- UI/UX Improvements
 vim.o.cmdheight = 0         -- No command height
+-- Neovim 0.12 added the "progress:" flag, default "progress:c", which routes
+-- vim.pack's per-plugin progress into the cmdline. With cmdheight = 0 the
+-- "hit-enter" rule -- prompt when a message is taller than cmdheight -- fires
+-- on every one of them, so :StimSync turned into 31 Press-ENTER prompts.
+-- Empty means those never reach the cmdline; vim.pack still opens its report
+-- tabpage at the end, and genuine messages still prompt.
+vim.o.messagesopt = "hit-enter,history:500,progress:"
 vim.o.cursorline = true     -- Highlight current line
 vim.o.termguicolors = true  -- 24-bit color support
 vim.o.guicursor = "a:"
