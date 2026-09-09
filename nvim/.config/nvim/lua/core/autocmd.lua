@@ -72,3 +72,11 @@ vim.filetype.add({
     ansi = "ansi",
   },
 })
+
+-- Track recently visited buffers for <leader><leader>
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("track-buffer-mru", { clear = true }),
+  callback = function(args)
+    require("core.utils").track_buffer(args.buf)
+  end,
+})

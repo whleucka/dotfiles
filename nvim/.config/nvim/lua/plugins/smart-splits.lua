@@ -19,11 +19,11 @@ return {
       { "<C-M-l>", require('smart-splits').move_cursor_right,  desc = "Move cursor right" },
     }
     return vim.list_extend(nav_and_resize, {
-      { "<leader>;", require('smart-splits').move_cursor_previous, desc = "Move cursor previous" },
-      { "<leader><leader>h", require('smart-splits').swap_buf_left, desc = "Swap buffer left" },
-      { "<leader><leader>j", require('smart-splits').swap_buf_down, desc = "Swap buffer odwn" },
-      { "<leader><leader>k", require('smart-splits').swap_buf_up, desc = "Swap buffer up" },
-      { "<leader><leader>l", require('smart-splits').swap_buf_right, desc = "Swap buffer right" },
+      -- { "<leader>;", require('smart-splits').move_cursor_previous, desc = "Move cursor previous" },
+      -- { "<leader><leader>h", require('smart-splits').swap_buf_left, desc = "Swap buffer left" },
+      -- { "<leader><leader>j", require('smart-splits').swap_buf_down, desc = "Swap buffer odwn" },
+      -- { "<leader><leader>k", require('smart-splits').swap_buf_up, desc = "Swap buffer up" },
+      -- { "<leader><leader>l", require('smart-splits').swap_buf_right, desc = "Swap buffer right" },
     })
   end
 }

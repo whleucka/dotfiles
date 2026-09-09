@@ -114,6 +114,16 @@ local keys = {
   {
     { "q",          "<nop>" },
     { "<esc><esc>", ":noh<CR>" },
+    {
+      "<leader><leader>",
+      function()
+        local buf = require("core.utils").last_buffer()
+        if buf then
+          vim.api.nvim_set_current_buf(buf)
+        end
+      end,
+      desc = "Last buffer",
+    },
     { "<leader>q",  function() require("mini.bufremove").delete(0, false) end, desc = "Close buffer" },
     { "<leader>Q",  ":qa<CR>",                                                 desc = "Close Neovim" },
     { "<leader>w",  ":w!<CR>",                                                 desc = "Save" },
