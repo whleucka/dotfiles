@@ -3,9 +3,6 @@ vim.lsp.enable({
   "clangd",
   "cssls",
   "html",
-  -- "htmx", -- disabled: htmx-lsp advertises hoverProvider but returns garbage,
-  --            which kills vim.lsp.buf.hover() on every ft it attaches to
-  --            (php/js/ts/html/twig/markdown). Config kept in lsp/htmx.lua.
   "intelephense",
   "lua_ls",
   "ruff",
@@ -15,10 +12,6 @@ vim.lsp.enable({
 })
 
 vim.diagnostic.config({
-  -- virtual_text = true,
-  -- virtual_lines = {
-  --   current_line = true,
-  -- },
   virtual_text = { current_line = true },
   underline = true,
   update_in_insert = false,

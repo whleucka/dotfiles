@@ -50,11 +50,11 @@ vim.o.list = true
 vim.o.listchars = "tab:» ,leadmultispace:·   ,trail:·,nbsp:+,extends:›,precedes:‹"
 
 -- Aesthetics
-vim.o.showmode = false                -- Don’t show mode (use statusline plugin)
-vim.o.laststatus = 3                  -- Global statusline (Neovim 0.7+)
-vim.opt.fillchars:append({              -- vim.o has no :append, must use vim.opt
-  eob = " ",                            -- No ~ past end of buffer
-  vert = "│",                            -- Thin split separator
+vim.o.showmode = false -- Don’t show mode (use statusline plugin)
+vim.o.laststatus = 3   -- Global statusline (Neovim 0.7+)
+vim.opt.fillchars:append({
+  eob = " ",
+  vert = "│",
   horiz = "─",
   fold = " ",
   foldopen = "▾",
@@ -64,8 +64,8 @@ vim.opt.fillchars:append({              -- vim.o has no :append, must use vim.op
 })
 
 -- Extra Ninja Options
-vim.o.lazyredraw = true           -- Faster macro execution
-vim.o.virtualedit = 'block'       -- Allow cursor beyond EOL in visual block
+vim.o.lazyredraw = true             -- Faster macro execution
+vim.o.virtualedit = 'block'         -- Allow cursor beyond EOL in visual block
 vim.opt.whichwrap:append('<,>,[,]') -- Left/right move across lines
 
 -- Folds
@@ -82,9 +82,7 @@ vim.o.spelllang = 'en_ca'
 -- Auto reload when file changes
 vim.o.autoread = true
 
--- Neovim 0.12+
--- linematch is on by default at 40; drop the default before raising the budget so
--- diffopt doesn't carry two conflicting linematch entries
+-- Diff
 vim.opt.diffopt = vim.tbl_filter(function(o)
   return not vim.startswith(o, 'linematch:')
 end, vim.opt.diffopt:get())

@@ -52,9 +52,6 @@ local keys = {
     { "<leader>bc", ":enew<CR>",   desc = "Create New" },
     {
       "<leader>bq",
-      -- Plain :bd closes the *window* when it isn't the last one (e.g. with a
-      -- docked split like mantis). mini.bufremove deletes the buffer while
-      -- keeping the window layout intact.
       function() require("mini.bufremove").delete(0, false) end,
       desc = "Close",
     },
@@ -70,7 +67,7 @@ local keys = {
           -- Only delete the buffer if it is listed/valid
           if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted then
             -- Change false to true if you want to force-delete unsaved buffers
-            bufremove.delete(bufnr, false) 
+            bufremove.delete(bufnr, false)
           end
         end
       end,
