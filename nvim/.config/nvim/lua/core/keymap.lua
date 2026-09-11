@@ -13,7 +13,13 @@ local keys = {
       "<leader>ca", function() vim.lsp.buf.code_action() end, desc = "Action"
     },
     {
-      "<leader>cf", function() vim.lsp.buf.format({ async = true }) end, desc = "Format"
+      -- Not vim.lsp.buf.format: intelephense reports documentFormattingProvider
+      -- = false, so this used to be a silent no-op in PHP. conform routes php
+      -- to the project's php-cs-fixer and everything else to its LSP.
+      "<leader>cf", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, desc = "Format"
+    },
+    {
+      "<leader>cn", function() require("config.lint").run() end, desc = "Lint now"
     },
     {
       "<leader>cr", function() vim.lsp.buf.rename() end, desc = "Rename symbol"
