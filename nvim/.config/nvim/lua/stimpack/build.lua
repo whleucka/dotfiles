@@ -8,7 +8,9 @@ local function _resolve_path(spec, pack_name)
   if spec.dir then
     return vim.fn.expand(spec.dir)
   end
-  local info_list = vim.pack.get({ pack_name }, { info = true })
+  -- info = false: only the path is needed, and info = true shells out to git
+  -- for every branch and tag.
+  local info_list = vim.pack.get({ pack_name }, { info = false })
   if not info_list or #info_list == 0 or not info_list[1].path then
     return nil
   end

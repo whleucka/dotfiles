@@ -37,15 +37,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Clear search
-vim.api.nvim_create_autocmd("CursorMoved", {
-  group = vim.api.nvim_create_augroup('clear-search-cursor-move', { clear = true }),
-  callback = function()
-    if vim.v.hlsearch == 1 and vim.fn.mode() == "n" then
-      vim.cmd("nohlsearch")
-    end
-  end,
-})
+-- Clear search highlight after 'updatetime' idle or on entering insert mode.
+-- Not a CursorMoved -> :nohlsearch autocmd: the search highlight state is
+-- saved and restored around autocommands (:h autocmd-searchpat), so that was a
+-- silent no-op. The bundled plugin feedkeys() the command to escape that.
+vim.cmd.packadd("nohlsearch")
 
 -- Close with q
 vim.api.nvim_create_autocmd("FileType", {

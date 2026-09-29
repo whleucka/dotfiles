@@ -94,4 +94,3 @@ vim.opt.diffopt = vim.tbl_filter(function(o)
   return not vim.startswith(o, 'linematch:')
 end, vim.opt.diffopt:get())
 vim.opt.diffopt:append('linematch:60') -- Better diffs with linematch algorithm
-vim.loader.enable()                    -- Fast startup via Lua module caching

@@ -1,4 +1,10 @@
 -- Welcome to my Neovim configuration
+
+-- Byte-compile cache for Lua modules. First, so it covers every require below
+-- (it used to sit at the end of core.options, after stimpack had loaded most
+-- of the config).
+vim.loader.enable()
+
 require("core.globals")
 vim.g.start_time = vim.fn.reltime()
 

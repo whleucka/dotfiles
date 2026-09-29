@@ -28,30 +28,61 @@ local function _register_key(spec)
   end
 end
 
--- Registering a plugin with vim.pack's default init-time `load = false` runs
--- `:packadd!` per plugin, which is the single most expensive part of startup
--- (~0.5ms each). Lazy plugins only need their `lua/` visible so specs can
--- `require` the plugin in `keys`/`opts` before it loads, so collect their paths
--- and splice them into 'runtimepath' in one shot instead. The real `:packadd`
--- (which sources `plugin/` and `ftdetect/`) still happens on the lazy trigger.
-local function _rtp_insert(paths)
+-- Lazy plugins must stay OFF 'runtimepath' until their trigger fires. Anything
+-- on 'rtp' when init.lua returns has its plugin/ scripts sourced by Nvim's own
+-- startup plugin loading -- that is all `:packadd!` means -- so splicing lazy
+-- plugins into 'rtp' up front ran every one of their plugin/ files at startup
+-- (~24ms of a ~76ms start), lazy in name only.
+--
+-- Specs still need to `require` a lazy plugin before it loads (in `keys` or
+-- `opts`), so its modules are resolved by a package searcher over each plugin's
+-- lua/ dir instead. The real `:packadd` on the trigger puts it on 'rtp' and
+-- sources plugin/; after that Nvim's own loader finds its modules first.
+-- Top-level module name -> plugin paths. A list, because plugins share
+-- namespaces: blink.cmp and blink.lib both ship lua/blink/.
+local lazy_modules = {}
+
+local function _index_lua_dir(path)
+  local lua_dir = path .. "/lua"
+  if not vim.uv.fs_stat(lua_dir) then
+    return
+  end
+  for name, type_ in vim.fs.dir(lua_dir) do
+    local mod = type_ == "directory" and name or name:match("^(.+)%.lua$")
+    if mod then
+      lazy_modules[mod] = lazy_modules[mod] or {}
+      table.insert(lazy_modules[mod], path)
+    end
+  end
+end
+
+local function _lazy_searcher(modname)
+  local roots = lazy_modules[modname:match("^[^.]+")]
+  if not roots then
+    return nil
+  end
+  local rel = modname:gsub("%.", "/")
+  for _, root in ipairs(roots) do
+    for _, suffix in ipairs({ ".lua", "/init.lua" }) do
+      local file = root .. "/lua/" .. rel .. suffix
+      if vim.uv.fs_stat(file) then
+        return assert(loadfile(file))
+      end
+    end
+  end
+  return "\n\tno file in stimpack lazy plugins"
+end
+
+local function _register_lazy_paths(paths)
   if #paths == 0 then
     return
   end
-  -- Insert ahead of the first `after/` entry so user `after/` config keeps
-  -- overriding plugins, exactly like `:packadd!` would place them.
-  local rtp = vim.opt.rtp:get()
-  local at = #rtp + 1
-  for i, dir in ipairs(rtp) do
-    if dir:match("[/\\]after$") then
-      at = i
-      break
-    end
+  for _, path in ipairs(paths) do
+    _index_lua_dir(path)
   end
-  for i = #paths, 1, -1 do
-    table.insert(rtp, at, paths[i])
-  end
-  vim.opt.rtp = rtp
+  -- Last, so the byte-compiled vim.loader / 'rtp' searchers always win once a
+  -- plugin has actually been packadd'ed.
+  table.insert(package.loaders, _lazy_searcher)
 end
 
 -- Collects packs for one batched registration per load mode. A plugin can be
@@ -87,7 +118,7 @@ local function _new_registry()
           paths[#paths + 1] = data.path
         end,
       })
-      _rtp_insert(paths)
+      _register_lazy_paths(paths)
     end
   end
 

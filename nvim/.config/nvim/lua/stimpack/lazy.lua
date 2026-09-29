@@ -25,6 +25,67 @@ local function _normalize_event(event)
   error("event must be a string or table of strings")
 end
 
+-- Autocmds a plugin creates while it loads never see the event that loaded
+-- it: Nvim does not run autocmds added mid-dispatch. That is exactly how
+-- plugins hook in (dashboard's UIEnter/VimEnter, render-markdown's FileType
+-- attach), so load, then re-fire the trigger event for just the new ones.
+-- Not every autocmd carries an `id` (Vimscript-defined ones don't), so fall
+-- back to identifying it by its contents.
+local function _au_key(au)
+  return au.id
+    or table.concat({ tostring(au.group), au.pattern or "", au.command or "", tostring(au.callback) }, "\0")
+end
+
+local function _load_and_replay(load_handler)
+  return function(args)
+    local before = {}
+    for _, au in ipairs(vim.api.nvim_get_autocmds({ event = args.event })) do
+      before[_au_key(au)] = true
+    end
+
+    load_handler()
+
+    local groups, loose = {}, {}
+    for _, au in ipairs(vim.api.nvim_get_autocmds({ event = args.event })) do
+      if not before[_au_key(au)] then
+        if au.group then
+          groups[au.group] = true
+        elseif au.callback then
+          table.insert(loose, au)
+        end
+      end
+    end
+    if next(groups) == nil and #loose == 0 then
+      return
+    end
+
+    local function replay()
+      for group in pairs(groups) do
+        pcall(vim.api.nvim_exec_autocmds, args.event, {
+          group = group,
+          -- Pattern is matched against <amatch> (the filetype for FileType,
+          -- the file name for BufRead*, the pattern for User).
+          pattern = args.match ~= "" and args.match or nil,
+          modeline = false,
+          data = args.data,
+        })
+      end
+      for _, au in ipairs(loose) do
+        pcall(au.callback, vim.tbl_extend("force", args, { id = au.id }))
+        if au.once then
+          pcall(vim.api.nvim_del_autocmd, au.id)
+        end
+      end
+    end
+
+    if args.buf and args.buf ~= vim.api.nvim_get_current_buf() and vim.api.nvim_buf_is_valid(args.buf) then
+      vim.api.nvim_buf_call(args.buf, replay)
+    else
+      replay()
+    end
+  end
+end
+
 function M.setup_loading(spec, pack, dep_names, load_handler)
   if spec.event then
     local events = _normalize_event(spec.event)
@@ -32,12 +93,12 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
       vim.api.nvim_create_autocmd("User", {
         once = true,
         pattern = "VeryLazy",
-        callback = load_handler,
+        callback = _load_and_replay(load_handler),
       })
     else
       vim.api.nvim_create_autocmd(events, {
         once = true,
-        callback = load_handler,
+        callback = _load_and_replay(load_handler),
       })
     end
   end
@@ -46,7 +107,7 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
     vim.api.nvim_create_autocmd("FileType", {
       pattern = spec.ft,
       once = true,
-      callback = load_handler,
+      callback = _load_and_replay(load_handler),
     })
   end
 

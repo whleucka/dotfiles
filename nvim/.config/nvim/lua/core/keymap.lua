@@ -83,12 +83,14 @@ local keys = {
     { "<leader>bp", ":bprev<CR>",  desc = "Prev" },
     { "<leader>bf", ":bfirst<CR>", desc = "First" },
     { "<leader>bl", ":blast<CR>",  desc = "Last" },
+    -- mini.bufremove rather than :bd, which also closed every window showing
+    -- the buffer and collapsed the layout.
     {
       "<leader>bo",
       function()
         local cur = vim.api.nvim_get_current_buf()
         for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
-          if b.bufnr ~= cur then vim.cmd("bd " .. b.bufnr) end
+          if b.bufnr ~= cur then require("mini.bufremove").delete(b.bufnr, false) end
         end
       end,
       desc = "Close Others",
@@ -99,7 +101,7 @@ local keys = {
         local cur = vim.api.nvim_get_current_buf()
         for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
           if b.bufnr == cur then break end
-          vim.cmd("bd " .. b.bufnr)
+          require("mini.bufremove").delete(b.bufnr, false)
         end
       end,
       desc = "Close Left",
@@ -110,7 +112,7 @@ local keys = {
         local cur = vim.api.nvim_get_current_buf()
         local seen = false
         for _, b in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
-          if seen then vim.cmd("bd " .. b.bufnr) end
+          if seen then require("mini.bufremove").delete(b.bufnr, false) end
           if b.bufnr == cur then seen = true end
         end
       end,
@@ -134,13 +136,14 @@ local keys = {
     { "<leader>Q",  ":qa<CR>",                                                 desc = "Close Neovim" },
     { "<leader>w",  ":w!<CR>",                                                 desc = "Save" },
     { "H",          ":bprev<CR>",                                              desc = "Previous Buffer" },
-    { "L",          ":bnext<CR>",                                              desc = "Previous Buffer" },
-    { "gd",         ":lua vim.lsp.buf.definition()<cr>",                       desc = "Go to definition" },
-    { "gD",         ":lua vim.lsp.buf.declaration()<cr>",                      desc = "Go to declaration" },
-    { "gi",         ":lua vim.lsp.buf.implementation()<cr>",                   desc = "Go to implementation" },
-    { "gr",         ":lua vim.lsp.buf.references()<cr>",                       desc = "Go to references" },
-    { "gt",         ":lua vim.lsp.buf.type_definition()<cr>",                  desc = "Go to type definition" },
-    { "K",          ":lua vim.lsp.buf.hover()<cr>",                            desc = "Hover documentation" },
+    { "L",          ":bnext<CR>",                                              desc = "Next Buffer" },
+    -- References, implementation and type definition use Nvim's defaults
+    -- instead: grr, gri, grt (plus gra action, grn rename, grx codelens).
+    -- Custom gr/gi/gt shadowed builtins -- gi resumes insert, gt is next tab --
+    -- and a bare gr made every gr* default wait out 'timeoutlen'.
+    { "gd",         function() vim.lsp.buf.definition() end,                   desc = "Go to definition" },
+    { "gD",         function() vim.lsp.buf.declaration() end,                  desc = "Go to declaration" },
+    { "K",          function() vim.lsp.buf.hover() end,                        desc = "Hover documentation" },
     { "<F5>",       ":restart<CR>",                                            desc = "Restart" },
   },
   {
@@ -149,7 +152,9 @@ local keys = {
     { "kj", "<esc>" },
   },
   {
-    mode = "v",
+    -- "x", not "v": "v" also covers select mode, so typing <, >, J or K over a
+    -- snippet placeholder ran these instead of inserting the character.
+    mode = "x",
     { "<", "<gv",              desc = "Indent selected <" },
     { ">", ">gv",              desc = "Indent selected >" },
     { "J", ":m '>+1<CR>gv=gv", desc = "Move selected line down" },

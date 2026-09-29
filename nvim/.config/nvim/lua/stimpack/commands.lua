@@ -140,7 +140,8 @@ function M.setup(stimpack)
           valid_plugin = false
         end
       else
-        local ok, info = pcall(vim.pack.get, { name }, { info = true })
+        -- Only `rev` is read; info = true would run git per plugin.
+        local ok, info = pcall(vim.pack.get, { name }, { info = false })
         if ok and info and info[1] then
           rev = (info[1].rev or "N/A"):sub(1, 7)
         else

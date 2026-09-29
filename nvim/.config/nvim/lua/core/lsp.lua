@@ -1,3 +1,12 @@
+-- blink.cmp's plugin/ file registers these, but blink loads on InsertEnter --
+-- after the first client has already started without them. (It only ever
+-- worked because stimpack used to source every lazy plugin's plugin/ at
+-- startup.) get_lsp_capabilities() is safe to call before blink's setup().
+local blink_ok, blink = pcall(require, "blink.cmp")
+if blink_ok then
+  vim.lsp.config("*", { capabilities = blink.get_lsp_capabilities() })
+end
+
 vim.lsp.enable({
   "bashls",
   "clangd",

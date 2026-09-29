@@ -1,16 +1,34 @@
-function _G.set_terminal_keymaps()
-  local opts = {buffer = 0}
-  vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', 'kj', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+-- Terminal-mode keys are taken from the program running in the terminal, so
+-- stay off chords the shell and TUIs need: <C-w> is delete-word, <C-l> clear,
+-- <C-h>/<C-j>/<C-k> backspace/accept/kill-line, and a bare <esc> belongs to
+-- fzf, lazygit and friends.
+local function set_terminal_keymaps(buf)
+  local function map(lhs, rhs, desc)
+    vim.keymap.set('t', lhs, rhs, { buffer = buf, desc = desc })
+  end
+  map('<esc><esc>', [[<C-\><C-n>]], 'Normal mode')
+  map('jk', [[<C-\><C-n>]], 'Normal mode')
+  map('kj', [[<C-\><C-n>]], 'Normal mode')
+
+  -- The unified super+hjkl chord (Hyprland injects ctrl+alt+hjkl), so window
+  -- navigation works from inside the terminal too, edge hand-off included.
+  -- Same split as the normal-mode maps: herdr-splits inside herdr,
+  -- smart-splits outside.
+  local nav = vim.env.HERDR_ENV == "1" and "herdr-splits" or "smart-splits"
+  for key, dir in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
+    map('<C-M-' .. key .. '>', function()
+      require(nav)["move_cursor_" .. dir]()
+    end, 'Move cursor ' .. dir)
+  end
 end
 
-vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = vim.api.nvim_create_augroup("toggleterm-keymaps", { clear = true }),
+  pattern = "term://*toggleterm#*",
+  callback = function(args)
+    set_terminal_keymaps(args.buf)
+  end,
+})
 
 return {
   "akinsho/toggleterm.nvim",

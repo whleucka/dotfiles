@@ -25,23 +25,22 @@ return {
         {
           "<leader>o",
           function()
+            -- close() returns false when there was no explorer to close
             if not MiniFiles.close() then
               MiniFiles.open(vim.api.nvim_buf_get_name(0))
-            else
-              MiniFiles.close()
             end
           end,
-          desc = "Open file explorer"
+          desc = "Toggle file explorer"
         },
         {
           "<leader>ed",
-          ":lua MiniFiles.open()<CR>",
-          desc = "Files"
+          function() MiniFiles.open() end,
+          desc = "Files (cwd)"
         },
         {
           "<leader>ef",
-          ":lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>",
-          desc = "Files (project root)"
+          function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end,
+          desc = "Files (current file)"
         },
         {
           "<leader>eq",

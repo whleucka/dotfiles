@@ -80,7 +80,9 @@ function M.setup(opts)
 end
 
 function M.get_stats()
-  local loaded_plugins = vim.pack.get() or {}
+  -- info = false: the default (true) runs git for every plugin's branches and
+  -- tags -- ~335ms for 30 plugins vs ~0.4ms -- and only the count is used.
+  local loaded_plugins = vim.pack.get(nil, { info = false }) or {}
   local local_plugins = 0
   for _, spec in ipairs(M.config.specs) do
     if type(spec) == "table" and spec.dir then
@@ -101,9 +103,21 @@ function M.sync(opts)
   vim.pack.update()
 end
 
+-- vim.pack.del() refuses (and throws) for a plugin added to this session.
+-- Deliberately not forced: deleting a plugin whose spec still exists would
+-- just reinstall it on the next start.
 function M.delete(name)
-  vim.pack.del({ name })
+  local ok, err = pcall(vim.pack.del, { name })
+  if not ok then
+    vim.notify(
+      ("STIMPACK: Could not delete %s -- it is still loaded. Remove its spec, restart, and run :StimClean.\n%s")
+      :format(name, tostring(err)),
+      vim.log.levels.WARN
+    )
+    return false
+  end
   vim.notify(("STIMPACK: Successfully deleted %s!"):format(name), vim.log.levels.INFO)
+  return true
 end
 
 function M.update(name, opts)
@@ -224,11 +238,14 @@ function M.clean(opts)
     end
   end
 
+  local deleted = 0
   for _, orphan in ipairs(orphans) do
-    M.delete(orphan)
+    if M.delete(orphan) then
+      deleted = deleted + 1
+    end
   end
 
-  vim.notify("STIMPACK: Finished cleaning " .. #orphans .. " orphaned plugins.", vim.log.levels.INFO)
+  vim.notify(("STIMPACK: Finished cleaning %d of %d orphaned plugins."):format(deleted, #orphans), vim.log.levels.INFO)
 end
 
 function M.find_spec(name)
@@ -240,7 +257,13 @@ function M.find_spec(name)
   return nil
 end
 
+local very_lazy_fired = false
 function M.very_lazy()
+  -- `once` is per event, so without this each trigger below fired it again.
+  if very_lazy_fired then
+    return
+  end
+  very_lazy_fired = true
   vim.api.nvim_exec_autocmds("User", { pattern = "VeryLazy" })
 end
 
@@ -251,6 +274,17 @@ vim.api.nvim_create_autocmd({
 }, {
   once = true,
   callback = M.very_lazy,
+})
+
+-- ...or shortly after the first paint, if none of those happen. which-key used
+-- to set itself up from its own plugin/ timer; now that lazy plugins' plugin/
+-- files really wait for their trigger, <leader> maps would otherwise not exist
+-- until the cursor first moves.
+vim.api.nvim_create_autocmd("UIEnter", {
+  once = true,
+  callback = function()
+    vim.defer_fn(M.very_lazy, 100)
+  end,
 })
 
 local function hooks(ev)

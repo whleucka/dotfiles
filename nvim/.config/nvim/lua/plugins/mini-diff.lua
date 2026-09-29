@@ -21,12 +21,6 @@ local function do_buffer(action)
   end
 end
 
-local function goto_hunk(direction)
-  return function()
-    MiniDiff.goto_hunk(direction)
-  end
-end
-
 local function hunks_to_quickfix()
   local items = MiniDiff.export("qf")
   if #items == 0 then
@@ -77,9 +71,9 @@ return {
       end,
     })
   end,
+  -- ]c/[c/]C/[C come from `mappings` above; they used to be defined here as
+  -- well, which just overwrote mini.diff's own maps with identical ones.
   keys = {
-    { "]c", goto_hunk("next"), desc = "Next hunk" },
-    { "[c", goto_hunk("prev"), desc = "Prev hunk" },
     {
       "<leader>gh",
       group = "Hunk",
