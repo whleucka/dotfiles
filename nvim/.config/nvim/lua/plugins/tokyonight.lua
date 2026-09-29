@@ -5,6 +5,12 @@ return {
       style = "night",
       styles = {
         comments = { italic = true },
+        -- Same opacity problem as the tabline below: floats ship on
+        -- c.bg_float (#16161e), which kitty paints opaque. "transparent" here
+        -- is safe -- unlike the tabline, float groups don't fall back to a
+        -- dark fill -- and the rounded winborder still outlines them.
+        floats = "transparent",
+        sidebars = "transparent",
       },
       on_highlights = function(hl, c)
         -- Stock tokyonight comments are #565f89 -> 2.76:1 on the night bg, well
@@ -20,6 +26,30 @@ return {
         -- background, so split boundaries vanish. blue0 reads as a deliberate
         -- line without competing with the code.
         hl.WinSeparator = { fg = c.blue0, bold = false }
+        -- With floats transparent the border is their only edge, and stock
+        -- c.border_highlight (#27a1b9) glows. Match the split lines so floats
+        -- read as panels of the same layout; the title keeps the accent.
+        hl.FloatBorder = { fg = c.blue0 }
+        -- blink's borders are set outright rather than linked to FloatBorder
+        for _, group in ipairs({ "BlinkCmpMenuBorder", "BlinkCmpDocBorder", "BlinkCmpSignatureHelpBorder" }) do
+          hl[group] = { fg = c.blue0 }
+        end
+        hl.FloatTitle = { fg = c.blue, bold = true }
+
+        -- render-markdown's code blocks (hover docs, markdown buffers) sit on
+        -- c.bg_dark, darker than the bg and opaque under kitty -- a black hole
+        -- in a translucent float. Any tint is opaque, so raise it instead:
+        -- c.bg_highlight reads as a deliberate panel, like the cursorline.
+        hl.RenderMarkdownCode = { bg = c.bg_highlight }
+        hl.RenderMarkdownCodeBorder = { bg = c.bg_highlight }
+        -- Inline code ships on c.fg_gutter (#414868); a hover full of @param
+        -- types stacks those into a column of bars. Same panel as the blocks.
+        hl.RenderMarkdownCodeInline = { fg = c.blue, bg = c.bg_highlight }
+        hl["@markup.raw.markdown_inline"] = { fg = c.blue, bg = c.bg_highlight }
+
+        -- Stock scope line is c.cyan, the brightest thing on screen. blue0
+        -- keeps it clearly above the · indent dots without shouting.
+        hl.MiniIndentscopeSymbol = { fg = c.blue0, nocombine = true }
 
         -- kitty's background_opacity only reaches a cell whose background *is*
         -- the terminal default (#1a1b26). The tabline groups ship on c.black
@@ -40,6 +70,18 @@ return {
           "MiniTablineModifiedHidden",
           "MiniTablineModifiedVisible",
           "MiniTablineTrunc",
+        }) do
+          hl[group] = vim.tbl_extend("force", hl[group] or {}, { bg = c.bg })
+        end
+
+        -- The global statusline has the same black bar at the bottom: its
+        -- filler and filename section sit on c.bg_statusline. The mode and
+        -- devinfo chips keep their own backgrounds.
+        for _, group in ipairs({
+          "StatusLine",
+          "StatusLineNC",
+          "MiniStatuslineFilename",
+          "MiniStatuslineInactive",
         }) do
           hl[group] = vim.tbl_extend("force", hl[group] or {}, { bg = c.bg })
         end

@@ -29,8 +29,11 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup('enable-spellcheck', { clear = true }),
   pattern = { "gitcommit", "markdown" },
-  callback = function()
-    vim.opt_local.spell = true
+  callback = function(args)
+    -- LSP hover/signature floats are markdown too (buftype=nofile); spell
+    -- there just undercurls every @param and type name. Set false outright:
+    -- a new float copies 'spell' from the window it was opened from.
+    vim.opt_local.spell = vim.bo[args.buf].buftype == ""
   end,
 })
 
