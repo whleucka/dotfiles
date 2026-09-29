@@ -86,6 +86,8 @@ return {
       diagnostics = {
         globals = { "vim" },
       },
+      -- lua_ls only sends inlay hints when asked to (see core/lsp.lua).
+      hint = { enable = true },
     },
   }
 }

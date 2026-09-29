@@ -43,6 +43,33 @@ vim.api.nvim_create_autocmd("FileType", {
 -- silent no-op. The bundled plugin feedkeys() the command to escape that.
 vim.cmd.packadd("nohlsearch")
 
+-- Indent guides follow the buffer's shiftwidth. 'listchars' is window-local
+-- while 'shiftwidth' is buffer-local, so refresh whenever a buffer lands in a
+-- window, its filetype sets the width, or the width changes later.
+local function sync_indent_guides()
+  local sw = vim.fn.shiftwidth() -- resolves shiftwidth=0 to 'tabstop'
+  if sw < 1 then
+    return
+  end
+  local lc = vim.opt_local.listchars:get()
+  local guide = "·" .. string.rep(" ", sw - 1)
+  if lc.leadmultispace ~= guide then
+    lc.leadmultispace = guide
+    vim.opt_local.listchars = lc
+  end
+end
+
+local indent_guides = vim.api.nvim_create_augroup("indent-guides", { clear = true })
+vim.api.nvim_create_autocmd({ "BufWinEnter", "FileType" }, {
+  group = indent_guides,
+  callback = sync_indent_guides,
+})
+vim.api.nvim_create_autocmd("OptionSet", {
+  group = indent_guides,
+  pattern = { "shiftwidth", "tabstop" },
+  callback = sync_indent_guides,
+})
+
 -- Close with q
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("close-with-q", { clear = true }),

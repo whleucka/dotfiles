@@ -33,6 +33,14 @@ local keys = {
     {
       "<leader>cl", function() vim.diagnostic.setloclist() end, desc = "Diagnostics to loclist"
     },
+    {
+      "<leader>ch",
+      function()
+        local filter = { bufnr = 0 }
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
+      end,
+      desc = "Toggle inlay hints",
+    },
   },
   {
     "<leader>t",

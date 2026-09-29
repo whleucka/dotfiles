@@ -18,6 +18,39 @@ vim.lsp.enable({
   "rust_analyzer",
   "sqls",
   "ts_ls",
+  "ty",
+})
+
+-- Nvim 0.12 LSP features that are off unless asked for. Each one is gated on
+-- the server actually advertising it.
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("lsp-features", { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if not client then
+      return
+    end
+    local buf = args.buf
+
+    -- Editing an HTML open tag renames its close tag as you type (html, and
+    -- any other server that implements it).
+    if client:supports_method("textDocument/linkedEditingRange") then
+      vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
+    end
+
+    -- Colour literals get a swatch. "virtual" rather than the default
+    -- background fill: a coloured cell is opaque under kitty's translucency,
+    -- and a swatch leaves the literal itself readable.
+    if client:supports_method("textDocument/documentColor") then
+      vim.lsp.document_color.enable(true, { bufnr = buf }, { style = "virtual" })
+    end
+
+    -- Types and parameter names inline (rust-analyzer, clangd, intelephense).
+    -- <leader>ch toggles them for the buffer when they get noisy.
+    if client:supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+    end
+  end,
 })
 
 vim.diagnostic.config({

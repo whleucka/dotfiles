@@ -5,6 +5,18 @@
 -- of the config).
 vim.loader.enable()
 
+-- ui2: Nvim 0.12's redesigned message/cmdline UI (experimental). With
+-- cmdheight=0 the legacy grid turned any message taller than the (empty)
+-- cmdline into a hit-enter prompt; ui2 collapses long messages instead (g< to
+-- expand) and shows them in an ephemeral "msg" window -- the target meant for
+-- cmdheight=0. pcall'd so a future rename of this internal module degrades to
+-- the legacy UI rather than breaking startup.
+pcall(function()
+  require("vim._core.ui2").enable({
+    msg = { targets = "msg" },
+  })
+end)
+
 require("core.globals")
 vim.g.start_time = vim.fn.reltime()
 

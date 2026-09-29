@@ -53,7 +53,9 @@ vim.o.timeoutlen = 300 -- Shorter delay for mapped sequences
 
 -- Whitespace
 vim.o.list = true
--- leadmultispace pattern is shiftwidth-wide, so indent guides land on tab stops
+-- leadmultispace draws the indent guides. This 4-wide default is resized per
+-- window to the buffer's shiftwidth (see indent-guides in core/autocmd.lua), so
+-- 2-space languages get a guide on every level, not every other one.
 vim.o.listchars = "tab:» ,leadmultispace:·   ,trail:·,nbsp:+,extends:›,precedes:‹"
 
 -- Aesthetics

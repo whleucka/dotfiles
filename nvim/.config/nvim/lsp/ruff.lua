@@ -30,4 +30,9 @@ return {
   filetypes = { 'python' },
   root_markers = { 'pyproject.toml', 'ruff.toml', '.ruff.toml', '.git' },
   settings = {},
+  on_attach = function(client)
+    -- ruff's hover only explains `# noqa` codes; leave K to ty's type info
+    -- (Astral's recommended pairing) instead of two servers answering at once.
+    client.server_capabilities.hoverProvider = false
+  end,
 }
