@@ -1,10 +1,9 @@
 -- herdr-splits.nvim — nvim <-> herdr pane navigation and resize.
 --
--- Loaded ONLY inside a herdr pane. Outside herdr, smart-splits.nvim keeps the
--- nav/resize keymaps and its tmux integration (see plugins/smart-splits.lua,
--- which drops those keys when HERDR_ENV is set so the two never collide).
--- smart-splits still loads under herdr for its buffer-swap / previous-window
--- maps, which this plugin does not provide.
+-- Loaded everywhere, herdr or not. Every herdr call is gated on
+-- HERDR_ENV/HERDR_PANE_ID, so outside herdr it degrades to plain neovim split
+-- nav/resize and at_edge still hands off to Hyprland — what smart-splits.nvim
+-- used to cover there.
 --
 -- Keys arrive here from herdr: Hyprland's super+hjkl injects ctrl+alt+hjkl into
 -- the pty, and ~/.config/hypr/scripts/herdr-route forwards it to this pane when
@@ -18,9 +17,6 @@
 -- hop. herdr-route covers plain panes instead.
 return {
   "lmilojevicc/herdr-splits.nvim",
-  enabled = function()
-    return vim.env.HERDR_ENV == "1"
-  end,
   event = "VeryLazy",
   opts = {
     -- Match the chords herdr-route forwards, in neovim notation. setup()
@@ -43,7 +39,7 @@ return {
 
     -- Resize steps: 0.05 of the terminal for a herdr divider (matches
     -- herdr-route's resize_amount), 3 cells for a native neovim split
-    -- (matches the smart-splits default_amount we use outside herdr).
+    -- (also what you get outside herdr).
     default_amount = 0.05,
     neovim_amount = 3,
 

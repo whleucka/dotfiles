@@ -12,12 +12,9 @@ local function set_terminal_keymaps(buf)
 
   -- The unified super+hjkl chord (Hyprland injects ctrl+alt+hjkl), so window
   -- navigation works from inside the terminal too, edge hand-off included.
-  -- Same split as the normal-mode maps: herdr-splits inside herdr,
-  -- smart-splits outside.
-  local nav = vim.env.HERDR_ENV == "1" and "herdr-splits" or "smart-splits"
   for key, dir in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
     map('<C-M-' .. key .. '>', function()
-      require(nav)["move_cursor_" .. dir]()
+      require("herdr-splits")["move_cursor_" .. dir]()
     end, 'Move cursor ' .. dir)
   end
 end
