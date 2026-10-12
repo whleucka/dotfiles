@@ -30,7 +30,7 @@ return {
   filetypes = { 'php' },
   root_markers = { '.git', 'composer.json' },
   init_options = {
-    licenceKey = os.getenv('HOME') .. '/intelephense/license.txt',
+    licenceKey = os.getenv('HOME') .. '/intelephense/licence.txt',
   },
   settings = {
     intelephense = {
