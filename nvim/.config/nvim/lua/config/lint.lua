@@ -35,6 +35,13 @@ function M.setup()
     php = { "phpstan" },
   }
 
+  -- gopls already reports compile errors and staticcheck; golangci-lint adds
+  -- the rest (errcheck, gosec, ...) and picks up a repo's .golangci.yml. Only
+  -- when installed, or every Go write warns about a missing binary.
+  if vim.fn.executable("golangci-lint") == 1 then
+    lint.linters_by_ft.go = { "golangcilint" }
+  end
+
   -- phpstan/phpstan is a require-dev pin, not a global install. The builtin
   -- resolves 'vendor/bin/phpstan' relative to the process cwd; resolve it from
   -- the buffer instead so it works before M.run has set cwd.

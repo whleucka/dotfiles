@@ -4,7 +4,7 @@
 -- command as a list, so nothing gets re-parsed by a shell.
 local M = {}
 
-local state = { win = nil, last = nil }
+local testterm = require("config.testterm")
 
 -- nil = auto (use the compose php container when one is up), false = always
 -- run on the host. Toggled with <leader>Td.
@@ -100,30 +100,6 @@ local function enclosing_test()
   return nil
 end
 
-local function open(cmd, cwd)
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_close(state.win, true)
-  end
-
-  local origin = vim.api.nvim_get_current_win()
-  vim.cmd("botright 15new")
-  state.win = vim.api.nvim_get_current_win()
-
-  vim.fn.jobstart(cmd, { term = true, cwd = cwd })
-
-  vim.bo.buflisted = false
-  vim.keymap.set("n", "q", function()
-    if state.win and vim.api.nvim_win_is_valid(state.win) then
-      vim.api.nvim_win_close(state.win, true)
-    end
-  end, { buffer = 0, silent = true, desc = "Close test output" })
-
-  -- Read the results where the cursor already was, not in the terminal.
-  if vim.api.nvim_win_is_valid(origin) then
-    vim.api.nvim_set_current_win(origin)
-  end
-end
-
 ---@param scope "nearest"|"file"|"suite"
 function M.run(scope)
   local root, bin = project()
@@ -164,8 +140,7 @@ function M.run(scope)
     vim.list_extend(cmd, { "--filter", kind == "method_declaration" and ("::" .. name .. "$") or name })
   end
 
-  state.last = { cmd = cmd, cwd = root }
-  open(cmd, root)
+  testterm.open(cmd, root)
 end
 
 function M.toggle_docker()
@@ -177,11 +152,6 @@ function M.toggle_docker()
   vim.notify("phpunit: " .. (vim.g.phpunit_docker == false and "host only" or "docker when available"))
 end
 
-function M.rerun()
-  if not state.last then
-    return vim.notify("phpunit: nothing run yet", vim.log.levels.WARN)
-  end
-  open(state.last.cmd, state.last.cwd)
-end
+M.rerun = testterm.rerun
 
 return M

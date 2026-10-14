@@ -9,7 +9,12 @@ return {
     'regex',
     'bash',
     'c',
+    'cpp',
     'css',
+    'go',
+    'gomod',
+    'gosum',
+    'gowork',
     'html',
     'json', -- composer.json
     'lua',

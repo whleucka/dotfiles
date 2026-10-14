@@ -11,6 +11,7 @@ vim.lsp.enable({
   "bashls",
   "clangd",
   "cssls",
+  "gopls",
   "html",
   "intelephense",
   "lua_ls",
