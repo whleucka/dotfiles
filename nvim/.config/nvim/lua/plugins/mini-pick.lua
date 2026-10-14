@@ -3,15 +3,6 @@ return {
   event = "VeryLazy",
   keys = {
     {
-      {
-        "<C-p>",
-        function()
-          MiniPick.builtin.files()
-        end,
-        desc = "File Picker"
-      },
-    },
-    {
       "<leader>f",
       group = "Find",
       {
