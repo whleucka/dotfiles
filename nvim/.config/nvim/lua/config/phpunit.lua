@@ -6,6 +6,51 @@ local M = {}
 
 local state = { win = nil, last = nil }
 
+-- nil = auto (use the compose php container when one is up), false = always
+-- run on the host. Toggled with <leader>Td.
+
+local function docker(args)
+  local res = vim.system(vim.list_extend({ "docker" }, args), { text = true }):wait()
+  if res.code ~= 0 then
+    return nil
+  end
+  return vim.trim(res.stdout)
+end
+
+-- The compose stack's php service, found by the label Compose stamps on every
+-- container with the directory it was started from. Returns the container
+-- name and its bind mounts so host paths can be rewritten to container paths:
+-- the hydra app mounts itself at /var/www/html/app whatever the host dir is.
+local function container(root)
+  if vim.g.phpunit_docker == false or vim.fn.executable("docker") == 0 then
+    return nil
+  end
+  local name = docker({
+    "ps",
+    "--filter", "label=com.docker.compose.project.working_dir=" .. root,
+    "--filter", "label=com.docker.compose.service=php",
+    "--format", "{{.Names}}",
+  })
+  name = name and vim.split(name, "\n")[1]
+  if not name or name == "" then
+    return nil
+  end
+  local mounts = vim.json.decode(docker({ "inspect", name, "--format", "{{json .Mounts}}" }) or "[]")
+  return { name = name, mounts = mounts }
+end
+
+-- Longest bind-mount source that contains the path wins.
+local function to_container(ctr, path)
+  local best
+  for _, m in ipairs(ctr.mounts) do
+    local src = m.Source
+    if (path == src or vim.startswith(path, src .. "/")) and (not best or #src > #best.Source) then
+      best = m
+    end
+  end
+  return best and (best.Destination .. path:sub(#best.Source + 1)) or nil
+end
+
 -- Root on vendor/bin/phpunit, not on phpunit.xml or composer.json. Every
 -- packages/*/ in the monorepo carries its own composer.json and its own
 -- phpunit.xml whose bootstrap="vendor/autoload.php" is relative to a vendor/
@@ -86,12 +131,26 @@ function M.run(scope)
     return vim.notify("phpunit: no vendor/bin/phpunit above this file", vim.log.levels.WARN)
   end
 
-  local cmd = { bin, "--colors=always" }
+  local ctr = container(root)
+  local workdir = ctr and to_container(ctr, root)
+  local cmd
+  if workdir then
+    -- -t: jobstart's term gives docker a pty, so phpunit sees a terminal.
+    cmd = { "docker", "exec", "-t", "-w", workdir, ctr.name, "vendor/bin/phpunit", "--colors=always" }
+  else
+    cmd = { bin, "--colors=always" }
+  end
 
   if scope ~= "suite" then
     local file = vim.api.nvim_buf_get_name(0)
     if file == "" then
       return vim.notify("phpunit: buffer has no file", vim.log.levels.WARN)
+    end
+    if workdir then
+      file = to_container(ctr, file)
+      if not file then
+        return vim.notify("phpunit: file is not mounted in " .. ctr.name, vim.log.levels.WARN)
+      end
     end
     table.insert(cmd, file)
   end
@@ -107,6 +166,15 @@ function M.run(scope)
 
   state.last = { cmd = cmd, cwd = root }
   open(cmd, root)
+end
+
+function M.toggle_docker()
+  if vim.g.phpunit_docker == false then
+    vim.g.phpunit_docker = nil
+  else
+    vim.g.phpunit_docker = false
+  end
+  vim.notify("phpunit: " .. (vim.g.phpunit_docker == false and "host only" or "docker when available"))
 end
 
 function M.rerun()

@@ -20,6 +20,7 @@ map("<leader>Tt", function() phpunit.run("nearest") end, "Nearest test")
 map("<leader>Tf", function() phpunit.run("file") end, "File tests")
 map("<leader>Ta", function() phpunit.run("suite") end, "Whole suite")
 map("<leader>Tl", phpunit.rerun, "Rerun last")
+map("<leader>Td", phpunit.toggle_docker, "Toggle docker")
 
 pcall(function()
   require("which-key").add({ { "<leader>T", group = "Test", buffer = 0 } })
