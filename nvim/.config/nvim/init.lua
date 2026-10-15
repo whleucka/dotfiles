@@ -24,7 +24,6 @@ vim.g.start_time = vim.fn.reltime()
 require("stimpack").setup()
 
 -- Local plugins
-require("radio").setup()
 
 -- Other configurations
 require("core.options")
