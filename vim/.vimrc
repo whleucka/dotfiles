@@ -637,7 +637,6 @@ nnoremap q <Nop>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <leader><leader> <Cmd>call <SID>LastBuffer()<CR>
 nnoremap <silent> <leader>q <Cmd>call <SID>BufRemove()<CR>
-nnoremap <leader>Q <Cmd>qa<CR>
 nnoremap <leader>w <Cmd>w!<CR>
 nnoremap <silent> H <Cmd>bprevious<CR>
 nnoremap <silent> L <Cmd>bnext<CR>
