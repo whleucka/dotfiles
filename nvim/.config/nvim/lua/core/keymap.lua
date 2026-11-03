@@ -141,7 +141,6 @@ local keys = {
       desc = "Last buffer",
     },
     { "<leader>q",  function() require("mini.bufremove").delete(0, false) end, desc = "Close buffer" },
-    { "<leader>Q",  ":qa<CR>",                                                 desc = "Close Neovim" },
     { "<leader>w",  ":w!<CR>",                                                 desc = "Save" },
     { "H",          ":bprev<CR>",                                              desc = "Previous Buffer" },
     { "L",          ":bnext<CR>",                                              desc = "Next Buffer" },
