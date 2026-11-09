@@ -1,0 +1,24 @@
+# Das Keyboard X50Q lighting - applied with `x50q apply`
+#
+# Colours: "rrggbb", "rgb", or a name (`x50q keys` lists them).
+# Effects: static, breathe, cycle, blink, ripple, inward, laser.
+
+# How keys look normally.
+[idle]
+color = "00ff88"
+effect = "static"
+
+# What a key does when you press it. Leave out `color` to keep each key's own colour.
+[press]
+effect = "static"
+color = "ffffff"
+duration = 1        # seconds, 0-255
+
+# Per-key overrides, applied top to bottom, so put groups before single keys.
+# Key and group names: `x50q keys`. A value is a colour, or a table:
+#   esc = { color = "ff0000", effect = "breathe" }
+[keys]
+fkeys = "0066ff"
+arrows = "ffaa00"
+numpad = "8000ff"
+esc = { color = "ff0000", effect = "breathe" }

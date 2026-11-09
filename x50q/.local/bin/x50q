@@ -1,0 +1,540 @@
+#!/usr/bin/env python3
+"""x50q - control the lighting on a Das Keyboard X50Q from Linux.
+
+The official Das Keyboard Q app can't drive the X50Q on Linux: the lighting
+interface (USB interface 2) has only an OUT endpoint, so the kernel's usbhid
+driver refuses it and no hidraw node is created. This script does what
+zauguin/libx50q does instead:
+
+  * commands go out over libusb, as interrupt transfers to interface 2 / EP 0x03
+    (no kernel driver is bound there, so claiming it disturbs nothing)
+  * the keyboard's replies come back on interface 1, read through hidraw
+
+Protocol reverse-engineered by https://github.com/zauguin/libx50q (tested
+against firmware 0x40). Unofficial: use at your own risk.
+
+Requirements: python >= 3.11 and libusb (pacman -S libusb). No pip packages.
+
+Access without root needs a udev rule, e.g. /etc/udev/rules.d/70-x50q.rules:
+
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="24f0", ATTRS{idProduct}=="202b", TAG+="uaccess"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="24f0", ATTRS{idProduct}=="202b", TAG+="uaccess"
+
+(The das-keyboard-q package ships an equivalent rule for all 24f0 devices.)
+"""
+
+import argparse
+import ctypes
+import ctypes.util
+import json
+import os
+import select
+import sys
+import time
+import tomllib
+from pathlib import Path
+
+VID, PID = 0x24F0, 0x202B
+OUT_IFACE, OUT_EP = 2, 0x03
+NLED = 144  # the keyboard addresses 144 LED slots; 115 are real
+
+XDG_CONFIG = Path(os.environ.get("XDG_CONFIG_HOME") or Path.home() / ".config")
+XDG_STATE = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state")
+CONFIG_FILE = XDG_CONFIG / "x50q" / "config.toml"
+STATE_FILE = XDG_STATE / "x50q" / "state.json"
+
+EFFECTS = {
+    "static": 0,
+    "breathe": 1,
+    "cycle": 2,  # rainbow colour cycle
+    "blink": 4,
+    "ripple": 5,
+    "inward": 6,  # inwards ripple
+    "laser": 7,
+}
+
+NAMED_COLORS = {
+    "off": "000000", "black": "000000", "white": "ffffff", "red": "ff0000",
+    "green": "00ff00", "blue": "0000ff", "yellow": "ffff00", "cyan": "00ffff",
+    "magenta": "ff00ff", "orange": "ff6600", "purple": "8000ff", "pink": "ff3399",
+    "teal": "00ff88",
+}
+
+# Physical layout (US ANSI), row by row, mapped to the keyboard's LED slots.
+# Slot order from libx50q's demo/test.cpp; it matches the key order of the
+# official app's x50qLookupTable.
+_LAYOUT = [
+    ("esc f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12 prtsc scrlk pause x1 x2 x3",
+     [45, 27, 18, 9, 14, 0, 5, 90, 95, 77, 63, 68, 54, 59, 99, 104, 111, 120, 129]),
+    ("grave 1 2 3 4 5 6 7 8 9 0 minus equal backspace insert home pgup "
+     "numlock kp_slash kp_star kp_minus",
+     [46, 37, 28, 19, 10, 15, 1, 6, 91, 96, 81, 72, 64, 60, 61, 105, 106,
+      102, 110, 128, 119]),
+    ("tab q w e r t y u i o p lbracket rbracket backslash delete end pgdn kp7 kp8 kp9",
+     [47, 38, 29, 20, 11, 16, 2, 92, 82, 87, 73, 65, 69, 56, 101, 103, 100, 142, 115, 133]),
+    ("caps a s d f g h j k l semicolon quote enter kp4 kp5 kp6 kp_plus",
+     [48, 39, 30, 21, 25, 12, 3, 93, 83, 84, 74, 66, 58, 139, 112, 130, 124]),
+    ("lshift z x c v b n m comma period slash rshift up kp1 kp2 kp3",
+     [49, 31, 33, 24, 22, 13, 4, 94, 85, 86, 76, 70, 135, 136, 109, 127]),
+    ("lctrl lsuper lalt space ralt fn menu rctrl left down right kp0 kp_dot kp_enter",
+     [50, 41, 32, 23, 88, 79, 78, 67, 140, 137, 138, 141, 132, 121]),
+    # Side light bars (2 LEDs each) and the volume knob ring (4 LEDs).
+    # Which is which is unverified - run `x50q test` to see.
+    ("led1 led2 led3 led4 led5 led6 led7 led8",
+     [36, 42, 123, 51, 117, 126, 118, 131]),
+]
+
+KEYS = {}
+for _names, _slots in _LAYOUT:
+    _names = _names.split()
+    assert len(_names) == len(_slots), _names
+    KEYS.update(zip(_names, _slots))
+assert len(KEYS) == 115 and len(set(KEYS.values())) == 115
+
+ALIASES = {"capslock": "caps", "escape": "esc", "super": "lsuper", "win": "lsuper",
+           "return": "enter", "bksp": "backspace", "del": "delete", "ins": "insert",
+           "pgdown": "pgdn", "printscreen": "prtsc"}
+
+GROUPS = {
+    "all": list(KEYS),
+    "keys": [k for k in KEYS if not k.startswith("led")],
+    "fkeys": [f"f{i}" for i in range(1, 13)],
+    "numbers": list("1234567890"),
+    "letters": list("abcdefghijklmnopqrstuvwxyz"),
+    "wasd": list("wasd"),
+    "arrows": ["up", "down", "left", "right"],
+    "nav": ["insert", "home", "pgup", "delete", "end", "pgdn"],
+    "numpad": ["numlock"] + [k for k in KEYS if k.startswith("kp")],
+    "mods": ["lshift", "rshift", "lctrl", "rctrl", "lalt", "ralt", "lsuper", "fn", "menu"],
+    "extras": ["x1", "x2", "x3"],
+    "leds": [f"led{i}" for i in range(1, 9)],
+}
+
+
+class X50QError(Exception):
+    pass
+
+
+# ---------------------------------------------------------------- helpers ---
+
+def parse_color(value):
+    s = str(value).strip().lower()
+    s = NAMED_COLORS.get(s, s).lstrip("#")
+    if len(s) == 3:
+        s = "".join(c * 2 for c in s)
+    if len(s) != 6:
+        raise X50QError(f"bad colour {value!r} (use rrggbb, rgb or a name: "
+                        f"{', '.join(NAMED_COLORS)})")
+    try:
+        return [int(s[i:i + 2], 16) for i in (0, 2, 4)]
+    except ValueError:
+        raise X50QError(f"bad colour {value!r}") from None
+
+
+def parse_effect(name):
+    try:
+        return EFFECTS[str(name).lower()]
+    except KeyError:
+        raise X50QError(f"unknown effect {name!r} (one of: {', '.join(EFFECTS)})") from None
+
+
+def resolve_keys(names):
+    """Key names / group names -> LED slots."""
+    slots = []
+    for raw in names:
+        n = ALIASES.get(raw.lower(), raw.lower())
+        if n in GROUPS:
+            slots += [KEYS[k] for k in GROUPS[n]]
+        elif n in KEYS:
+            slots.append(KEYS[n])
+        else:
+            raise X50QError(f"unknown key or group {raw!r} (see `x50q keys`)")
+    return slots
+
+
+def new_state(color=(0, 0, 0), effect=0, press_color=None, press_effect=0, duration=1):
+    """Full lighting state. Covers all 144 slots so unused ones are harmless."""
+    press_color = color if press_color is None else press_color
+    return {
+        "idle_color": [list(color) for _ in range(NLED)],
+        "idle_effect": [effect] * NLED,
+        "press_color": [list(press_color) for _ in range(NLED)],
+        "press_effect": [press_effect] * NLED,
+        "press_duration": [duration] * NLED,
+    }
+
+
+def load_state():
+    try:
+        state = json.loads(STATE_FILE.read_text())
+        if all(len(state[k]) == NLED for k in new_state()):
+            return state
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None
+
+
+def save_state(state):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(json.dumps(state))
+
+
+def state_from_config(path):
+    try:
+        with open(path, "rb") as f:
+            cfg = tomllib.load(f)
+    except FileNotFoundError:
+        raise X50QError(f"no config at {path}") from None
+    except tomllib.TOMLDecodeError as e:
+        raise X50QError(f"{path}: {e}") from None
+
+    idle, press = cfg.get("idle", {}), cfg.get("press", {})
+    base = parse_color(idle.get("color", "white"))
+    state = new_state(
+        color=base,
+        effect=parse_effect(idle.get("effect", "static")),
+        press_color=parse_color(press["color"]) if "color" in press else None,
+        press_effect=parse_effect(press.get("effect", "static")),
+        duration=int(press.get("duration", 1)),
+    )
+    if not 0 <= state["press_duration"][0] <= 255:
+        raise X50QError("press.duration must be 0-255 seconds")
+
+    # [keys] entries apply in file order, so put groups before single keys.
+    for name, val in cfg.get("keys", {}).items():
+        if isinstance(val, dict):
+            color = parse_color(val["color"]) if "color" in val else None
+            effect = parse_effect(val["effect"]) if "effect" in val else None
+        else:
+            color, effect = parse_color(val), None
+        for slot in resolve_keys([name]):
+            if color is not None:
+                state["idle_color"][slot] = color
+                if "color" not in press:  # keep the key's colour while pressed
+                    state["press_color"][slot] = color
+            if effect is not None:
+                state["idle_effect"][slot] = effect
+    return state
+
+
+# ------------------------------------------------------------------ device ---
+
+def find_hidraw():
+    """The hidraw node for interface 1, where the keyboard sends its replies."""
+    want = f"HID_ID=0003:{VID:08X}:{PID:08X}"
+    for node in sorted(Path("/sys/class/hidraw").glob("hidraw*")):
+        dev = node / "device"
+        try:
+            if want not in (dev / "uevent").read_text():
+                continue
+        except OSError:
+            continue
+        if ":1.1/" in str(dev.resolve()):
+            return f"/dev/{node.name}"
+    raise X50QError("X50Q not found (is it plugged in? `lsusb -d 24f0:202b`)")
+
+
+class X50Q:
+    def __init__(self, dry_run=False):
+        self.dry = dry_run
+        self.fd = self.usb = self.ctx = self.handle = None
+        if dry_run:
+            return
+        try:
+            path = find_hidraw()
+            try:
+                self.fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK)
+            except PermissionError:
+                raise X50QError(f"no permission to read {path} - see the udev rule "
+                                f"in `head -25 {sys.argv[0]}`") from None
+            self._open_usb()
+        except BaseException:
+            self.close()
+            raise
+
+    def _open_usb(self):
+        lib = ctypes.CDLL(ctypes.util.find_library("usb-1.0") or "libusb-1.0.so.0")
+        P = ctypes.c_void_p
+        lib.libusb_init.argtypes = [ctypes.POINTER(P)]
+        lib.libusb_exit.argtypes = [P]
+        lib.libusb_exit.restype = None
+        lib.libusb_open_device_with_vid_pid.argtypes = [P, ctypes.c_uint16, ctypes.c_uint16]
+        lib.libusb_open_device_with_vid_pid.restype = P
+        lib.libusb_close.argtypes = [P]
+        lib.libusb_close.restype = None
+        lib.libusb_claim_interface.argtypes = [P, ctypes.c_int]
+        lib.libusb_release_interface.argtypes = [P, ctypes.c_int]
+        lib.libusb_interrupt_transfer.argtypes = [
+            P, ctypes.c_ubyte, ctypes.POINTER(ctypes.c_ubyte), ctypes.c_int,
+            ctypes.POINTER(ctypes.c_int), ctypes.c_uint]
+        lib.libusb_error_name.argtypes = [ctypes.c_int]
+        lib.libusb_error_name.restype = ctypes.c_char_p
+        self.usb = lib
+
+        ctx = P()
+        if err := lib.libusb_init(ctypes.byref(ctx)):
+            raise X50QError(f"libusb_init failed: {self._err(err)}")
+        self.ctx = ctx
+        self.handle = lib.libusb_open_device_with_vid_pid(ctx, VID, PID)
+        if not self.handle:
+            raise X50QError("can't open the keyboard over USB - no permission? see the "
+                            f"udev rule in `head -25 {sys.argv[0]}`")
+        if err := lib.libusb_claim_interface(self.handle, OUT_IFACE):
+            self.usb.libusb_close(self.handle)
+            self.handle = None
+            hint = " (another x50q/libx50q running?)" if err == -6 else ""
+            raise X50QError(f"can't claim lighting interface: {self._err(err)}{hint}")
+
+    def _err(self, code):
+        return self.usb.libusb_error_name(code).decode()
+
+    def close(self):
+        if self.handle:
+            self.usb.libusb_release_interface(self.handle, OUT_IFACE)
+            self.usb.libusb_close(self.handle)
+            self.handle = None
+        if self.ctx:
+            self.usb.libusb_exit(self.ctx)
+            self.ctx = None
+        if self.fd is not None:
+            os.close(self.fd)
+            self.fd = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+    # -- protocol --
+
+    def _drain(self):
+        while select.select([self.fd], [], [], 0)[0]:
+            try:
+                os.read(self.fd, 64)
+            except BlockingIOError:
+                break
+
+    def _exchange(self, msg, timeout=3.0):
+        """Send one 64-byte packet; return the 7 data bytes of the reply."""
+        msg = bytes(msg).ljust(64, b"\0")
+        if self.dry:
+            print(f"  -> {msg[:4].hex(' ')} | {msg[4:].rstrip(bytes(1)).hex()}")
+            return bytes([8, msg[1], 0, 0, 0, 0, 0])
+
+        self._drain()
+        buf = (ctypes.c_ubyte * 64).from_buffer_copy(msg)
+        sent = ctypes.c_int()
+        err = self.usb.libusb_interrupt_transfer(
+            self.handle, OUT_EP, buf, 64, ctypes.byref(sent), 1000)
+        if err or sent.value != 64:
+            raise X50QError(f"USB write failed: {self._err(err) if err else 'short write'}")
+
+        deadline = time.monotonic() + timeout
+        while (left := deadline - time.monotonic()) > 0:
+            if not select.select([self.fd], [], [], left)[0]:
+                continue
+            try:
+                rep = os.read(self.fd, 64)
+            except BlockingIOError:
+                continue
+            # Report 8 carries replies. Sub-type 0 = reply to us; 2 = profile
+            # switched on the keyboard; 0x67 = volume knob. Others: media keys etc.
+            if len(rep) >= 9 and rep[0] == 8 and rep[1] == 0:
+                return rep[2:9]
+        raise X50QError("keyboard did not answer")
+
+    def _block(self, cmd, sub, index=0, payload=b"", timeout=3.0):
+        r = self._exchange(bytes([7, cmd, sub, index]) + payload, timeout)
+        if r[0] != 8 or r[1] != cmd:
+            raise X50QError(f"unexpected reply to command {cmd:#04x}: {r.hex()}")
+
+    def _upload(self, cmd, data):
+        for i in range(0, len(data), 60):
+            self._block(cmd, 6, i // 60, bytes(data[i:i + 60]))
+
+    def status(self):
+        r = self._exchange(bytes([7, 0x81]))
+        if r[0] != 8 or r[1] != 0x81:
+            raise X50QError(f"unexpected status reply: {r.hex()}")
+        return {"profile": r[2], "firmware": r[4]}
+
+    def builtin(self, n):
+        """Switch to on-board profile 1-6 (same as Fn + numpad 1-6)."""
+        self._block(0x01, n, timeout=8.0)
+
+    def apply(self, state):
+        planes = lambda rgb: bytes(c[0] for c in rgb) + bytes(c[1] for c in rgb) \
+            + bytes(c[2] for c in rgb)
+        self._upload(0x0F, state["press_duration"])
+        self._upload(0x0E, state["press_effect"])
+        self._upload(0x0A, planes(state["press_color"]))
+        self._upload(0x0D, state["idle_effect"])
+        self._upload(0x09, planes(state["idle_color"]))
+
+
+# ---------------------------------------------------------------- commands ---
+
+def push(args, state):
+    with X50Q(args.dry_run) as kb:
+        kb.apply(state)
+    if not args.dry_run:
+        save_state(state)
+
+
+def cmd_color(args):
+    color = parse_color(args.color)
+    press = parse_color(args.press) if args.press else None
+    push(args, new_state(color, press_color=press,
+                         press_effect=EFFECTS["static"], duration=args.duration))
+
+
+def cmd_effect(args):
+    effect = parse_effect(args.effect)
+    color = parse_color(args.color) if args.color else [255, 255, 255]
+    push(args, new_state(color, effect=effect, press_effect=effect))
+
+
+def cmd_rainbow(args):
+    push(args, new_state((255, 255, 255), EFFECTS["cycle"], press_effect=EFFECTS["cycle"]))
+
+
+def cmd_off(args):
+    push(args, new_state((0, 0, 0)))
+
+
+def cmd_set(args):
+    color = parse_color(args.color)
+    effect = parse_effect(args.effect) if args.effect else None
+    slots = resolve_keys(args.keys)
+    state = load_state()
+    if state is None:
+        if CONFIG_FILE.exists():
+            state = state_from_config(CONFIG_FILE)
+        else:
+            raise X50QError("no saved state to modify yet - run `x50q color ...` "
+                            "or `x50q apply` first")
+    for slot in slots:
+        state["idle_color"][slot] = color
+        state["press_color"][slot] = color
+        if effect is not None:
+            state["idle_effect"][slot] = effect
+    push(args, state)
+
+
+def cmd_apply(args):
+    push(args, state_from_config(Path(args.file).expanduser()))
+
+
+def cmd_restore(args):
+    state = load_state()
+    if state is None:
+        raise X50QError(f"nothing saved in {STATE_FILE}")
+    push(args, state)
+
+
+def cmd_profile(args):
+    with X50Q(args.dry_run) as kb:
+        kb.builtin(args.number)
+
+
+def cmd_status(args):
+    with X50Q(args.dry_run) as kb:
+        s = kb.status()
+    print(f"on-board profile: {s['profile']}")
+    print(f"firmware:         {s['firmware']:#04x}"
+          + ("" if s["firmware"] == 0x40 else "  (untested - libx50q was tested on 0x40)"))
+    print(f"saved state:      {STATE_FILE if STATE_FILE.exists() else 'none'}")
+
+
+def cmd_keys(args):
+    for names, _ in _LAYOUT:
+        print("  " + " ".join(names.split()))
+    print("\ngroups: " + ", ".join(GROUPS))
+    print("effects: " + ", ".join(EFFECTS))
+    print("colours: rrggbb, rgb, or " + ", ".join(NAMED_COLORS))
+
+
+def cmd_test(args):
+    """Light each LED in turn and print its name - to check the key map."""
+    names = [k for g in (args.keys or ["all"]) for k in
+             GROUPS.get(g, [ALIASES.get(g, g)])]
+    resolve_keys(names)  # validate
+    saved = load_state()
+    with X50Q(args.dry_run) as kb:
+        try:
+            for name in names:
+                state = new_state((0, 0, 0))
+                slot = KEYS[name]
+                state["idle_color"][slot] = state["press_color"][slot] = [255, 255, 255]
+                print(name, flush=True)
+                kb._upload(0x09, (lambda c: bytes(x[0] for x in c) + bytes(x[1] for x in c)
+                                  + bytes(x[2] for x in c))(state["idle_color"]))
+                if args.dry_run:
+                    break
+                time.sleep(args.delay)
+        except KeyboardInterrupt:
+            print()
+        finally:
+            kb.apply(saved or new_state((255, 255, 255)))
+
+
+def main():
+    p = argparse.ArgumentParser(
+        prog="x50q", description="Control Das Keyboard X50Q lighting.",
+        epilog=f"config: {CONFIG_FILE}   state: {STATE_FILE}")
+    p.add_argument("-n", "--dry-run", action="store_true",
+                   help="print the packets instead of talking to the keyboard")
+    sub = p.add_subparsers(dest="cmd", required=True, metavar="COMMAND")
+
+    s = sub.add_parser("color", aliases=["colour"], help="whole keyboard one colour")
+    s.add_argument("color")
+    s.add_argument("--press", metavar="COLOR", help="colour while/after a key is pressed")
+    s.add_argument("--duration", type=int, default=1, metavar="SEC",
+                   help="how long the press colour stays (default 1)")
+    s.set_defaults(func=cmd_color)
+
+    s = sub.add_parser("set", help="change some keys, keep the rest as they are")
+    s.add_argument("color")
+    s.add_argument("keys", nargs="+", metavar="KEY", help="key or group names")
+    s.add_argument("--effect", help="also set these keys' effect")
+    s.set_defaults(func=cmd_set)
+
+    s = sub.add_parser("effect", help="whole keyboard one effect")
+    s.add_argument("effect", help=", ".join(EFFECTS))
+    s.add_argument("color", nargs="?")
+    s.set_defaults(func=cmd_effect)
+
+    sub.add_parser("rainbow", help="factory rainbow cycle").set_defaults(func=cmd_rainbow)
+    sub.add_parser("off", help="all lights off").set_defaults(func=cmd_off)
+
+    s = sub.add_parser("apply", help="apply a config file")
+    s.add_argument("file", nargs="?", default=str(CONFIG_FILE))
+    s.set_defaults(func=cmd_apply)
+
+    sub.add_parser("restore", help="re-send the last applied lighting "
+                   "(e.g. after replug)").set_defaults(func=cmd_restore)
+
+    s = sub.add_parser("profile", help="switch to on-board profile 1-6")
+    s.add_argument("number", type=int, choices=range(1, 7))
+    s.set_defaults(func=cmd_profile)
+
+    sub.add_parser("status", help="show profile and firmware").set_defaults(func=cmd_status)
+    sub.add_parser("keys", help="list key names, groups, effects").set_defaults(func=cmd_keys)
+
+    s = sub.add_parser("test", help="light each key in turn and print its name")
+    s.add_argument("keys", nargs="*", metavar="KEY_OR_GROUP")
+    s.add_argument("--delay", type=float, default=0.4)
+    s.set_defaults(func=cmd_test)
+
+    args = p.parse_args()
+    try:
+        args.func(args)
+    except X50QError as e:
+        sys.exit(f"x50q: {e}")
+    except KeyboardInterrupt:
+        sys.exit(130)
+
+
+if __name__ == "__main__":
+    main()
