@@ -520,6 +520,22 @@ function! s:Nav(key) abort
 endfunction
 
 " Resize moves the divider in the key's direction (smart-splits semantics).
+" Opt in: the script injects only while the kitty user variable hashiru_nav=1
+" is set (OSC 1337 SetUserVar, value base64 "1"), so a vim without this config,
+" or this one over ssh where the script is absent, is left alone.
+function! s:NavOptin(on) abort
+  if empty($KITTY_WINDOW_ID) || !executable(s:hypr_nav) || !exists('*echoraw')
+    return
+  endif
+  call echoraw("\e]1337;SetUserVar=hashiru_nav=" . (a:on ? 'MQ==' : '') . "\x07")
+endfunction
+
+augroup hashiru_nav
+  autocmd!
+  autocmd VimEnter,VimResume * call s:NavOptin(1)
+  autocmd VimLeavePre,VimSuspend * call s:NavOptin(0)
+augroup END
+
 function! s:Resize(key) abort
   let horizontal = a:key =~# '[hl]'
   let [before, after] = horizontal ? ['h', 'l'] : ['k', 'j']
