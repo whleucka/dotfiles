@@ -11,7 +11,9 @@
 -- stock nvim (or this one over ssh, where the script is absent) is left alone.
 --
 -- alt+hjkl resizes: the divider moves in the key's direction (smart-splits
--- semantics), whichever side of it the cursor is on.
+-- semantics), whichever side of it the cursor is on. Hyprland's super+ctrl+hjkl
+-- injects it too (`nav --resize`); with no split on that axis we hand back to
+-- `nav --resize --edge`, which resizes the kitty split, then the Hyprland window.
 local M = {}
 
 local hypr_nav = vim.fn.expand("~/.config/hypr/scripts/nav")
@@ -31,7 +33,11 @@ function M.resize(key, amount)
   if not horizontal then before, after = "k", "j" end
   local has_after = vim.fn.winnr(after) ~= vim.fn.winnr()
   if not has_after and vim.fn.winnr(before) == vim.fn.winnr() then
-    return -- no split on this axis
+    -- No split on this axis: hand off to the kitty split, then Hyprland.
+    if vim.fn.executable(hypr_nav) == 1 then
+      vim.system({ hypr_nav, "--resize", "--edge", key }, { detach = true })
+    end
+    return
   end
   -- With a window `after` us we own the divider on that side: moving toward it
   -- grows us. Without one, our divider is on the `before` side: moving toward

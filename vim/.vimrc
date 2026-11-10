@@ -506,7 +506,9 @@ endfunction
 " Hyprland's super+hjkl runs ~/.config/hypr/scripts/nav, which injects
 " ctrl+alt+hjkl when the focused kitty window is running vim. At the vim edge,
 " hand back to `nav --edge`: it tries the kitty split that way, then Hyprland.
-" alt+hjkl resizes vim splits. Same contract as core/nav.lua in nvim.
+" alt+hjkl resizes vim splits (super+ctrl+hjkl injects it); with no split on
+" that axis, `nav --resize --edge` resizes the kitty split, then Hyprland.
+" Same contract as core/nav.lua in nvim.
 
 let s:hypr_nav = expand('~/.config/hypr/scripts/nav')
 
@@ -541,6 +543,11 @@ function! s:Resize(key) abort
   let [before, after] = horizontal ? ['h', 'l'] : ['k', 'j']
   let has_after = winnr(after) != winnr()
   if !has_after && winnr(before) == winnr()
+    " No split on this axis: hand off to the kitty split, then Hyprland.
+    if executable(s:hypr_nav)
+      call job_start([s:hypr_nav, '--resize', '--edge', a:key],
+            \ { 'in_io': 'null', 'out_io': 'null', 'err_io': 'null' })
+    endif
     return
   endif
   let grow = (a:key ==# after) == has_after
