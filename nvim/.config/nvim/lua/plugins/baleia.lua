@@ -1,6 +1,5 @@
 -- Renders ANSI escape sequences in a buffer as real highlights.
--- Used by ftplugin/ansi.lua for herdr scrollback dumps
--- (~/.config/herdr/scripts/scrollback) and any other captured terminal output.
+-- Used by ftplugin/ansi.lua for captured terminal output (*.ansi files).
 --
 -- The ftplugin `packadd`s and configures this itself: nvim's built-in
 -- filetypeplugin autocmd runs before stimpack's ft loader, so the buffer would

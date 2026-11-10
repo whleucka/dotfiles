@@ -502,60 +502,29 @@ function! s:LastBuffer() abort
   endfor
 endfunction
 
-" --- super+hjkl: vim splits -> herdr panes -> Hyprland windows ---
-" Hyprland injects ctrl+alt+hjkl (nav) and alt+hjkl (resize); herdr-route
-" forwards them into a pane running vim, which then owns the decision -- the
-" same contract herdr-splits.nvim fulfils for nvim. At the vim edge, mirror
-" the router's plain-pane logic: herdr pane that way? focus it : Hyprland.
+" --- super+hjkl: vim splits -> kitty windows -> Hyprland windows ---
+" Hyprland's super+hjkl runs ~/.config/hypr/scripts/nav, which injects
+" ctrl+alt+hjkl when the focused kitty window is running vim. At the vim edge,
+" hand back to `nav --edge`: it tries the kitty split that way, then Hyprland.
+" alt+hjkl resizes vim splits. Same contract as core/nav.lua in nvim.
 
-let s:words = { 'h': 'left', 'j': 'down', 'k': 'up', 'l': 'right' }
-let s:hypr_dirs = { 'h': 'l', 'j': 'd', 'k': 'u', 'l': 'r' }
-let s:herdr = expand('~/.local/bin/herdr')
-let s:hypr_focus = expand('~/.config/hypr/scripts/focus')
-
-function! s:InHerdr() abort
-  return !empty($HERDR_PANE_ID) && executable(s:herdr)
-endfunction
-
-function! s:Escalate(key) abort
-  let word = s:words[a:key]
-  let sh = ''
-  if s:InHerdr() && executable('jq')
-    let sh .= 'h=' . shellescape(s:herdr) . '; p="$HERDR_PANE_ID"; d=' . word . '; '
-    let sh .= 'e=$("$h" pane edges --pane "$p" 2>/dev/null); '
-    " a zoomed pane reports itself at every edge; unzoom and re-read
-    let sh .= 'if [ "$(printf %s "$e" | jq -r .result.edges.layout.zoomed)" = true ]; then '
-    let sh .= '"$h" pane zoom --off --pane "$p" >/dev/null 2>&1; e=$("$h" pane edges --pane "$p" 2>/dev/null); fi; '
-    let sh .= 'if [ "$(printf %s "$e" | jq -r --arg d "$d" ''.result.edges[$d]'')" != true ] && '
-    let sh .= '[ "$("$h" pane focus --direction "$d" --pane "$p" 2>/dev/null | jq -r .result.focus.changed)" = true ]; then exit 0; fi; '
-  endif
-  if !executable(s:hypr_focus) && empty(sh) | return | endif
-  let sh .= executable(s:hypr_focus)
-        \ ? 'exec ' . shellescape(s:hypr_focus) . ' ' . s:hypr_dirs[a:key]
-        \ : 'exit 0'
-  call job_start(['sh', '-c', sh], { 'in_io': 'null', 'out_io': 'null', 'err_io': 'null' })
-endfunction
+let s:hypr_nav = expand('~/.config/hypr/scripts/nav')
 
 function! s:Nav(key) abort
   let before = winnr()
   execute 'wincmd' a:key
-  if winnr() == before
-    call s:Escalate(a:key)
+  if winnr() == before && executable(s:hypr_nav)
+    call job_start([s:hypr_nav, '--edge', a:key],
+          \ { 'in_io': 'null', 'out_io': 'null', 'err_io': 'null' })
   endif
 endfunction
 
-" Resize moves the divider in the key's direction (smart-splits semantics);
-" with no vim split on that axis it resizes the herdr pane instead.
+" Resize moves the divider in the key's direction (smart-splits semantics).
 function! s:Resize(key) abort
   let horizontal = a:key =~# '[hl]'
   let [before, after] = horizontal ? ['h', 'l'] : ['k', 'j']
   let has_after = winnr(after) != winnr()
   if !has_after && winnr(before) == winnr()
-    if s:InHerdr()
-      call job_start([s:herdr, 'pane', 'resize', '--direction', s:words[a:key],
-            \ '--amount', '0.05', '--pane', $HERDR_PANE_ID],
-            \ { 'in_io': 'null', 'out_io': 'null', 'err_io': 'null' })
-    endif
     return
   endif
   let grow = (a:key ==# after) == has_after

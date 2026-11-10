@@ -1,12 +1,9 @@
--- Captured terminal output with its ANSI escape sequences intact.
--- Fed by ~/.config/herdr/scripts/scrollback (herdr pane scrollback pager), and
--- usable for any `--color=always` capture: `cmd &> /tmp/out.ansi` then open it.
+-- Captured terminal output with its ANSI escape sequences intact, from any
+-- `--color=always` capture: `cmd &> /tmp/out.ansi` then open it.
 --
 -- baleia is packadd'd here rather than through the plugin spec: nvim's built-in
 -- filetypeplugin autocmd fires before stimpack's ft loader, so waiting on the
 -- spec would colorize the buffer before the plugin is on the runtimepath.
-local pane = vim.env.HERDR_SCROLLBACK_PANE
-local pager = pane ~= nil and pane ~= ""
 local buf = vim.api.nvim_get_current_buf()
 
 vim.opt_local.number = false
@@ -37,23 +34,12 @@ else
   vim.notify("ansi: baleia.nvim not available — showing raw escape codes", vim.log.levels.WARN)
 end
 
--- herdr pads its snapshot out to the pane height; those trailing empties are
--- just dead space at the end of a pager.
+-- Screen captures pad out to the terminal height; those trailing empties are
+-- just dead space.
 local last = vim.api.nvim_buf_line_count(buf)
 while last > 1 and vim.api.nvim_buf_get_lines(buf, last - 1, last, false)[1]:match("^%s*$") do
   last = last - 1
 end
 if last < vim.api.nvim_buf_line_count(buf) then
   vim.api.nvim_buf_set_lines(buf, last, -1, false, {})
-end
-
-if pager then
-  -- A throwaway capture file: name it for the statusline, make it unwritable,
-  -- and land on the newest output the way a scrollback view should.
-  pcall(vim.api.nvim_buf_set_name, buf, "scrollback://" .. pane)
-  vim.bo[buf].buftype = "nofile"
-  vim.bo[buf].swapfile = false
-  vim.bo[buf].modified = false
-  vim.keymap.set("n", "q", "<Cmd>qa!<CR>", { buffer = buf, desc = "Close scrollback" })
-  vim.cmd("normal! Gzb")
 end

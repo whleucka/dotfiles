@@ -91,7 +91,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Captured terminal output (herdr scrollback dumps, CI logs) keeps its ANSI
+-- Captured terminal output (`--color=always` dumps, CI logs) keeps its ANSI
 -- escape sequences; ftplugin/ansi.lua turns them into real highlights.
 vim.filetype.add({
   extension = {

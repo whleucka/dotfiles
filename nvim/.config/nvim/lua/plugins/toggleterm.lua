@@ -12,10 +12,10 @@ local function set_terminal_keymaps(buf)
 
   -- The unified super+hjkl chord (Hyprland injects ctrl+alt+hjkl), so window
   -- navigation works from inside the terminal too, edge hand-off included.
-  for key, dir in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
+  for _, key in ipairs({ "h", "j", "k", "l" }) do
     map('<C-M-' .. key .. '>', function()
-      require("herdr-splits")["move_cursor_" .. dir]()
-    end, 'Move cursor ' .. dir)
+      require("core.nav").nav(key)
+    end, 'Navigate ' .. key)
   end
 end
 

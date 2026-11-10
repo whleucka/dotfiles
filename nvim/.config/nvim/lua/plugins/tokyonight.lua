@@ -87,7 +87,7 @@ return {
         end
 
         -- One accent for "active", tiered by area: c.blue on the small chips
-        -- (this, the waybar workspace pill, the herdr tab, the statusline mode
+        -- (this, the waybar workspace pill, the kitty tab, the statusline mode
         -- block) and the dimmer c.blue0 reserved for the one full-width band,
         -- the Hyprland groupbar, where c.blue glares. c.bg for the text because
         -- c.fg on c.blue is 1.9:1 -- unreadable -- while c.bg lands at 6.7:1.

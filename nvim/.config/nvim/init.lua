@@ -31,6 +31,7 @@ require("core.autocmd")
 
 vim.schedule(function()
   require("core.keymap")
+  require("core.nav").setup()
 end)
 
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
