@@ -19,8 +19,9 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- Auto reload file if changed
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+-- Auto reload file if changed. Not on CursorHold: with updatetime=200 that
+-- stat'd the file after every short pause -- a network round-trip on sshfs.
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
   group = vim.api.nvim_create_augroup('auto-reload-file', { clear = true }),
   command = "checktime"
 })

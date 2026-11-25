@@ -82,7 +82,11 @@ return {
   },
   settings = {
     Lua = {
-      workspace = { checkThirdParty = false, library = vim.api.nvim_get_runtime_file("", true) },
+      runtime = { version = "LuaJIT" },
+      -- Just the Nvim runtime (vim.*, vim.uv types). The whole 'runtimepath'
+      -- was ~17 dirs -- every eager plugin plus /usr/share/vim/vimfiles -- all
+      -- re-indexed on each lua_ls start.
+      workspace = { checkThirdParty = false, library = { vim.env.VIMRUNTIME } },
       diagnostics = {
         globals = { "vim" },
       },

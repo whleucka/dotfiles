@@ -4,4 +4,3 @@ vim.bo.softtabstop = 4
 vim.bo.expandtab = true
 vim.bo.autoindent = true
 vim.bo.smartindent = true
-vim.bo.commentstring = "# %s"

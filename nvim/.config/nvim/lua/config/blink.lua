@@ -4,7 +4,9 @@ return {
     ["<C-e>"] = { "select_and_accept", "fallback" },
   },
 
-  snippets = { preset = "luasnip" },
+  -- Nvim's own vim.snippet engine; blink loads friendly-snippets (and any
+  -- ~/.config/nvim/snippets) itself. LuaSnip was only ever a loader for those.
+  snippets = { preset = "default" },
 
   appearance = {
     nerd_font_variant = "mono",

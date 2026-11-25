@@ -2,7 +2,7 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "saghen/blink.lib",
-    "L3MON4D3/LuaSnip",
+    -- Read by blink's default snippet source straight off 'runtimepath'.
     "rafamadriz/friendly-snippets",
   },
   event = "InsertEnter",

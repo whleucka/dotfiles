@@ -134,20 +134,24 @@ function M.setup_loading(spec, pack, dep_names, load_handler)
   if spec.keys then
     local keys = type(spec.keys) == "function" and spec.keys() or spec.keys
 
-    -- Recursively extract actual keymaps from nested which-key-style groups
+    -- Recursively extract actual keymaps from nested which-key-style specs.
+    -- An item is either a mapping/group ({ lhs, [rhs], ..., children... },
+    -- children from index 2) or a bare list of specs ({ {..}, {..} }, children
+    -- from index 1). Walking only from index 2 used to drop the first child of
+    -- every bare list, so those keys got no stub and only worked once some
+    -- other trigger had loaded the plugin.
     local function extract_keymaps(tbl, result)
       result = result or {}
       for _, item in ipairs(tbl) do
         if type(item) == "table" then
-          local lhs = item[1]
-          local rhs = item[2]
-          if type(lhs) == "string" and (type(rhs) == "string" or type(rhs) == "function") then
-            table.insert(result, item)
-          end
-          for i = 2, #item do
-            if type(item[i]) == "table" then
-              extract_keymaps({ item[i] }, result)
+          local lhs, rhs = item[1], item[2]
+          if type(lhs) == "string" then
+            if type(rhs) == "string" or type(rhs) == "function" then
+              table.insert(result, item)
             end
+            extract_keymaps(vim.list_slice(item, 2), result)
+          else
+            extract_keymaps(item, result)
           end
         end
       end

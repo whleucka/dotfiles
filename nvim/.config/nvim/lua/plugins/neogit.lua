@@ -1,7 +1,7 @@
 return {
   "NeogitOrg/neogit",
-  event = "VeryLazy",
-  -- The dashboard's "g" shortcut runs :Neogit, possibly before VeryLazy.
+  -- No VeryLazy: the `cmd` stub (the dashboard's "g") and the `keys` stubs
+  -- below load it on first use, instead of ~20ms on the first cursor move.
   cmd = { "Neogit" },
   dependencies = {
     "nvim-lua/plenary.nvim",
